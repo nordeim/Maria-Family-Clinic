@@ -1,0 +1,1098 @@
+// ========================================
+// PRIVACY & COMPLIANCE FRAMEWORK
+// Sub-Phase 9.5: PDPA-Compliant Health Data Protection
+// Singapore Personal Data Protection Act & Healthcare Data Security
+// ========================================
+
+// Enhanced ContactForm with field-level encryption for health data
+model ContactFormPrivacy {
+  id                    String   @id @default(cuid())
+  contactFormId         String   @unique
+  
+  // Data Classification and Encryption
+  dataClassification    DataClassification @default(PUBLIC)
+  encryptionStatus      EncryptionStatus @default(NOT_ENCRYPTED)
+  encryptionKeyId       String?  // Reference to encryption key
+  encryptedFields       Json     @default("{}") // Encrypted field data
+  
+  // PDPA Compliance
+  consentStatus         ConsentStatus @default(NO_CONSENT)
+  consentVersion        String?  // Version of consent text used
+  consentExpiry         DateTime?
+  legalBasis            LegalBasis? // PDPA legal basis for processing
+  consentAuditTrail     Json     @default("[]") // Consent change history
+  
+  // Purpose and Use Controls
+  processingPurposes    Json     @default("[]") // Declared purposes for data use
+  secondaryUseConsent   Boolean  @default(false) // Consent for secondary use
+  dataMinimizationLevel DataMinimizationLevel @default(STANDARD)
+  
+  // Access Control and Permissions
+  accessRoleMatrix      Json     @default("{}") // Role-based access control matrix
+  dataAccessLog         Json     @default("[]") // Access log for compliance
+  exportPermissions     Json     @default("[]") // Permitted data export purposes
+  thirdPartySharing     Boolean  @default(false)
+  thirdPartyConsents    Json     @default("[]") // Third-party sharing consents
+  
+  // Retention and Deletion
+  retentionCategory     RetentionCategory @default(STANDARD)
+  retentionDate         DateTime? // When data should be deleted
+  deletionSchedule      Json     @default("{}") // Automated deletion schedule
+  archiveDate           DateTime?
+  dataDeletionAudit     Json     @default("[]") // Deletion audit trail
+  
+  // Audit and Monitoring
+  privacyAuditEnabled   Boolean  @default(true)
+  complianceAlerts      Json     @default("[]") // Alert configuration
+  incidentTracking      Json     @default("[]") // Security incidents
+  complianceScore       Float?   // Overall privacy compliance score
+  
+  // Healthcare-specific controls
+  medicalRecordProtection Boolean @default(false) // Extra protection for medical data
+  professionalConfidentiality Boolean @default(false) // Medical confidentiality
+  hipaaEquivalency      Boolean  @default(false) // US HIPAA equivalent protection
+  clinicalNoteProtection Boolean @default(false) // Clinical documentation protection
+  
+  // Data Subject Rights
+  accessRequestStatus   RequestStatus @default(NONE)
+  rectificationRequest  Boolean  @default(false)
+  erasureRequest        Boolean  @default(false)
+  portabilityRequest    Boolean  @default(false)
+  restrictionRequest    Boolean  @default(false)
+  rightsRequestLog      Json     @default("[]") // Rights request history
+  
+  // Breach Response
+  breachNotificationRequired Boolean @default(false)
+  breachResponsePlan    Json     @default("{}") // Incident response plan
+  notificationTimeline  Json     @default("[]") // Breach notification timeline
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  // Relationships
+  contactForm           ContactForm @relation(fields: [contactFormId], references: [id], onDelete: Cascade)
+  
+  @@index([contactFormId])
+  @@index([dataClassification])
+  @@index([retentionDate])
+  @@index([consentStatus])
+  @@map("contact_form_privacy")
+}
+
+// Comprehensive Audit Logging for Privacy Compliance
+model PrivacyAuditLog {
+  id                    String   @id @default(cuid())
+  
+  // Event Identification
+  eventId               String   @unique @default(uuid())
+  eventType             PrivacyEventType
+  eventCategory         PrivacyEventCategory
+  severity              SecuritySeverity @default(INFO)
+  
+  // Actor Information
+  actorId               String?  // User or system performing action
+  actorName             String?
+  actorRole             String?
+  actorType             ActorType // USER, SYSTEM, AUTOMATION, EXTERNAL
+  sessionId             String?
+  
+  // Resource Information
+  resourceType          String   // e.g., 'contact_form', 'enquiry', 'document'
+  resourceId            String
+  resourceName          String?
+  dataSensitivity       DataClassification @default(PUBLIC)
+  
+  // Action Details
+  actionPerformed       String   @db.Text // Description of action
+  actionResult          String?  @db.Text // Result of action
+  previousValue         String?  @db.Text // Previous data value (if applicable)
+  newValue              String?  @db.Text // New data value (if applicable)
+  
+  // Context and Environment
+  ipAddress             String?
+  userAgent             String?
+  requestId             String?  // Request correlation ID
+  apiEndpoint           String?  // API endpoint accessed
+  httpMethod            String?  // HTTP method used
+  responseStatus        Int?     // HTTP response status
+  
+  // Compliance Context
+  complianceFrameworks  String[] @default([]) // PDPA, GDPR, HIPAA, etc.
+  legalBasis            String?  // Legal basis for processing
+  consentStatus         ConsentStatus? // Consent status at time of action
+  dataRetentionStatus   String?  // Data retention status
+  
+  // Healthcare Context
+  containsPHI           Boolean  @default(false) // Protected Health Information
+  medicalContext        Boolean  @default(false) // Medical or clinical context
+  professionalPrivilege Boolean  @default(false) // Medical professional privilege
+  clinicalNote          Boolean  @default(false) // Part of clinical documentation
+  
+  // Risk Assessment
+  riskLevel             RiskLevel @default(LOW)
+  riskScore             Float?   // Calculated risk score 0-100
+  riskFactors           Json     @default("[]") // Risk factors identified
+  mitigationActions     Json     @default("[]") // Risk mitigation actions taken
+  
+  // Monitoring and Alerts
+  triggersAlert         Boolean  @default(false)
+  alertSeverity         SecuritySeverity?
+  alertConfiguration    String?  // Alert rule that triggered
+  automatedResponse     Boolean  @default(false)
+  manualReviewRequired  Boolean  @default(false)
+  
+  // Compliance Tracking
+  complianceScore       Float?   // Compliance score for this event
+  regulatoryReporting   Boolean  @default(false) // Should be reported to regulators
+  reportingDeadline     DateTime?
+  reportStatus          ReportStatus @default(NOT_REQUIRED)
+  
+  // Chain of Custody (Tamper-proof)
+  hashChainPrevious     String?  // Hash of previous log entry
+  hashChainCurrent      String   // Hash of current log entry
+  digitalSignature      String?  // Digital signature for integrity
+  verificationKeyId     String?  // Key used for signature verification
+  
+  // Metadata
+  metadata              Json     @default("{}")
+  tags                  String[] @default([])
+  retentionCategory     RetentionCategory @default(CRITICAL)
+  
+  // Timestamps
+  eventTimestamp        DateTime @default(now())
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@index([eventType])
+  @@index([eventCategory])
+  @@index([severity])
+  @@index([actorId])
+  @@index([resourceType, resourceId])
+  @@index([eventTimestamp])
+  @@index([dataSensitivity])
+  @@index([containsPHI])
+  @@index([hashChainPrevious])
+  @@map("privacy_audit_log")
+}
+
+// Consent Management System
+model ConsentRecord {
+  id                    String   @id @default(cuid())
+  
+  // Consent Identification
+  consentId             String   @unique @default(uuid())
+  consentType           ConsentType
+  purpose               String   @db.Text // Purpose of data processing
+  legalBasis            LegalBasis
+  
+  // Data Subject Information
+  dataSubjectId         String   // User, patient, or contact person ID
+  dataSubjectType       DataSubjectType
+  dataSubjectName       String?
+  dataSubjectEmail      String?
+  
+  // Consent Details
+  consentStatus         ConsentStatus
+  consentVersion        String   // Version of consent form/text
+  consentText           String   @db.Text // Full consent text presented
+  language              String   @default("en")
+  
+  // Consent Scope
+  dataCategories        Json     @default("[]") // Categories of data consented
+  processingActivities  Json     @default("[]") // Specific processing activities
+  thirdPartySharing     Boolean  @default(false)
+  dataRetentionPeriod   String?  // Period data will be retained
+  
+  // Consent Lifecycle
+  consentMethod         ConsentMethod // How consent was obtained
+  consentDate           DateTime @default(now())
+  consentExpiry         DateTime?
+  lastRenewalDate       DateTime?
+  renewalCount          Int      @default(0)
+  
+  // Consent Changes
+  withdrawalDate        DateTime?
+  withdrawalReason      String?  @db.Text
+  modificationHistory   Json     @default("[]") // History of consent changes
+  consentAuditTrail     Json     @default("[]") // Detailed audit of consent events
+  
+  // Verification and Proof
+  verificationMethod    String?  // How consent was verified
+  witnessId             String?  // ID of witness if applicable
+  digitalSignature      String?  // Digital signature of consent
+  ipAddress             String?  // IP address at time of consent
+  userAgent             String?  // User agent at time of consent
+  timestampProof        String?  // Timestamp proof (blockchain, etc.)
+  
+  // Compliance
+  regulatoryFramework   String[] @default([]) // PDPA, GDPR, etc.
+  complianceScore       Float?   // Compliance score for this consent
+  documentationComplete Boolean  @default(true)
+  retentionCompliance   Boolean  @default(true)
+  
+  // Healthcare Context
+  medicalConsent        Boolean  @default(false)
+  professionalConsultation Boolean @default(false) // Healthcare professional involved
+  emergencyException    Boolean  @default(false) // Emergency treatment exception
+  vitalInterests        Boolean  @default(false) // Vital interests justification
+  
+  // Granular Controls
+  granularConsents      Json     @default("{}") // Individual granular consents
+  scopeLimitations      Json     @default("[]") // Limitations on consent scope
+  geographicScope       String?  // Geographic scope of consent
+  purposeLimitations    Json     @default("[]") // Limitations on processing purpose
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@index([consentType])
+  @@index([dataSubjectId])
+  @@index([consentStatus])
+  @@index([consentDate])
+  @@index([consentExpiry])
+  @@map("consent_records")
+}
+
+// Data Retention and Lifecycle Management
+model DataRetentionPolicy {
+  id                    String   @id @default(cuid())
+  policyName            String   @unique
+  description           String?  @db.Text
+  
+  // Policy Scope
+  appliesTo             RetentionScope
+  dataCategories        Json     @default("[]") // Categories of data this applies to
+  entityTypes           Json     @default("[]") // e.g., contact_forms, enquiries, documents
+  
+  // Retention Rules
+  retentionPeriod       String   // e.g., "7 years", "2 years", "indefinite"
+  retentionDays         Int?     // Numeric value for calculations
+  retentionBasis        RetentionBasis
+  
+  // Legal and Regulatory Basis
+  legalRequirement      String?  @db.Text // Legal basis for retention
+  regulatoryFramework   String[] @default([]) // PDPA, Medical Act, etc.
+  retentionJustification String? @db.Text
+  
+  // Lifecycle Actions
+  archiveAfter          String?  // When to archive data
+  deletionAfter         String?  // When to delete data
+  reviewRequired        Boolean  @default(false)
+  reviewInterval        String?  // How often to review
+  
+  // Deletion Method
+  deletionMethod        DeletionMethod @default(STANDARD_DELETE)
+  secureDeleteRequired  Boolean  @default(true)
+  deletionVerification  Boolean  @default(true)
+  deletionAuditRequired Boolean  @default(true)
+  
+  // Exceptions and Overrides
+  legalHold             Boolean  @default(false) // Legal hold overrides deletion
+  legalHoldExpiry       DateTime?
+  overrideConditions    Json     @default("[]") // Conditions that override policy
+  
+  // Monitoring and Compliance
+  enforcementEnabled    Boolean  @default(true)
+  complianceAlerts      Boolean  @default(true)
+  automatedExecution    Boolean  @default(true)
+  manualReviewRequired  Boolean  @default(false)
+  
+  // Statistics
+  recordsManaged        Int      @default(0)
+  successfulDeletions   Int      @default(0)
+  failedDeletions       Int      @default(0)
+  lastExecution         DateTime?
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@index([appliesTo])
+  @@index([retentionDays])
+  @@map("data_retention_policies")
+}
+
+// Secure File Handling for Medical Documents
+model SecureDocument {
+  id                    String   @id @default(cuid())
+  
+  // Document Identification
+  fileId                String   @unique @default(uuid())
+  originalFilename      String
+  storedFilename        String   @unique
+  filePath              String
+  fileSize              BigInt
+  mimeType              String
+  fileHash              String   @unique // SHA-256 hash for integrity
+  
+  // Document Classification
+  documentType          DocumentType
+  dataClassification    DataClassification @default(CONFIDENTIAL)
+  containsPHI           Boolean  @default(false) // Protected Health Information
+  medicalRecord         Boolean  @default(false) // Part of medical record
+  
+  // Encryption and Security
+  encryptionStatus      EncryptionStatus @default(ENCRYPTED)
+  encryptionMethod      String?  // e.g., AES-256-GCM
+  encryptionKeyId       String?  // Reference to encryption key
+  encryptionTimestamp   DateTime?
+  
+  // Access Control
+  accessLevel           AccessLevel @default(ROLE_BASED)
+  permittedRoles        Json     @default("[]") // Roles that can access
+  individualAccess      Json     @default("[]") // Individual user permissions
+  accessExpiry          DateTime?
+  
+  // Sharing and Distribution
+  shareable             Boolean  @default(false)
+  externalSharing       Boolean  @default(false)
+  sharingExpiry         DateTime?
+  watermarkRequired     Boolean  @default(true)
+  downloadRestrictions  Json     @default("{}")
+  
+  // Retention and Lifecycle
+  retentionPolicyId     String?
+  scheduledDeletion     DateTime?
+  archiveDate           DateTime?
+  version               String   @default("1.0")
+  
+  // Audit and Compliance
+  uploadAuditRequired   Boolean  @default(true)
+  accessLogRequired     Boolean  @default(true)
+  complianceFlags       Json     @default("[]")
+  regulatoryCategory    String?  // e.g., "medical_record", "research_data"
+  
+  // Document Processing
+  processed             Boolean  @default(false)
+  ocrProcessed          Boolean  @default(false)
+  virusScanned          Boolean  @default(false)
+  virusScanResult       String?
+  
+  // Healthcare Context
+  patientContext        Boolean  @default(false)
+  clinicalContext       Boolean  @default(false)
+  professionalPrivilege Boolean  @default(false) // Medical professional privilege
+  consentRequired       Boolean  @default(false)
+  
+  // Metadata
+  uploadUserId          String?
+  uploadTimestamp       DateTime @default(now())
+  lastAccessed          DateTime?
+  accessCount           Int      @default(0)
+  downloadCount         Int      @default(0)
+  
+  // Relationships
+  relatedContactFormId  String?
+  relatedEnquiryId      String?
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@index([fileId])
+  @@index([documentType])
+  @@index([dataClassification])
+  @@index([containsPHI])
+  @@index([scheduledDeletion])
+  @@map("secure_documents")
+}
+
+// Privacy Rights and Data Subject Requests
+model DataSubjectRequest {
+  id                    String   @id @default(cuid())
+  requestId             String   @unique @default(uuid())
+  
+  // Request Identification
+  requestType           DataSubjectRight
+  requestCategory       RequestCategory
+  priority              RequestPriority @default(NORMAL)
+  
+  // Data Subject Information
+  dataSubjectId         String   // ID of person making request
+  dataSubjectType       DataSubjectType
+  dataSubjectName       String
+  dataSubjectEmail      String
+  dataSubjectPhone      String?
+  
+  // Identity Verification
+  identityVerified      Boolean  @default(false)
+  verificationMethod    String?  // How identity was verified
+  verificationDate      DateTime?
+  verificationLevel     VerificationLevel @default(BASIC)
+  
+  // Request Details
+  requestDescription    String   @db.Text
+  dataCategories        Json     @default("[]") // Categories of data requested
+  processingPurposes    Json     @default("[]") // Purpose of request
+  dateRangeStart        DateTime?
+  dateRangeEnd          DateTime?
+  specificRecords       Json     @default("[]") // Specific record identifiers
+  
+  // Request Status
+  status                RequestStatus @default(PENDING)
+  assignedTo            String?  // Staff member assigned
+  estimatedCompletion   DateTime?
+  actualCompletion      DateTime?
+  
+  // Processing Actions
+  actionsTaken          Json     @default("[]") // Actions performed to fulfill request
+  recordsIdentified     Int      @default(0)
+  recordsProvided       Int      @default(0)
+  recordsModified       Int      @default(0)
+  recordsDeleted        Int      @default(0)
+  
+  // Response and Communication
+  responseMethod        ResponseMethod?
+  responseFormat        ResponseFormat?
+  deliveryStatus        DeliveryStatus @default(PENDING)
+  responseDate          DateTime?
+  
+  // Compliance and Legal
+  regulatoryDeadline    DateTime // PDPA: 30 days, GDPR: 30 days
+  extensionRequired     Boolean  @default(false)
+  extensionReason       String?  @db.Text
+  legalBasis            String?  // Legal basis for request handling
+  complianceScore       Float?   // Compliance score for this request
+  
+  // Healthcare Context
+  medicalDataInvolved   Boolean  @default(false)
+  professionalConsultation Boolean @default(false)
+  clinicalReview        Boolean  @default(false)
+  healthcareProviderInvolved Boolean @default(false)
+  
+  // Fees and Costs
+  feeRequired           Boolean  @default(false)
+  feeAmount             Float?   // Fee in SGD
+  feeWaived             Boolean  @default(false)
+  feeWaiverReason       String?  @db.Text
+  
+  // Quality and Satisfaction
+  qualityScore          Float?   // Internal quality assessment
+  satisfactionRating    Int?     // 1-5 rating from data subject
+  complaintStatus       Boolean  @default(false)
+  escalationRequired    Boolean  @default(false)
+  
+  // Audit and Documentation
+  documentationComplete Boolean  @default(false)
+  auditTrail            Json     @default("[]")
+  decisionRationale     String?  @db.Text // Rationale for decisions made
+  reviewerId            String?  // Staff member who reviewed decision
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@index([requestType])
+  @@index([status])
+  @@index([dataSubjectId])
+  @@index([regulatoryDeadline])
+  @@index([priority])
+  @@map("data_subject_requests")
+}
+
+// Privacy Compliance Monitoring
+model PrivacyComplianceMonitor {
+  id                    String   @id @default(cuid())
+  monitorId             String   @unique @default(uuid())
+  
+  // Monitoring Configuration
+  monitorType           ComplianceMonitorType
+  monitorName           String
+  description           String?  @db.Text
+  enabled               Boolean  @default(true)
+  frequency             MonitoringFrequency @default(DAILY)
+  
+  // Compliance Framework
+  regulatoryFramework   String[] @default([]) // PDPA, GDPR, HIPAA, etc.
+  applicableJurisdiction String[] @default(["SG"])
+  complianceScope       String   @db.Text
+  
+  // Monitoring Criteria
+  thresholdConfig       Json     @default("{}") // Thresholds for alerts
+  alertConditions       Json     @default("[]") // Conditions that trigger alerts
+  escalationRules       Json     @default("[]") // Escalation procedures
+  
+  // Data Collection Points
+  dataSources           Json     @default("[]") // Where to collect monitoring data
+  collectionMethods     Json     @default("[]") // How to collect data
+  lastCollection        DateTime?
+  nextCollection        DateTime?
+  
+  // Current Status
+  lastAssessment        DateTime?
+  currentStatus         ComplianceStatus @default(UNKNOWN)
+  complianceScore       Float?   // Current compliance score
+  riskLevel             RiskLevel @default(UNKNOWN)
+  
+  // Issues and Findings
+  issuesIdentified      Json     @default("[]")
+  recommendations       Json     @default("[]")
+  remediationActions    Json     @default("[]")
+  progressTracking      Json     @default("[]")
+  
+  // Reporting
+  reportGeneration      Boolean  @default(true)
+  reportRecipients      Json     @default("[]")
+  lastReport            DateTime?
+  reportFrequency       ReportFrequency @default(MONTHLY)
+  
+  // Notifications
+  notificationConfig    Json     @default("{}")
+  lastNotification      DateTime?
+  notificationHistory   Json     @default("[]")
+  
+  // Automation
+  automatedActions      Boolean  @default(false)
+  actionRules           Json     @default("[]")
+  automationEnabled     Boolean  @default(false)
+  
+  // Performance Metrics
+  totalAssessments      Int      @default(0)
+  complianceRate        Float?   // Percentage of time in compliance
+  incidentCount         Int      @default(0)
+  meanTimeToResolution  Int?     // Average time to resolve issues (minutes)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@index([monitorType])
+  @@index([enabled])
+  @@index([currentStatus])
+  @@index([nextCollection])
+  @@map("privacy_compliance_monitor")
+}
+
+// Incident Response and Breach Management
+model PrivacyIncident {
+  id                    String   @id @default(cuid())
+  incidentId            String   @unique @default(uuid())
+  
+  // Incident Classification
+  incidentType          PrivacyIncidentType
+  severity              SecuritySeverity @default(LOW)
+  category              IncidentCategory
+  dataInvolved          Boolean  @default(false)
+  
+  // Incident Details
+  title                 String
+  description           String   @db.Text
+  discoveryDate         DateTime @default(now())
+  occurrenceDate        DateTime? // When incident actually occurred
+  
+  // Data Classification
+  dataTypesInvolved     Json     @default("[]")
+  sensitivityLevel      DataClassification?
+  personalDataInvolved  Boolean  @default(false)
+  phiInvolved           Boolean  @default(false) // Protected Health Information
+  
+  // Impact Assessment
+  individualsAffected   Int?     // Number of individuals affected
+  recordsAffected       Int?     // Number of records affected
+  estimatedImpact       ImpactLevel @default(MINIMAL)
+  businessImpact        ImpactLevel @default(MINIMAL)
+  reputationImpact      ImpactLevel @default(MINIMAL)
+  
+  // Root Cause
+  rootCause             String?  @db.Text
+  contributingFactors   Json     @default("[]")
+  vulnerabilityExploited String? @db.Text
+  
+  // Response Actions
+  immediateActions      Json     @default("[]")
+  containmentActions    Json     @default("[]")
+  remediationActions    Json     @default("[]")
+  preventionActions     Json     @default("[]")
+  
+  // Communication
+  internalNotified      Boolean  @default(false)
+  authoritiesNotified   Boolean  @default(false)
+  individualsNotified   Boolean  @default(false)
+  mediaResponse         String?  @db.Text // Media response status
+  
+  // Regulatory Requirements
+  pdpaReportable        Boolean  @default(false)
+  reportableUnder       String[] @default([]) // Which regulations require reporting
+  reportDeadline        DateTime?
+  authorityReportDate   DateTime?
+  authorityReference    String?  // Reference number from authority
+  
+  // Investigation
+  investigationStatus   InvestigationStatus @default(IN_PROGRESS)
+  investigator          String?  // Staff member conducting investigation
+  externalInvestigation Boolean  @default(false)
+  investigationNotes    String?  @db.Text
+  
+  // Resolution
+  resolutionDate        DateTime?
+  resolutionSummary     String?  @db.Text
+  lessonsLearned        String?  @db.Text
+  policyUpdates         String?  @db.Text
+  trainingRequired      Boolean  @default(false)
+  
+  // Costs and Resources
+  estimatedCost         Float?   // Cost in SGD
+  resourceHours         Float?   // Hours of staff time
+  externalCosts         Float?   // External costs (consultants, legal, etc.)
+  
+  // Follow-up
+  followUpRequired      Boolean  @default(false)
+  followUpDate          DateTime?
+  followUpStatus        String?  // e.g., "completed", "in_progress"
+  
+  // Metrics
+  responseTime          Int?     // Minutes from discovery to response
+  containmentTime       Int?     // Minutes from discovery to containment
+  resolutionTime        Int?     // Minutes from discovery to resolution
+  notificationTime      Int?     // Minutes from discovery to notification
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@index([incidentType])
+  @@index([severity])
+  @@index([status])
+  @@index([discoveryDate])
+  @@index([pdpaReportable])
+  @@index([reportDeadline])
+  @@map("privacy_incidents")
+}
+
+// ========================================
+// ENUMS FOR PRIVACY & COMPLIANCE
+// ========================================
+
+// Data Classification Levels
+enum DataClassification {
+  PUBLIC
+  INTERNAL
+  CONFIDENTIAL
+  RESTRICTED
+  TOP_SECRET
+  REGULATED
+  PHI // Protected Health Information
+  PCI // Payment Card Information
+  PII // Personally Identifiable Information
+}
+
+// Encryption Status
+enum EncryptionStatus {
+  NOT_ENCRYPTED
+  ENCRYPTED
+  ENCRYPTION_IN_PROGRESS
+  ENCRYPTION_FAILED
+  PARTIALLY_ENCRYPTED
+}
+
+// Consent Status
+enum ConsentStatus {
+  NO_CONSENT
+  PENDING
+  GRANTED
+  WITHDRAWN
+  EXPIRED
+  INVALID
+  UNDER_REVIEW
+}
+
+// Legal Basis (PDPA)
+enum LegalBasis {
+  CONSENT
+  CONTRACT_PERFORMANCE
+  LEGAL_OBLIGATION
+  VITAL_INTERESTS
+  PUBLIC_TASK
+  LEGITIMATE_INTERESTS
+  MEDICAL_TREATMENT
+  EMERGENCY_CARE
+  PUBLIC_HEALTH
+  RESEARCH
+}
+
+// Data Minimization Level
+enum DataMinimizationLevel {
+  MINIMAL
+  STANDARD
+  COMPREHENSIVE
+  MAXIMUM
+}
+
+// Retention Categories
+enum RetentionCategory {
+  TEMPORARY
+  STANDARD
+  EXTENDED
+  REGULATORY
+  INDEFINITE
+  CRITICAL
+  ARCHIVE
+  LEGAL_HOLD
+}
+
+// Request Status
+enum RequestStatus {
+  NONE
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+  ON_HOLD
+  APPEALED
+  CLOSED
+}
+
+// Privacy Event Types
+enum PrivacyEventType {
+  // Data Access Events
+  DATA_ACCESS
+  DATA_EXPORT
+  DATA_DOWNLOAD
+  DATA_VIEW
+  DATA_PRINT
+  
+  // Data Modification Events
+  DATA_CREATE
+  DATA_UPDATE
+  DATA_DELETE
+  DATA_RESTORE
+  DATA_ARCHIVE
+  
+  // Consent Events
+  CONSENT_GRANT
+  CONSENT_WITHDRAW
+  CONSENT_MODIFY
+  CONSENT_VERIFY
+  CONSENT_RENEW
+  
+  // Security Events
+  LOGIN_SUCCESS
+  LOGIN_FAILURE
+  UNAUTHORIZED_ACCESS
+  PERMISSION_CHANGE
+  PASSWORD_CHANGE
+  ACCOUNT_LOCKOUT
+  
+  // System Events
+  BACKUP
+  RESTORE
+  MAINTENANCE
+  SYSTEM_ACCESS
+  CONFIGURATION_CHANGE
+  
+  // Compliance Events
+  AUDIT_LOG_EXPORT
+  COMPLIANCE_REPORT
+  POLICY_UPDATE
+  TRAINING_COMPLETION
+  INCIDENT_RESPONSE
+}
+
+// Privacy Event Categories
+enum PrivacyEventCategory {
+  ACCESS_CONTROL
+  DATA_HANDLING
+  CONSENT_MANAGEMENT
+  SECURITY_INCIDENT
+  COMPLIANCE_MONITORING
+  USER_ACTIVITY
+  SYSTEM_EVENT
+  BUSINESS_PROCESS
+}
+
+// Actor Types
+enum ActorType {
+  USER
+  ADMIN
+  SYSTEM
+  AUTOMATION
+  EXTERNAL
+  THIRD_PARTY
+  ANONYMOUS
+}
+
+// Security Severity Levels
+enum SecuritySeverity {
+  INFO
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+  EMERGENCY
+}
+
+// Risk Levels
+enum RiskLevel {
+  MINIMAL
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+  UNKNOWN
+}
+
+// Compliance Status
+enum ComplianceStatus {
+  COMPLIANT
+  NON_COMPLIANT
+  PARTIAL
+  UNKNOWN
+  ASSESSING
+  REMEDIATION_IN_PROGRESS
+}
+
+// Monitoring Frequency
+enum MonitoringFrequency {
+  REAL_TIME
+  HOURLY
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  ANNUALLY
+  ON_DEMAND
+}
+
+// Report Frequency
+enum ReportFrequency {
+  REAL_TIME
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  ANNUALLY
+  ON_DEMAND
+}
+
+// Retention Scope
+enum RetentionScope {
+  ALL_DATA
+  CONTACT_FORMS
+  ENQUIRIES
+  MEDICAL_RECORDS
+  CONSENT_RECORDS
+  AUDIT_LOGS
+  FINANCIAL_RECORDS
+  EMPLOYEE_DATA
+  CUSTOMER_DATA
+}
+
+// Retention Basis
+enum RetentionBasis {
+  BUSINESS_NEED
+  LEGAL_REQUIREMENT
+  REGULATORY_REQUIREMENT
+  CONTRACTUAL_OBLIGATION
+  CONSENT_BASED
+  LEGITIMATE_INTEREST
+}
+
+// Deletion Methods
+enum DeletionMethod {
+  STANDARD_DELETE
+  SECURE_DELETE
+  CRYPTOGRAPHIC_ERASE
+  PHYSICAL_DESTRUCTION
+  IRREVERSIBLE_ANONYMIZATION
+}
+
+// Document Types
+enum DocumentType {
+  MEDICAL_RECORD
+  PRESCRIPTION
+  LAB_RESULT
+  IMAGING
+  REFERRAL
+  INSURANCE_DOCUMENT
+  CONSENT_FORM
+  ID_DOCUMENT
+  FINANCIAL_RECUMENT
+  CORRESPONDENCE
+  INVOICE
+  OTHER
+}
+
+// Access Levels
+enum AccessLevel {
+  NONE
+  VIEW_ONLY
+  ROLE_BASED
+  INDIVIDUAL_BASED
+  CONDITIONAL
+  FULL_ACCESS
+}
+
+// Consent Types
+enum ConsentType {
+  DATA_PROCESSING
+  MARKETING
+  RESEARCH
+  THIRD_PARTY_SHARING
+  PROFILING
+  AUTOMATED_DECISION_MAKING
+  DATA_RETENTION
+  DATA_EXPORT
+  MEDICAL_CONSULTATION
+  CLINICAL_RESEARCH
+  EMERGENCY_TREATMENT
+}
+
+// Data Subject Types
+enum DataSubjectType {
+  PATIENT
+  DOCTOR
+  NURSE
+  STAFF
+  VENDOR
+  CUSTOMER
+  VISITOR
+  MINOR
+  GUARDIAN
+  BENEFICIARY
+}
+
+// Consent Methods
+enum ConsentMethod {
+  WEB_FORM
+  PAPER_FORM
+  VERBAL
+  ELECTRONIC_SIGNATURE
+  IMPLIED_CONSENT
+  OPT_OUT
+  LEGALLY_REQUIRED
+  EMERGENCY_EXCEPTION
+}
+
+// Compliance Monitor Types
+enum ComplianceMonitorType {
+  CONSENT_MONITORING
+  DATA_RETENTION_MONITORING
+  ACCESS_CONTROL_MONITORING
+  AUDIT_LOG_MONITORING
+  INCIDENT_MONITORING
+  COMPLIANCE_SCORING
+  REGULATORY_ALIGNMENT
+}
+
+// Data Subject Rights
+enum DataSubjectRight {
+  ACCESS
+  RECTIFICATION
+  ERASURE
+  PORTABILITY
+  RESTRICTION
+  OBJECTION
+  AUTOMATED_DECISION_MAKING
+  COMPLAINT
+}
+
+// Request Categories
+enum RequestCategory {
+  INDIVIDUAL_REQUEST
+  REGULATORY_REQUEST
+  LEGAL_REQUEST
+  AUDIT_REQUEST
+  INTERNAL_REQUEST
+}
+
+// Request Priorities
+enum RequestPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+  CRITICAL
+  EMERGENCY
+}
+
+// Verification Levels
+enum VerificationLevel {
+  BASIC
+  STANDARD
+  ENHANCED
+  EXTREME
+  NOT_REQUIRED
+}
+
+// Response Methods
+enum ResponseMethod {
+  EMAIL
+  POSTAL_MAIL
+  SECURE_PORTAL
+  IN_PERSON
+  PHONE
+  CERTIFIED_MAIL
+}
+
+// Response Formats
+enum ResponseFormat {
+  DIGITAL_COPY
+  PAPER_COPY
+  SUMMARY_REPORT
+  DETAILED_REPORT
+  SECURE_DOWNLOAD
+  PORTAL_ACCESS
+}
+
+// Delivery Status
+enum DeliveryStatus {
+  PENDING
+  SENT
+  DELIVERED
+  FAILED
+  RETURNED
+  ACCEPTED
+  DECLINED
+}
+
+// Privacy Incident Types
+enum PrivacyIncidentType {
+  DATA_BREACH
+  UNAUTHORIZED_ACCESS
+  LOST_DEVICE
+  ACCIDENTAL_DISCLOSURE
+  SYSTEM_VULNERABILITY
+  EMPLOYEE_MISCONDUCT
+  THIRD_PARTY_BREACH
+  RANSOMWARE
+  PHISHING_ATTACK
+  PHYSICAL_BREACH
+  VERBAL_DISCLOSURE
+}
+
+// Incident Categories
+enum IncidentCategory {
+  CYBERSECURITY
+  HUMAN_ERROR
+  PROCESS_FAILURE
+  TECHNICAL_FAILURE
+  MALICIOUS_ACTIVITY
+  NATURAL_DISASTER
+  THIRD_PARTY
+  UNKNOWN
+}
+
+// Impact Levels
+enum ImpactLevel {
+  MINIMAL
+  LOW
+  MEDIUM
+  HIGH
+  SEVERE
+  CATASTROPHIC
+}
+
+// Investigation Status
+enum InvestigationStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  CLOSED
+  ESCALATED
+}
+
+// Report Status
+enum ReportStatus {
+  NOT_REQUIRED
+  PENDING
+  SUBMITTED
+  ACKNOWLEDGED
+  REJECTED
+  CLOSED
+}

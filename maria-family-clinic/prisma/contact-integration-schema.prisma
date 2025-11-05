@@ -1,0 +1,826 @@
+// ========================================
+// CONTACT SYSTEM INTEGRATION SCHEMA
+// Sub-Phase 9.9: Integration with Existing My Family Clinic Features
+// Seamless integration between contact system and all existing platform features
+// ========================================
+
+// ========================================
+// USER INTEGRATION ENHANCEMENTS
+// Contact preferences and settings for user profiles
+// ========================================
+
+// User Contact Preferences - Extends existing UserPreferences
+model UserContactPreferences {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  
+  // Contact method preferences
+  preferredContactMethod ContactMethod @default(EMAIL)
+  secondaryContactMethod ContactMethod?
+  emergencyContactMethod ContactMethod @default(PHONE)
+  
+  // Communication settings
+  allowDirectContact    Boolean  @default(true)
+  allowEmailMarketing   Boolean  @default(false)
+  allowSmsUpdates       Boolean  @default(true)
+  allowPhoneCalls       Boolean  @default(false)
+  allowWhatsAppUpdates  Boolean  @default(false)
+  
+  // Timing preferences
+  contactAllowedFrom    String?  // "09:00" - 24h format
+  contactAllowedTo      String?  // "17:00" - 24h format
+  timezone              String   @default("Asia/Singapore")
+  doNotDisturb          Boolean  @default(false)
+  
+  // Healthcare-specific preferences
+  medicalUpdatesViaEmail Boolean  @default(true)
+  appointmentReminders   Boolean  @default(true)
+  healthGoalReminders    Boolean  @default(true)
+  programEnrollmentUpdates Boolean @default(true)
+  emergencyNotifications Boolean  @default(true)
+  
+  // Contact history and follow-up
+  preferredFollowUpTime Int?     // Days for follow-up after contact
+  contactHistoryAccess  Boolean  @default(true)
+  shareContactWithPartners Boolean @default(false)
+  
+  // Privacy and compliance
+  dataRetentionPeriod   Int      @default(365) // Days
+  contactDataEncrypted  Boolean  @default(true)
+  thirdPartySharing     Boolean  @default(false)
+  marketingTracking     Boolean  @default(false)
+  
+  // Healthier SG specific
+  healthierSgNotifications Boolean @default(true)
+  healthierSgContactPreferences Json @default("{}")
+  
+  // Appointment and program integration
+  appointmentRelatedContact Boolean @default(true)
+  serviceRelatedContact    Boolean @default(true)
+  programEnrollmentContact  Boolean @default(true)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("user_contact_preferences")
+}
+
+// User Contact History and Enquiry Log
+model UserContactHistory {
+  id                String   @id @default(cuid())
+  userId            String
+  
+  // Contact details
+  contactFormId     String?
+  enquiryId         String?
+  appointmentId     String?
+  serviceId         String?
+  clinicId          String?
+  doctorId          String?
+  
+  // Contact classification
+  contactType       ContactType
+  contactCategory   String?
+  purpose           String   @db.Text
+  
+  // Communication details
+  method            ContactMethod
+  subject           String?
+  summary           String?  @db.Text
+  outcome           String?  @db.Text
+  
+  // Follow-up tracking
+  followUpRequired  Boolean  @default(false)
+  followUpDate      DateTime?
+  followUpCompleted Boolean  @default(false)
+  followUpNotes     String?  @db.Text
+  
+  // Status and resolution
+  status            ContactHistoryStatus @default(ACTIVE)
+  resolved          Boolean  @default(false)
+  satisfaction      Int?     // 1-5 rating
+  notes             String?  @db.Text
+  
+  // Healthcare integration
+  relatedHealthData Json     @default("{}")
+  medicalRelevance  Boolean  @default(false)
+  prescriptionMentioned Boolean @default(false)
+  
+  // Privacy and access
+  encryptedContent  Boolean  @default(true)
+  accessLevel       ContactAccessLevel @default(STANDARD)
+  auditRequired     Boolean  @default(true)
+  
+  // Analytics and insights
+  responseTime      Int?     // Minutes
+  resolutionTime    Int?     // Minutes
+  cost              Float?   // Cost in SGD
+  qualityScore      Float?   // 0-1 quality rating
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now())
+
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contactForm       ContactForm? @relation(fields: [contactFormId], references: [id], onDelete: SetNull)
+  enquiry           Enquiry? @relation(fields: [enquiryId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([contactFormId])
+  @@index([enquiryId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("user_contact_history")
+}
+
+// ========================================
+// CLINIC INTEGRATION ENHANCEMENTS
+// Contact features and preferences for clinic profiles
+// ========================================
+
+// Clinic Contact Integration Settings
+model ClinicContactIntegration {
+  id                String   @id @default(cuid())
+  clinicId          String   @unique
+  
+  // Contact form integration
+  enableContactForm Boolean  @default(true)
+  autoAssignContact Boolean  @default(true)
+  contactFormCategories Json @default("[]") // Enabled categories
+  
+  // Quick contact options
+  showPhoneButton   Boolean  @default(true)
+  showEmailButton   Boolean  @default(true)
+  showWhatsAppButton Boolean @default(false)
+  showWalkInOption  Boolean  @default(true)
+  
+  // Emergency and urgent contact
+  emergencyContactEnabled Boolean @default(true)
+  emergencyPhone           String?
+  emergencyHours           Json    @default("{}")
+  urgentMessageTemplate    String? @db.Text
+  
+  // Appointment-related contact
+  appointmentQueriesEnabled Boolean @default(true)
+  appointmentPhone         String?
+  appointmentEmail         String?
+  appointmentHours         Json    @default("{}")
+  
+  // Service-specific contact
+  serviceContactEnabled    Boolean @default(true)
+  serviceContactMethods    Json    @default("[]")
+  specialistDirectContact  Boolean @default(false)
+  
+  // Healthier SG integration
+  healthierSgContactEnabled Boolean @default(true)
+  healthierSgContactMethods Json    @default("[]")
+  healthierSgHotline        String?
+  healthierSgEmail          String?
+  
+  // Response time commitments
+  responseTimeCommitments  Json    @default("{}")
+  businessHours            Json    @default("{}")
+  languageSupport          String[] @default(["en", "zh", "ms", "ta"])
+  
+  // Contact form customization
+  customFields             Json    @default("[]")
+  mandatoryFields          Json    @default("[]")
+  fileUploadEnabled        Boolean @default(true)
+  maxFileSize              Int     @default(5242880) // 5MB
+  allowedFileTypes         String[] @default(["pdf", "jpg", "png", "doc", "docx"])
+  
+  // Contact analytics
+  contactTrackingEnabled   Boolean @default(true)
+  conversionGoals          Json    @default("[]")
+  performanceMetrics       Json    @default("{}")
+  
+  // Integration settings
+  crmIntegrationEnabled    Boolean @default(false)
+  crmSystem                String?
+  crmConfig               Json    @default("{}")
+  webhookEndpoints        Json    @default("[]")
+  
+  // Staff and routing
+  primaryContactPerson     String?
+  contactTeam              String[]
+  escalationRules          Json    @default("[]")
+  autoResponseEnabled      Boolean @default(true)
+  
+  // Privacy and compliance
+  contactDataRetentionDays Int     @default(730) // 2 years
+  encryptionRequired       Boolean @default(true)
+  pdpaCompliance           Boolean @default(true)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  clinic            Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+
+  @@index([clinicId])
+  @@map("clinic_contact_integration")
+}
+
+// ========================================
+// DOCTOR INTEGRATION ENHANCEMENTS
+// Contact features and preferences for doctor profiles
+// ========================================
+
+// Doctor Contact Integration Settings
+model DoctorContactIntegration {
+  id                String   @id @default(cuid())
+  doctorId          String   @unique
+  
+  // Contact method preferences
+  allowPatientContact Boolean @default(true)
+  contactMethodPreferences Json @default("[]")
+  preferredContactTimes Json @default("{}")
+  
+  // Patient communication
+  patientEmailEnabled   Boolean @default(true)
+  patientPhoneEnabled   Boolean @default(false)
+  patientWhatsAppEnabled Boolean @default(false)
+  patientPortalEnabled  Boolean @default(true)
+  
+  // Urgent contact handling
+  emergencyContactEnabled Boolean @default(true)
+  emergencyPhone          String?
+  emergencyAfterHours     Boolean @default(false)
+  urgentMessageResponse   String? // Response time commitment
+  
+  // Service and appointment contact
+  appointmentQueries     Boolean @default(true)
+  serviceInquiries       Boolean @default(true)
+  secondOpinionRequests  Boolean @default(false)
+  medicalRecordsRequests Boolean @default(true)
+  
+  // Specialty-specific contact
+  specialtyContactRules  Json    @default("[]")
+  conditionSpecificContact Json  @default("[]")
+  procedureRelatedContact Boolean @default(true)
+  
+  // Healthier SG program contact
+  healthierSgEnrollmentSupport Boolean @default(true)
+  healthierSgContactEnabled     Boolean @default(false)
+  healthierSgHotline           String?
+  
+  // Professional communication
+  professionalReferrals    Boolean @default(true)
+  colleagueConsultation    Boolean @default(false)
+  medicalEducationRequests Boolean @default(false)
+  
+  // Response and availability
+  responseTimeCommitments  Json    @default("{}")
+  consultationAvailability Json    @default("[]")
+  languageSupport          String[] @default(["en", "zh", "ms", "ta"])
+  
+  // Contact form integration
+  enableContactForm       Boolean @default(true)
+  autoResponseTemplates   Json    @default("[]")
+  contactCategorization   Json    @default("[]")
+  
+  // Privacy and compliance
+  patientDataHandling     Json    @default("{}")
+  medicalRecordRequests   Boolean @default(true)
+  medicalRecordResponseTime Int?  // Days
+  
+  // Integration and technology
+  telemedicineContact     Boolean @default(true)
+  videoConsultationContact Boolean @default(false)
+  digitalPrescriptionContact Boolean @default(true)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  doctor            Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@index([doctorId])
+  @@map("doctor_contact_integration")
+}
+
+// ========================================
+// SERVICE INTEGRATION ENHANCEMENTS
+// Contact features for service-related enquiries
+// ========================================
+
+// Service Contact Integration Settings
+model ServiceContactIntegration {
+  id                String   @id @default(cuid())
+  serviceId         String   @unique
+  
+  // Service-specific contact options
+  enableServiceContact Boolean @default(true)
+  contactMethods        Json    @default("[]")
+  specialistContact     Boolean @default(false)
+  generalContact        Boolean @default(true)
+  
+  // Pre-consultation contact
+  preAppointmentContact  Boolean @default(true)
+  preparationQuestions   Boolean @default(true)
+  requirementsInquiry    Boolean @default(true)
+  pricingQueries         Boolean @default(true)
+  
+  // Post-service contact
+  followUpQueries        Boolean @default(true)
+  resultsDiscussion      Boolean @default(true)
+  complicationReporting  Boolean @default(true)
+  satisfactionFeedback   Boolean @default(true)
+  
+  // Medical information contact
+  medicalHistoryInquiry  Boolean @default(true)
+  riskAssessmentContact  Boolean @default(false)
+  contraindicationQueries Boolean @default(true)
+  alternativeOptions     Boolean @default(true)
+  
+  // Healthier SG related contact
+  healthierSgCoverageInquiry Boolean @default(true)
+  healthierSgProcessSupport   Boolean @default(true)
+  subsidyInformation          Boolean @default(true)
+  
+  // Contact customization
+  serviceSpecificFields   Json    @default("[]")
+  mandatoryQuestions      Json    @default("[]")
+  optionalInformation     Json    @default("[]")
+  
+  // Response and routing
+  responseTimeCommitment  String? // e.g., "24 hours"
+  autoRoutingRules        Json    @default("[]")
+  specialistAssignment    Boolean @default(false)
+  
+  // Documentation and files
+  documentUploadRequired  Boolean @default(false)
+  medicalReportUpload     Boolean @default(true)
+  labResultUpload         Boolean @default(false)
+  imageUpload            Boolean @default(false)
+  
+  // Privacy and compliance
+  medicalDataProtection   Boolean @default(true)
+  consentRequired         Boolean @default(true)
+  dataRetentionPeriod     Int     @default(365) // Days
+  
+  // Integration settings
+  clinicIntegration       Boolean @default(true)
+  doctorIntegration       Boolean @default(true)
+  appointmentSystemIntegration Boolean @default(true)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  service           Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId])
+  @@map("service_contact_integration")
+}
+
+// ========================================
+// APPOINTMENT BOOKING INTEGRATION
+// Link contact history with appointment scheduling
+// ========================================
+
+// Appointment Contact Integration
+model AppointmentContactIntegration {
+  id                String   @id @default(cuid())
+  appointmentId     String   @unique
+  
+  // Contact history link
+  lastContactId     String?
+  pendingContactId  String?
+  relatedContactIds String[] @default([])
+  
+  // Contact-driven booking
+  contactTriggeredBooking Boolean @default(false)
+  contactReference        String?  // Reference number from contact
+  contactCategory         String?  // Category that triggered booking
+  
+  // Pre-appointment contact
+  preAppointmentContact   Boolean @default(true)
+  preContactMethod        ContactMethod?
+  preContactScheduled     DateTime?
+  preContactCompleted     Boolean @default(false)
+  
+  // Appointment confirmation
+  confirmationContact     Boolean @default(true)
+  confirmationMethod      ContactMethod?
+  confirmationSent        Boolean @default(false)
+  confirmationMethodUsed  String?
+  
+  // Post-appointment follow-up
+  followUpContact         Boolean @default(false)
+  followUpDelay           Int?    // Days after appointment
+  followUpMethod          ContactMethod?
+  followUpScheduled       DateTime?
+  followUpCompleted       Boolean @default(false)
+  
+  // Appointment details contact
+  rescheduleContact       Boolean @default(true)
+  cancellationContact     Boolean @default(true)
+  modificationContact     Boolean @default(true)
+  noShowContact          Boolean @default(false)
+  
+  // Medical information contact
+  preOpInstructions       Boolean @default(false)
+  postOpCare              Boolean @default(false)
+  medicationInstructions  Boolean @default(false)
+  resultDiscussion        Boolean @default(false)
+  
+  // Contact preferences for this appointment
+  preferredContactMethod  ContactMethod?
+  patientContactPreferences Json   @default("{}")
+  specialContactInstructions String? @db.Text
+  
+  // Contact tracking
+  contactSequence         Json    @default("[]") // Contact steps and timing
+  contactCompletedSteps   Json    @default("[]")
+  nextContactScheduled    DateTime?
+  contactNotes            String? @db.Text
+  
+  // Integration with other systems
+  clinicContactSystem     Boolean @default(true)
+  doctorContactSystem     Boolean @default(true)
+  patientPortalIntegration Boolean @default(false)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  appointment       Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  lastContact       ContactForm? @relation(fields: [lastContactId], references: [id], onDelete: SetNull)
+
+  @@index([appointmentId])
+  @@index([lastContactId])
+  @@map("appointment_contact_integration")
+}
+
+// ========================================
+// HEALTHIER SG PROGRAM INTEGRATION
+// Contact and follow-up for program participants
+// ========================================
+
+// Healthier SG Contact Integration
+model HealthierSgContactIntegration {
+  id                String   @id @default(cuid())
+  enrollmentId      String   @unique
+  
+  // Enrollment contact
+  enrollmentContactId   String?
+  enrollmentMethod      ContactMethod?
+  enrollmentSupport     String?  // Support person/department
+  enrollmentFollowUp    DateTime?
+  enrollmentCompleted   Boolean  @default(false)
+  
+  // Program participation contact
+  programSupportContact Boolean  @default(true)
+  programQuestions      Boolean  @default(true)
+  serviceNavigation     Boolean  @default(true)
+  benefitExplanation    Boolean  @default(true)
+  
+  // Health goal contact
+  goalSettingContact    Boolean  @default(true)
+  goalProgressContact   Boolean  @default(false)
+  milestoneCelebration  Boolean  @default(false)
+  setbackSupport        Boolean  @default(true)
+  
+  // Service and clinic contact
+  clinicTransitionSupport Boolean @default(true)
+  providerSwitchSupport   Boolean @default(false)
+  serviceModification     Boolean @default(true)
+  appointmentAssistance   Boolean @default(true)
+  
+  // Follow-up and check-ins
+  regularCheckIns        Boolean  @default(false)
+  checkInFrequency       Int?     // Weeks
+  healthReviewContact    Boolean  @default(false)
+  annualReviewContact    Boolean  @default(false)
+  
+  // Program updates and news
+  programUpdates         Boolean  @default(true)
+  benefitChanges         Boolean  @default(true)
+  newServices            Boolean  @default(false)
+  policyChanges          Boolean  @default(true)
+  
+  // Contact preferences for Healthier SG
+  preferredContactMethod ContactMethod?
+  contactFrequency       String?  // weekly, monthly, quarterly
+  contactTimePreference  String?  // morning, afternoon, evening
+  
+  // Integration with other healthcare contacts
+  linkWithMedicalContact Boolean  @default(false)
+  separateHealthierSgContact Boolean @default(true)
+  emergencyHealthierSgContact Boolean @default(false)
+  
+  // Program milestones
+  programMilestones      Json     @default("[]")
+  milestoneContact       Json     @default("[]")
+  completionContact      Boolean  @default(false)
+  graduationContact      Boolean  @default(false)
+  
+  // Data and analytics
+  contactEffectiveness   Json     @default("{}")
+  engagementMetrics      Json     @default("{}")
+  successIndicators      Json     @default("[]")
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  enrollment        HealthierSgEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  enrollmentContact ContactForm? @relation(fields: [enrollmentContactId], references: [id], onDelete: SetNull)
+
+  @@index([enrollmentId])
+  @@index([enrollmentContactId])
+  @@map("healthier_sg_contact_integration")
+}
+
+// ========================================
+// CONTACT DASHBOARD INTEGRATION
+// Unified contact management across all platform features
+// ========================================
+
+// User Contact Dashboard Settings
+model UserContactDashboard {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  
+  // Dashboard preferences
+  showContactNotifications Boolean @default(true)
+  showEnquiryUpdates      Boolean @default(true)
+  showAppointmentContacts Boolean @default(true)
+  showProgramContacts     Boolean @default(false)
+  
+  // Contact summary widgets
+  recentContactsWidget    Boolean @default(true)
+  pendingResponsesWidget  Boolean @default(true)
+  followUpTasksWidget     Boolean @default(true)
+  contactStatsWidget      Boolean @default(false)
+  
+  // Notification preferences
+  emailNotifications      Boolean @default(true)
+  smsNotifications        Boolean @default(false)
+  pushNotifications       Boolean @default(true)
+  inAppNotifications      Boolean @default(true)
+  
+  // Contact management features
+  quickContactAccess      Boolean @default(true)
+  contactHistoryAccess    Boolean @default(true)
+  saveContactPreferences  Boolean @default(true)
+  contactAnalyticsAccess  Boolean @default(false)
+  
+  // Contact categorization
+  showHealthContacts      Boolean @default(true)
+  showProgramContacts     Boolean @default(false)
+  showAdministrativeContacts Boolean @default(false)
+  
+  // Privacy and sharing
+  shareContactHistory     Boolean @default(false)
+  allowContactSuggestions Boolean @default(true)
+  allowContactRecommendations Boolean @default(false)
+  
+  // Integration preferences
+  showClinicContacts      Boolean @default(true)
+  showDoctorContacts      Boolean @default(true)
+  showServiceContacts     Boolean @default(true)
+  showEmergencyContacts   Boolean @default(true)
+  
+  // Dashboard layout
+  contactListView         Boolean @default(true)
+  contactCardView         Boolean @default(false)
+  contactTimelineView     Boolean @default(false)
+  contactAnalyticsView    Boolean @default(false)
+  
+  // Contact actions
+  enableQuickReply        Boolean @default(true)
+  enableContactEscalation Boolean @default(false)
+  enableContactMerging    Boolean @default(false)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("user_contact_dashboard")
+}
+
+// Contact Activity and Notification Log
+model ContactActivityLog {
+  id                String   @id @default(cuid())
+  userId            String?
+  contactFormId     String?
+  enquiryId         String?
+  appointmentId     String?
+  
+  // Activity details
+  activityType      ContactActivityType
+  activityDescription String @db.Text
+  activityData      Json    @default("{}")
+  
+  // Contact context
+  contactMethod     ContactMethod?
+  contactCategory   String?
+  priority          ContactPriority @default(NORMAL)
+  
+  // Status and outcome
+  status            ContactActivityStatus @default(PENDING)
+  outcome           String?  @db.Text
+  satisfaction      Int?     // 1-5 rating
+  
+  // Integration context
+  sourceSystem      String   // clinic_system, doctor_system, appointment_system, etc.
+  integrationId     String?  // ID in source system
+  integrationData   Json     @default("{}")
+  
+  // Notification details
+  notificationSent  Boolean  @default(false)
+  notificationData  Json     @default("{}")
+  deliveryStatus    String?  // sent, delivered, read, failed
+  
+  // Follow-up tracking
+  requiresFollowUp  Boolean  @default(false)
+  followUpDate      DateTime?
+  followUpCompleted Boolean  @default(false)
+  followUpMethod    ContactMethod?
+  
+  // Analytics
+  responseTime      Int?     // Minutes
+  resolutionTime    Int?     // Minutes
+  userEngagement    Float?   // 0-1 engagement score
+  
+  // Privacy and compliance
+  sensitiveData     Boolean  @default(false)
+  encrypted         Boolean  @default(true)
+  auditTrail        Boolean  @default(true)
+  accessLogged      Boolean  @default(true)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user              User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  contactForm       ContactForm? @relation(fields: [contactFormId], references: [id], onDelete: SetNull)
+  enquiry           Enquiry? @relation(fields: [enquiryId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([contactFormId])
+  @@index([enquiryId])
+  @@index([activityType])
+  @@index([status])
+  @@index([createdAt])
+  @@map("contact_activity_log")
+}
+
+// ========================================
+// CONTACT INTEGRATION ENUMS
+// ========================================
+
+// Contact Type Classification
+enum ContactType {
+  GENERAL_INQUIRY
+  APPOINTMENT_BOOKING
+  APPOINTMENT_INQUIRY
+  SERVICE_INFORMATION
+  HEALTH_CONCERN
+  HEALTHIER_SG_RELATED
+  MEDICAL_RECORD_REQUEST
+  COMPLAINT
+  COMPLIMENT
+  EMERGENCY
+  FOLLOW_UP
+  URGENT_CARE
+  PRESCRIPTION_INQUIRY
+  BILLING_INQUIRY
+  TECHNICAL_SUPPORT
+  PROGRAM_ENROLLMENT
+  PROGRAM_SUPPORT
+  PROGRAM_COMPLETION
+}
+
+// Contact History Status
+enum ContactHistoryStatus {
+  ACTIVE
+  PENDING_RESPONSE
+  RESOLVED
+  CLOSED
+  ARCHIVED
+  DELETED
+  ESCALATED
+}
+
+// Contact Access Level
+enum ContactAccessLevel {
+  PUBLIC
+  STANDARD
+  RESTRICTED
+  CONFIDENTIAL
+  MEDICAL
+  EMERGENCY_ONLY
+}
+
+// Contact Activity Type
+enum ContactActivityType {
+  FORM_SUBMITTED
+  RESPONSE_SENT
+  STATUS_UPDATED
+  ASSIGNED
+  ESCALATED
+  RESOLVED
+  CLOSED
+  FOLLOW_UP_SCHEDULED
+  FOLLOW_UP_COMPLETED
+  APPOINTMENT_BOOKED
+  APPOINTMENT_CONFIRMED
+  APPOINTMENT_CANCELLED
+  ENQUIRY_CREATED
+  DOCUMENT_UPLOADED
+  RESPONSE_RECEIVED
+  SATISFACTION_RATED
+  CONTACT_PREFERENCES_UPDATED
+  DASHBOARD_UPDATED
+  NOTIFICATION_SENT
+  INTEGRATION_SYNC
+}
+
+// Contact Activity Status
+enum ContactActivityStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELLED
+  DEFERRED
+  ON_HOLD
+}
+
+// ========================================
+// INDEXES FOR OPTIMAL PERFORMANCE
+// Optimized for contact system integration queries
+// ========================================
+
+// User contact preferences queries
+// Optimizes: User dashboard, contact settings management
+// Usage: UserContactDashboard, UserContactPreferences display
+@@index([userId, preferredContactMethod])
+@@index([userId, emergencyContactMethod])
+@@index([userId, contactAllowedFrom, contactAllowedTo])
+
+// Contact history queries
+// Optimizes: User contact history display and analytics
+// Usage: UserContactDashboard, contact history timeline
+@@index([userId, createdAt])
+@@index([userId, contactType, createdAt])
+@@index([userId, status, createdAt])
+@@index([contactFormId, createdAt])
+
+// Clinic contact integration queries
+// Optimizes: Clinic contact features, contact form generation
+// Usage: Clinic profile, contact form customization
+@@index([clinicId, enableContactForm])
+@@index([clinicId, emergencyContactEnabled])
+@@index([clinicId, appointmentQueriesEnabled])
+
+// Doctor contact integration queries
+// Optimizes: Doctor profile contact features
+// Usage: Doctor contact display, patient communication
+@@index([doctorId, allowPatientContact])
+@@index([doctorId, emergencyContactEnabled])
+@@index([doctorId, appointmentQueries])
+
+// Service contact integration queries
+// Optimizes: Service-specific contact features
+// Usage: Service detail pages, pre-consultation contact
+@@index([serviceId, enableServiceContact])
+@@index([serviceId, preAppointmentContact])
+@@index([serviceId, followUpQueries])
+
+// Appointment contact integration queries
+// Optimizes: Appointment workflow contact integration
+// Usage: Appointment booking, confirmation, follow-up
+@@index([appointmentId, contactTriggeredBooking])
+@@index([appointmentId, preAppointmentContact])
+@@index([appointmentId, followUpContact])
+
+// Healthier SG contact integration queries
+// Optimizes: Program participant contact management
+// Usage: Healthier SG enrollment, program support
+@@index([enrollmentId, programSupportContact])
+@@index([enrollmentId, enrollmentContactId])
+@@index([enrollmentId, followUpDate])
+
+// User dashboard preferences queries
+// Optimizes: User dashboard customization
+// Usage: UserContactDashboard, contact notifications
+@@index([userId, showContactNotifications])
+@@index([userId, notificationPreferences])
+
+// Contact activity log queries
+// Optimizes: Contact activity tracking and notifications
+// Usage: Contact activity monitoring, user notifications
+@@index([userId, activityType, createdAt])
+@@index([userId, status, createdAt])
+@@index([contactFormId, createdAt])
+@@index([sourceSystem, integrationId])
+
+// Cross-system integration queries
+// Optimizes: Contact integration with other platform features
+// Usage: Unified contact management, cross-feature navigation
+@@index([userId, sourceSystem])
+@@index([contactFormId, enquiryId])
+@@index([appointmentId, relatedContactIds])
+@@index([createdAt, activityType])

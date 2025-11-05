@@ -1,0 +1,2506 @@
+My Family Clinic Website - Comprehensive UI/UX Enhancement Analysis
+Executive Summary
+I've conducted a systematic, multi-dimensional analysis of your PRD to identify opportunities for elevating the UI/UX, aesthetics, user interaction, and feature set beyond the already-solid foundation you've established. This analysis identifies 47 specific enhancement opportunities across 10 critical dimensions, ranging from quick wins to strategic improvements that will significantly amplify trust, usability, and patient satisfaction.
+
+Key Finding: Your PRD provides an excellent technical and functional foundation. The greatest opportunities lie in emotional design, trust-building mechanisms, and context-aware intelligence that transform the site from a well-functioning tool into a genuinely caring digital healthcare companion.
+
+Analysis Framework
+I've evaluated your PRD across these dimensions:
+
+Visual Design & Aesthetic Psychology
+Information Architecture & Wayfinding
+Interaction Design & Micro-interactions
+Trust & Credibility Mechanisms
+Accessibility & Inclusive Design
+Performance & Perceived Speed
+Content Strategy & Voice
+Mobile-Specific Experiences
+Error Prevention & Recovery
+Context Awareness & Personalization
+1. Visual Design & Aesthetic Psychology
+1.1 Design System Enhancements
+Current State: PRD mentions design tokens but lacks emotional and psychological rationale.
+
+Recommended Enhancements:
+
+Color Palette with Psychological Intent
+text
+
+PRIMARY PALETTE (Trust & Care)
+├─ Primary Blue: #0369A1 (Sky-700) - Trust, professionalism, calm
+├─ Primary Blue Light: #7DD3FC (Sky-300) - Approachability, accessibility
+├─ Primary Blue Dark: #0C4A6E (Sky-900) - Authority, depth
+├─ Accent Green: #059669 (Emerald-600) - Health, growth, positive action
+└─ Accent Amber: #F59E0B (Amber-500) - Attention, warmth (for alerts/highlights)
+
+SEMANTIC PALETTE
+├─ Success: Emerald-600 (#059669) - Confirmations, positive states
+├─ Warning: Amber-500 (#F59E0B) - Cautions, attention needed
+├─ Error: Rose-600 (#E11D48) - Errors, critical alerts
+└─ Info: Sky-500 (#0EA5E9) - Informational content
+
+NEUTRAL PALETTE (Calm & Readable)
+├─ Neutral-50: #FAFAF9 (Warm white - backgrounds)
+├─ Neutral-100-300: (Light UI elements, borders)
+├─ Neutral-600-700: (Body text, readable on light)
+├─ Neutral-800-900: (Headlines, high emphasis)
+└─ White: #FFFFFF (Cards, overlays, contrast)
+
+HEALTHCARE-SPECIFIC ACCENTS
+├─ Wellness Teal: #14B8A6 (Teal-500) - Preventive care, wellness
+└─ Care Purple: #9333EA (Purple-600) - Specialist care, premium services
+Rationale: Healthcare requires a delicate balance—professional enough to inspire trust, warm enough to reduce anxiety. This palette uses color psychology intentionally, with blues for trust and greens for health/growth. The warm neutrals (stone vs gray) prevent the clinical coldness common in healthcare sites.
+
+Typography System with Hierarchy & Emotion
+TypeScript
+
+// Font Stack Recommendation
+const fontSystem = {
+  // Headings: Geometric sans-serif for modern professionalism
+  display: 'Inter Variable, system-ui, sans-serif',
+  
+  // Body: Humanist sans-serif for warmth and readability  
+  body: 'Inter Variable, system-ui, sans-serif',
+  
+  // Alternative: If you want more warmth, consider:
+  // display: 'Cal Sans, Inter, system-ui, sans-serif',
+  // body: 'Inter Variable, system-ui, sans-serif',
+  
+  // Monospace: For reference numbers, codes
+  mono: 'JetBrains Mono, Consolas, monospace',
+}
+
+// Type Scale (1.250 - Major Third for generous spacing)
+const typeScale = {
+  xs: '0.75rem',    // 12px - labels, captions
+  sm: '0.875rem',   // 14px - secondary text
+  base: '1rem',     // 16px - body text
+  lg: '1.125rem',   // 18px - large body, introductions
+  xl: '1.25rem',    // 20px - small headings
+  '2xl': '1.5rem',  // 24px - h3
+  '3xl': '1.875rem', // 30px - h2
+  '4xl': '2.25rem', // 36px - h1
+  '5xl': '3rem',    // 48px - display, hero
+  '6xl': '3.75rem', // 60px - hero (desktop only)
+}
+
+// Line Heights for Optimal Readability
+const lineHeights = {
+  tight: 1.2,    // Headings
+  snug: 1.375,   // Short paragraphs
+  normal: 1.6,   // Body text (optimal for healthcare content)
+  relaxed: 1.75, // Long-form content
+}
+
+// Font Weights with Semantic Naming
+const fontWeights = {
+  normal: 400,   // Body text
+  medium: 500,   // Emphasis, labels
+  semibold: 600, // Subheadings, buttons
+  bold: 700,     // Headings, strong emphasis
+}
+Enhancement: Variable Font Loading Strategy
+
+TypeScript
+
+// app/layout.tsx
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap', // Prevent FOIT
+  preload: true,
+  fallback: ['system-ui', 'sans-serif'],
+})
+Rationale: Inter Variable provides a modern, highly legible typeface with excellent rendering across devices. Variable font reduces HTTP requests while providing full weight range. The generous line-height (1.6) is critical for healthcare content where comprehension and calm reading matter more than density.
+
+Spacing & Layout System
+8px Base Grid with Healthcare-Optimized Spacing:
+
+TypeScript
+
+const spacing = {
+  // Micro (internal component spacing)
+  0.5: '0.125rem', // 2px
+  1: '0.25rem',    // 4px
+  2: '0.5rem',     // 8px - base unit
+  3: '0.75rem',    // 12px
+  4: '1rem',       // 16px
+  
+  // Macro (component gaps, layout)
+  6: '1.5rem',     // 24px - comfortable spacing
+  8: '2rem',       // 32px - section spacing
+  12: '3rem',      // 48px - major sections
+  16: '4rem',      // 64px - page sections
+  24: '6rem',      // 96px - hero spacing
+  32: '8rem',      // 128px - large sections
+}
+
+// Container Max Widths
+const containers = {
+  sm: '640px',  // Single column content
+  md: '768px',  // Forms, narrow content
+  lg: '1024px', // Standard content
+  xl: '1280px', // Wide content (locator, tables)
+  '2xl': '1536px', // Full-width sections
+  
+  // Custom content widths for optimal readability
+  prose: '65ch', // Optimal line length for reading (520px ~ 65 characters)
+}
+Enhancement: Responsive Spacing Scale
+
+TypeScript
+
+// Use Tailwind's responsive spacing strategically
+<section className="
+  px-4 md:px-6 lg:px-8        // Horizontal padding
+  py-8 md:py-12 lg:py-16      // Vertical padding
+  space-y-6 md:space-y-8      // Stack spacing
+">
+Rationale: Healthcare content should never feel cramped. Generous spacing reduces cognitive load, creates calm, and improves scanability for elderly users or those with visual impairments.
+
+Elevation & Depth System
+TypeScript
+
+// Shadow System (tailwind.config.ts)
+const shadows = {
+  // Subtle depth for cards and elevated surfaces
+  sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+  DEFAULT: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+  md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+  lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+  xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+  
+  // Special: Inner shadow for inputs
+  inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
+  
+  // Healthcare-specific: Soft glow for focus/active states
+  focus: '0 0 0 3px rgb(14 165 233 / 0.5)', // Sky-500 at 50%
+  success: '0 0 0 3px rgb(5 150 105 / 0.3)', // Emerald-600 at 30%
+  error: '0 0 0 3px rgb(225 29 72 / 0.3)', // Rose-600 at 30%
+}
+
+// Border Radius for Approachability
+const radius = {
+  none: '0',
+  sm: '0.25rem',    // 4px - tight elements
+  DEFAULT: '0.5rem', // 8px - cards, buttons
+  md: '0.75rem',    // 12px - larger cards
+  lg: '1rem',       // 16px - modals, major containers
+  xl: '1.5rem',     // 24px - hero elements
+  full: '9999px',   // Pills, badges, avatars
+}
+Enhancement: Consistent Elevation Hierarchy
+
+TypeScript
+
+// Component elevation map
+const elevationMap = {
+  page: 'bg-neutral-50',           // Base layer
+  card: 'bg-white shadow',         // Elevated content
+  cardHover: 'bg-white shadow-md', // Interactive feedback
+  dropdown: 'bg-white shadow-lg',  // Overlays
+  modal: 'bg-white shadow-xl',     // Dialogs
+  tooltip: 'bg-neutral-900 shadow-lg', // Floating labels
+  sticky: 'bg-white shadow-md',    // Sticky header/nav
+}
+Rationale: Consistent elevation creates visual hierarchy and guides attention. Soft shadows (vs. hard material design) feel more approachable and less corporate, suitable for a family clinic.
+
+1.2 Visual Identity & Imagery
+Missing from PRD: Specific guidance on imagery and visual storytelling.
+
+Photography Guidelines
+Markdown
+
+PHOTOGRAPHY STYLE GUIDE
+
+PRIMARY STYLE: Authentic Healthcare Moments
+- Real patients and doctors (with consent and model releases)
+- Natural lighting with warm tones
+- Candid interactions showing care and connection
+- Diverse representation (age, ethnicity, ability)
+- Focus on emotions: reassurance, relief, care, trust
+
+SETTINGS
+- Clean, bright clinic environments (not sterile)
+- Welcoming reception areas
+- Doctor-patient consultations showing eye contact
+- Family-friendly waiting areas
+- Healthcare professionals in natural poses (not stock-photo stiff)
+
+AVOID
+- Overly staged stock photography
+- Cold, clinical environments
+- Medical equipment as hero images (supporting context only)
+- Pain or distress as primary emotion
+- Homogeneous representation
+
+TECHNICAL SPECIFICATIONS
+- Format: WebP with JPEG fallback
+- Aspect ratios: 16:9 (hero), 4:3 (cards), 1:1 (avatars)
+- Minimum resolution: 2x for retina displays
+- Compression: 80-85% quality with size budget per breakpoint
+Illustration System for Empty States & Onboarding
+TypeScript
+
+// Recommendation: Use a friendly, minimal illustration style
+const illustrationStyle = {
+  library: 'lucide-react (icons) + custom spot illustrations',
+  style: 'Line art with subtle color fills',
+  colorPalette: 'Primary blue + accent green, limited palette',
+  use_cases: [
+    'Empty states (no search results)',
+    'Success confirmations',
+    'Onboarding steps',
+    'Error pages (404, 500)',
+    'Feature explanations (Healthier SG steps)',
+  ]
+}
+Example: Empty State for Clinic Search
+
+React
+
+<div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+  {/* Custom illustration or icon */}
+  <div className="w-48 h-48 mb-6 text-neutral-300">
+    <MapPinOff className="w-full h-full" />
+  </div>
+  
+  <h3 className="text-2xl font-semibold text-neutral-900 mb-2">
+    No clinics found nearby
+  </h3>
+  
+  <p className="text-neutral-600 max-w-prose mb-6">
+    We couldn't find any clinics matching your criteria in this area. 
+    Try expanding your search radius or adjusting filters.
+  </p>
+  
+  <div className="flex gap-3">
+    <Button variant="outline" onClick={clearFilters}>
+      Clear Filters
+    </Button>
+    <Button onClick={expandRadius}>
+      Search Wider Area
+    </Button>
+  </div>
+</div>
+1.3 Motion Design Principles
+Current PRD: Mentions "subtle animations" but lacks specification.
+
+Enhancement: Purposeful Motion with Healthcare-Appropriate Timing
+
+TypeScript
+
+// Motion tokens (tailwind.config.ts)
+const motion = {
+  // Duration
+  duration: {
+    instant: '50ms',   // Immediate feedback (hover)
+    fast: '150ms',     // UI responses (button press)
+    base: '250ms',     // Default transitions
+    slow: '350ms',     // Complex animations (panel open)
+    slower: '500ms',   // Page transitions, modals
+  },
+  
+  // Easing (healthcare = calm, not aggressive)
+  easing: {
+    // Entrances: Gentle ease-out (decelerating)
+    out: 'cubic-bezier(0.16, 1, 0.3, 1)', // Smooth deceleration
+    
+    // Exits: Gentle ease-in (accelerating)
+    in: 'cubic-bezier(0.32, 0, 0.67, 0)', // Smooth acceleration
+    
+    // Bidirectional: Ease-in-out
+    inOut: 'cubic-bezier(0.65, 0, 0.35, 1)', // Smooth both ways
+    
+    // Spring (for playful elements only, use sparingly)
+    spring: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+  },
+  
+  // Reduced motion preference
+  prefersReduced: '@media (prefers-reduced-motion: reduce)',
+}
+
+// Implementation
+const transitionClasses = {
+  button: 'transition-colors duration-150 ease-out',
+  card: 'transition-all duration-250 ease-out',
+  modal: 'transition-all duration-350 ease-inOut',
+  page: 'transition-opacity duration-500 ease-out',
+}
+Motion Design Rules:
+
+Purposeful, Not Decorative: Every animation should serve a purpose (feedback, direction, relationship).
+Respect Reduced Motion: Always provide prefers-reduced-motion: reduce fallbacks.
+Consistent Timing: Use the same duration for similar actions across the site.
+Ease Healthcare Anxiety: Avoid sudden, jarring, or aggressive animations.
+Example: Card Hover with Gentle Elevation
+
+React
+
+<Card className="
+  transition-all duration-250 ease-out
+  hover:shadow-md hover:-translate-y-1
+  motion-reduce:transition-none
+  motion-reduce:hover:translate-y-0
+">
+  {/* Card content */}
+</Card>
+Example: Skeleton Loading with Subtle Pulse
+
+React
+
+<div className="
+  animate-pulse
+  motion-reduce:animate-none
+  bg-neutral-200 rounded
+" />
+
+// Custom animation in tailwind.config.ts
+animation: {
+  pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+}
+1.4 Dark Mode Consideration
+Missing from PRD: No mention of dark mode.
+
+Recommendation: Add System-Responsive Dark Mode (Phase 1.5 or Phase 2)
+
+Rationale:
+
+Reduces eye strain for users browsing in evening/night
+Modern expectation for digital products
+Can be implemented progressively with Tailwind's dark: variant
+Implementation Strategy:
+
+TypeScript
+
+// tailwind.config.ts
+module.exports = {
+  darkMode: 'class', // or 'media' for automatic system detection
+  theme: {
+    extend: {
+      colors: {
+        // Dark mode specific colors
+        dark: {
+          bg: '#0A0A0A',
+          surface: '#171717',
+          border: '#262626',
+        }
+      }
+    }
+  }
+}
+React
+
+// Example dark mode classes
+<div className="
+  bg-white dark:bg-dark-surface
+  text-neutral-900 dark:text-neutral-100
+  border border-neutral-200 dark:border-dark-border
+">
+Phase 1 Decision: Consider deferring to Phase 1.5 unless user research shows significant night-time usage for healthcare searching.
+
+2. Information Architecture & Wayfinding Enhancements
+2.1 Navigation Improvements
+Current PRD: Good foundation with grouped navigation.
+
+Enhancements:
+
+Mega Menu for "Care" Navigation
+Rationale: Healthcare sites have complex hierarchies. A mega menu can surface key pathways without requiring users to drill down.
+
+React
+
+// MegaMenu Component Structure
+<NavigationMenu>
+  <NavigationMenuList>
+    <NavigationMenuItem>
+      <NavigationMenuTrigger>Care</NavigationMenuTrigger>
+      <NavigationMenuContent className="grid grid-cols-3 gap-4 p-6 w-[600px]">
+        
+        {/* Column 1: Services */}
+        <div>
+          <h4 className="font-semibold mb-3">Services</h4>
+          <ul className="space-y-2">
+            <li><Link href="/services/gp-consultation">GP Consultation</Link></li>
+            <li><Link href="/services/health-screening">Health Screening</Link></li>
+            <li><Link href="/services/vaccination">Vaccination</Link></li>
+            <li><Link href="/services">View All →</Link></li>
+          </ul>
+        </div>
+        
+        {/* Column 2: Doctors */}
+        <div>
+          <h4 className="font-semibold mb-3">Find a Doctor</h4>
+          <ul className="space-y-2">
+            <li><Link href="/doctors?specialty=family-medicine">Family Medicine</Link></li>
+            <li><Link href="/doctors?specialty=pediatrics">Pediatrics</Link></li>
+            <li><Link href="/doctors">All Doctors →</Link></li>
+          </ul>
+        </div>
+        
+        {/* Column 3: Featured */}
+        <div className="bg-sky-50 p-4 rounded-lg">
+          <h4 className="font-semibold mb-2">Healthier SG</h4>
+          <p className="text-sm text-neutral-600 mb-3">
+            Join our nationwide program for better health outcomes
+          </p>
+          <Button size="sm">Learn More</Button>
+        </div>
+        
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>
+Mobile Alternative: Bottom Sheet Navigation
+
+React
+
+// Mobile-optimized sheet navigation (easier thumb reach)
+<Sheet>
+  <SheetTrigger asChild>
+    <Button variant="ghost" className="md:hidden">
+      <Menu />
+    </Button>
+  </SheetTrigger>
+  <SheetContent side="bottom" className="h-[85vh] rounded-t-2xl">
+    {/* Navigation content */}
+  </SheetContent>
+</Sheet>
+Breadcrumb Navigation
+Missing from PRD - Critical for Wayfinding
+
+React
+
+// Breadcrumb Component
+<Breadcrumb className="mb-6">
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/services">Services</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>GP Consultation</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+Enhancement: Smart Breadcrumbs with Context
+
+React
+
+// For clinic detail pages
+Home > Find a Clinic > Ang Mo Kio > Ang Mo Kio Family Clinic
+
+// For doctor profiles
+Home > Our Doctors > Family Medicine > Dr. Sarah Tan
+
+// For services
+Home > Services > Primary Care > GP Consultation
+Benefits:
+
+Reduces cognitive load ("Where am I?")
+Provides quick navigation upward
+Improves SEO with structured data
+Contextual Navigation
+Enhancement: Related Content & Smart Suggestions
+
+React
+
+// On Service Detail Pages - Show Related Clinics
+<section className="mt-12 border-t pt-12">
+  <h3 className="text-2xl font-semibold mb-6">
+    Clinics offering {serviceName}
+  </h3>
+  <div className="grid md:grid-cols-3 gap-4">
+    {relatedClinics.map(clinic => (
+      <ClinicCard key={clinic.id} clinic={clinic} />
+    ))}
+  </div>
+</section>
+
+// On Clinic Detail Pages - Show Available Services
+<section className="mt-8">
+  <h3 className="text-xl font-semibold mb-4">Services at this clinic</h3>
+  <div className="flex flex-wrap gap-2">
+    {clinic.services.map(service => (
+      <Badge key={service.id} variant="outline" asChild>
+        <Link href={`/services/${service.slug}`}>
+          {service.name}
+        </Link>
+      </Badge>
+    ))}
+  </div>
+</section>
+
+// On Doctor Profile - Show Affiliated Clinics
+<section className="mt-8">
+  <h3 className="text-xl font-semibold mb-4">Available at these clinics</h3>
+  {/* Clinic list */}
+</section>
+Benefits:
+
+Keeps users flowing through related content
+Reduces dead ends
+Encourages exploration without losing context
+2.2 Search Enhancements
+Current PRD: Site-wide search mentioned as Phase 2 optional.
+
+Recommendation: Make Search a Phase 1 Priority
+
+Rationale: Healthcare users often arrive with specific intent ("find a pediatrician," "get flu shot," "clinic near Orchard"). Search is a critical pathway.
+
+Intelligent Search with Auto-Suggest
+React
+
+// CommandPalette-style search (Cmd+K pattern)
+<CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
+  <CommandInput placeholder="Search clinics, services, doctors..." />
+  <CommandList>
+    <CommandEmpty>No results found.</CommandEmpty>
+    
+    <CommandGroup heading="Clinics">
+      {clinicResults.map(clinic => (
+        <CommandItem key={clinic.id} onSelect={() => navigate(clinic)}>
+          <MapPin className="mr-2 h-4 w-4" />
+          <span>{clinic.name}</span>
+          <span className="ml-auto text-xs text-neutral-500">
+            {clinic.district}
+          </span>
+        </CommandItem>
+      ))}
+    </CommandGroup>
+    
+    <CommandGroup heading="Services">
+      {serviceResults.map(service => (
+        <CommandItem key={service.id}>
+          <Stethoscope className="mr-2 h-4 w-4" />
+          <span>{service.name}</span>
+        </CommandItem>
+      ))}
+    </CommandGroup>
+    
+    <CommandGroup heading="Doctors">
+      {doctorResults.map(doctor => (
+        <CommandItem key={doctor.id}>
+          <UserCircle className="mr-2 h-4 w-4" />
+          <span>{doctor.name}</span>
+          <span className="ml-auto text-xs text-neutral-500">
+            {doctor.specialty}
+          </span>
+        </CommandItem>
+      ))}
+    </CommandGroup>
+    
+    <CommandSeparator />
+    
+    <CommandGroup heading="Quick Actions">
+      <CommandItem>
+        <Search className="mr-2 h-4 w-4" />
+        <span>Find nearest clinic</span>
+      </CommandItem>
+      <CommandItem>
+        <Phone className="mr-2 h-4 w-4" />
+        <span>Contact us</span>
+      </CommandItem>
+    </CommandGroup>
+  </CommandList>
+</CommandDialog>
+
+// Trigger
+<Button 
+  variant="outline" 
+  className="w-full md:w-64"
+  onClick={() => setSearchOpen(true)}
+>
+  <Search className="mr-2 h-4 w-4" />
+  <span className="text-neutral-500">Search...</span>
+  <kbd className="ml-auto pointer-events-none hidden md:inline-flex h-5 select-none items-center gap-1 rounded border bg-neutral-100 px-1.5 font-mono text-xs font-medium text-neutral-600">
+    <span className="text-xs">⌘</span>K
+  </kbd>
+</Button>
+Features:
+
+Keyboard shortcut (Cmd+K / Ctrl+K)
+Grouped results by type
+Keyboard navigation
+Recent searches (stored in localStorage)
+Quick actions
+Backend: tRPC Search Endpoint
+
+TypeScript
+
+// server/routers/search.ts
+export const searchRouter = router({
+  global: publicProcedure
+    .input(z.object({
+      query: z.string().min(2).max(100),
+      limit: z.number().min(1).max(20).default(5),
+    }))
+    .query(async ({ input, ctx }) => {
+      const { query, limit } = input;
+      
+      const [clinics, services, doctors] = await Promise.all([
+        ctx.prisma.clinic.findMany({
+          where: {
+            OR: [
+              { name: { contains: query, mode: 'insensitive' } },
+              { district: { contains: query, mode: 'insensitive' } },
+              { postal_code: { contains: query } },
+            ],
+          },
+          take: limit,
+          select: { id: true, name: true, slug: true, district: true },
+        }),
+        
+        ctx.prisma.service.findMany({
+          where: {
+            OR: [
+              { name: { contains: query, mode: 'insensitive' } },
+              { short_description: { contains: query, mode: 'insensitive' } },
+            ],
+          },
+          take: limit,
+          select: { id: true, name: true, slug: true, category: true },
+        }),
+        
+        ctx.prisma.doctor.findMany({
+          where: {
+            OR: [
+              { full_name: { contains: query, mode: 'insensitive' } },
+              { specialties: { hasSome: [query] } },
+            ],
+          },
+          take: limit,
+          select: { id: true, full_name: true, slug: true, specialties: true },
+        }),
+      ]);
+      
+      return { clinics, services, doctors };
+    }),
+});
+2.3 Persistent User Context
+Enhancement: Remember User Preferences & Location
+
+TypeScript
+
+// lib/user-context.ts
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+interface UserContextState {
+  lastSearchLocation: { lat: number; lng: number; label: string } | null;
+  preferredClinic: string | null; // clinic slug
+  recentlyViewed: {
+    type: 'clinic' | 'service' | 'doctor';
+    id: string;
+    name: string;
+    slug: string;
+    viewedAt: string;
+  }[];
+  
+  setLastSearchLocation: (location: { lat: number; lng: number; label: string }) => void;
+  setPreferredClinic: (slug: string) => void;
+  addRecentlyViewed: (item: Omit<RecentlyViewedItem, 'viewedAt'>) => void;
+  clearRecentlyViewed: () => void;
+}
+
+export const useUserContext = create<UserContextState>()(
+  persist(
+    (set) => ({
+      lastSearchLocation: null,
+      preferredClinic: null,
+      recentlyViewed: [],
+      
+      setLastSearchLocation: (location) => set({ lastSearchLocation: location }),
+      setPreferredClinic: (slug) => set({ preferredClinic: slug }),
+      
+      addRecentlyViewed: (item) => set((state) => ({
+        recentlyViewed: [
+          { ...item, viewedAt: new Date().toISOString() },
+          ...state.recentlyViewed.filter(i => i.id !== item.id), // Remove duplicates
+        ].slice(0, 10), // Keep last 10
+      })),
+      
+      clearRecentlyViewed: () => set({ recentlyViewed: [] }),
+    }),
+    {
+      name: 'mfc-user-context',
+    }
+  )
+);
+Usage in Clinic Locator:
+
+React
+
+// On clinic locator page
+function ClinicLocator() {
+  const { lastSearchLocation, setLastSearchLocation } = useUserContext();
+  
+  // Prepopulate search with last location
+  useEffect(() => {
+    if (lastSearchLocation && !searchParams.get('location')) {
+      setSearchInput(lastSearchLocation.label);
+      // Optionally auto-trigger search
+    }
+  }, []);
+  
+  return (
+    <div>
+      {lastSearchLocation && (
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={() => searchNear(lastSearchLocation)}
+        >
+          <MapPin className="mr-2 h-4 w-4" />
+          Search near {lastSearchLocation.label} again
+        </Button>
+      )}
+      {/* Search UI */}
+    </div>
+  );
+}
+"Recently Viewed" Component:
+
+React
+
+// components/RecentlyViewed.tsx
+export function RecentlyViewed() {
+  const { recentlyViewed } = useUserContext();
+  
+  if (recentlyViewed.length === 0) return null;
+  
+  return (
+    <section className="py-8 border-t">
+      <h3 className="text-lg font-semibold mb-4">Recently Viewed</h3>
+      <div className="flex gap-3 overflow-x-auto pb-2">
+        {recentlyViewed.map(item => (
+          <Link
+            key={item.id}
+            href={`/${item.type}s/${item.slug}`}
+            className="flex-shrink-0 p-3 border rounded-lg hover:shadow-md transition-shadow"
+          >
+            <div className="text-xs text-neutral-500 mb-1">
+              {item.type}
+            </div>
+            <div className="font-medium">{item.name}</div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+3. Interaction Design & Micro-interactions
+3.1 Enhanced Loading States
+Current PRD: Mentions skeleton screens.
+
+Enhancement: Contextual, Content-Aware Skeletons
+
+React
+
+// Match skeleton to actual content layout
+export function ClinicCardSkeleton() {
+  return (
+    <Card className="p-4">
+      {/* Clinic name */}
+      <Skeleton className="h-6 w-3/4 mb-2" />
+      
+      {/* Address */}
+      <Skeleton className="h-4 w-full mb-1" />
+      <Skeleton className="h-4 w-2/3 mb-4" />
+      
+      {/* Services badges */}
+      <div className="flex gap-2 mb-4">
+        <Skeleton className="h-6 w-20" />
+        <Skeleton className="h-6 w-24" />
+        <Skeleton className="h-6 w-16" />
+      </div>
+      
+      {/* Actions */}
+      <div className="flex gap-2">
+        <Skeleton className="h-9 flex-1" />
+        <Skeleton className="h-9 flex-1" />
+      </div>
+    </Card>
+  );
+}
+Progressive Loading Pattern:
+
+React
+
+// Show partial results as they load
+function ClinicLocator() {
+  const { data, isLoading, isFetching } = trpc.clinics.nearby.useQuery({
+    lat,
+    lng,
+  });
+  
+  return (
+    <div>
+      {/* Show results as they arrive */}
+      {data?.clinics.map(clinic => (
+        <ClinicCard key={clinic.id} clinic={clinic} />
+      ))}
+      
+      {/* Show skeletons for remaining expected results */}
+      {isFetching && Array.from({ length: 3 }).map((_, i) => (
+        <ClinicCardSkeleton key={i} />
+      ))}
+      
+      {/* Inline loading indicator */}
+      {isFetching && data && (
+        <div className="flex items-center justify-center py-4 text-sm text-neutral-500">
+          <Loader2 className="animate-spin mr-2 h-4 w-4" />
+          Loading more results...
+        </div>
+      )}
+    </div>
+  );
+}
+3.2 Optimistic UI Updates
+Enhancement: Instant Perceived Response
+
+React
+
+// Form submission with optimistic update
+function EnquiryForm() {
+  const utils = trpc.useUtils();
+  const { mutate, isLoading } = trpc.enquiries.create.useMutation({
+    onMutate: async (newEnquiry) => {
+      // Cancel outgoing refetches
+      await utils.enquiries.list.cancel();
+      
+      // Snapshot current data
+      const previousEnquiries = utils.enquiries.list.getData();
+      
+      // Optimistically update UI
+      utils.enquiries.list.setData(undefined, (old) => [
+        {
+          id: 'temp-' + Date.now(),
+          ...newEnquiry,
+          status: 'pending',
+          created_at: new Date().toISOString(),
+        },
+        ...(old || []),
+      ]);
+      
+      // Show instant success feedback
+      toast.success('Enquiry submitted! We\'ll respond within 24 hours.');
+      
+      return { previousEnquiries };
+    },
+    
+    onError: (err, newEnquiry, context) => {
+      // Rollback on error
+      utils.enquiries.list.setData(undefined, context?.previousEnquiries);
+      toast.error('Failed to submit. Please try again.');
+    },
+    
+    onSettled: () => {
+      // Refetch after mutation
+      utils.enquiries.list.invalidate();
+    },
+  });
+  
+  // Form implementation
+}
+3.3 Gestural Interactions (Mobile)
+Enhancement: Touch-Optimized Interactions
+
+React
+
+// Swipeable clinic cards in list view
+import { useSwipeable } from 'react-swipeable';
+
+function ClinicCard({ clinic }) {
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      // Reveal quick actions (call, directions)
+      setActionsVisible(true);
+    },
+    onSwipedRight: () => {
+      // Hide actions
+      setActionsVisible(false);
+    },
+    trackMouse: false, // Only on touch devices
+  });
+  
+  return (
+    <div {...handlers} className="relative overflow-hidden">
+      <div className={`transition-transform ${actionsVisible ? '-translate-x-32' : ''}`}>
+        {/* Card content */}
+      </div>
+      
+      {/* Quick actions revealed on swipe */}
+      <div className="absolute right-0 top-0 bottom-0 w-32 flex">
+        <Button size="sm" variant="ghost" onClick={handleCall}>
+          <Phone />
+        </Button>
+        <Button size="sm" variant="ghost" onClick={handleDirections}>
+          <Navigation />
+        </Button>
+      </div>
+    </div>
+  );
+}
+Pull-to-Refresh for Clinic List:
+
+React
+
+import { usePullToRefresh } from '@/hooks/use-pull-to-refresh';
+
+function ClinicList() {
+  const utils = trpc.useUtils();
+  const { pulling, pullDistance } = usePullToRefresh({
+    onRefresh: async () => {
+      await utils.clinics.list.invalidate();
+    },
+  });
+  
+  return (
+    <div className="relative">
+      {/* Pull indicator */}
+      {pulling && (
+        <div 
+          className="absolute top-0 left-0 right-0 flex items-center justify-center transition-transform"
+          style={{ transform: `translateY(${pullDistance}px)` }}
+        >
+          <RefreshCw className={`h-5 w-5 ${pullDistance > 80 ? 'animate-spin' : ''}`} />
+        </div>
+      )}
+      
+      {/* List content */}
+    </div>
+  );
+}
+3.4 Haptic Feedback (Mobile)
+Enhancement: Tactile Confirmation
+
+TypeScript
+
+// lib/haptics.ts
+export const haptics = {
+  light: () => {
+    if ('vibrate' in navigator) {
+      navigator.vibrate(10);
+    }
+  },
+  
+  medium: () => {
+    if ('vibrate' in navigator) {
+      navigator.vibrate(20);
+    }
+  },
+  
+  success: () => {
+    if ('vibrate' in navigator) {
+      navigator.vibrate([10, 50, 10]);
+    }
+  },
+  
+  error: () => {
+    if ('vibrate' in navigator) {
+      navigator.vibrate([20, 100, 20]);
+    }
+  },
+};
+
+// Usage
+<Button onClick={() => {
+  haptics.light();
+  handleClick();
+}}>
+  Call Clinic
+</Button>
+
+// On form submission
+onSubmit={async (data) => {
+  try {
+    await submitForm(data);
+    haptics.success();
+    toast.success('Submitted!');
+  } catch (error) {
+    haptics.error();
+    toast.error('Failed');
+  }
+}}
+3.5 Enhanced Focus States
+Current PRD: Mentions accessibility but not specific focus treatments.
+
+Enhancement: Beautiful, Visible Focus Indicators
+
+CSS
+
+/* globals.css */
+/* Custom focus ring that matches brand */
+.focus-ring {
+  @apply outline-none ring-2 ring-offset-2 ring-sky-500 ring-offset-white;
+}
+
+.focus-ring-inset {
+  @apply outline-none ring-2 ring-inset ring-sky-500;
+}
+
+/* Dark mode variant */
+.dark .focus-ring {
+  @apply ring-offset-dark-surface;
+}
+
+/* Apply to all interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  @apply focus-ring;
+}
+Component-Specific Focus Treatment:
+
+React
+
+// Card with enhanced focus state
+<Card 
+  tabIndex={0}
+  className="
+    group
+    cursor-pointer
+    transition-all
+    hover:shadow-md
+    focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2
+    focus-visible:shadow-lg
+  "
+>
+  {/* Content */}
+</Card>
+
+// Button with focus + active states
+<Button className="
+  focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-500
+  active:scale-95
+  transition-all
+">
+  Locate Clinic
+</Button>
+4. Trust & Credibility Mechanisms
+This is critical for healthcare sites.
+
+4.1 Social Proof & Trust Signals
+Enhancement: Real-Time Social Proof
+
+React
+
+// Real-time activity indicator
+function SocialProof({ clinicId }: { clinicId: string }) {
+  const { data } = trpc.clinics.recentActivity.useQuery({ clinicId });
+  
+  if (!data || data.count === 0) return null;
+  
+  return (
+    <div className="flex items-center gap-2 text-sm text-neutral-600 bg-sky-50 px-3 py-2 rounded-full">
+      <div className="flex -space-x-2">
+        {data.avatars.map((avatar, i) => (
+          <div 
+            key={i}
+            className="w-6 h-6 rounded-full bg-sky-200 border-2 border-white"
+          />
+        ))}
+      </div>
+      <span>
+        <strong className="text-neutral-900">{data.count}</strong> people viewed this clinic today
+      </span>
+    </div>
+  );
+}
+Verified Badges:
+
+React
+
+// Doctor verification badge
+<div className="flex items-center gap-2">
+  <Avatar>
+    <AvatarImage src={doctor.photo_url} alt={doctor.full_name} />
+    <AvatarFallback>{doctor.initials}</AvatarFallback>
+  </Avatar>
+  <div>
+    <div className="flex items-center gap-2">
+      <h3 className="font-semibold">{doctor.full_name}</h3>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Badge variant="secondary" className="gap-1">
+              <ShieldCheck className="h-3 w-3" />
+              Verified
+            </Badge>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Credentials verified by My Family Clinic</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
+    <p className="text-sm text-neutral-600">{doctor.credentials}</p>
+  </div>
+</div>
+4.2 Transparent Wait Time & Availability
+Enhancement: Set Expectations Early
+
+React
+
+// Clinic card with current status
+function ClinicCard({ clinic }) {
+  const now = new Date();
+  const isOpen = isClinicOpen(clinic.hours_json, now);
+  const nextOpenTime = getNextOpenTime(clinic.hours_json, now);
+  
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-start justify-between">
+          <CardTitle>{clinic.name}</CardTitle>
+          
+          {isOpen ? (
+            <Badge variant="success" className="gap-1">
+              <Circle className="h-2 w-2 fill-current" />
+              Open Now
+            </Badge>
+          ) : (
+            <Badge variant="secondary">
+              Opens {nextOpenTime}
+            </Badge>
+          )}
+        </div>
+      </CardHeader>
+      
+      <CardContent>
+        {/* Typical wait time */}
+        <div className="flex items-center gap-2 text-sm text-neutral-600 mb-3">
+          <Clock className="h-4 w-4" />
+          <span>Typical wait: <strong>15-30 min</strong></span>
+        </div>
+        
+        {/* Current queue indicator (if available from Phase 2 integration) */}
+        {clinic.queueLength && (
+          <div className="flex items-center gap-2 text-sm">
+            <Users className="h-4 w-4" />
+            <span>{clinic.queueLength} patients in queue</span>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+4.3 Response Time Commitments
+Enhancement: Set Clear Expectations for Enquiries
+
+React
+
+// On enquiry form
+<Alert className="mb-6">
+  <Clock className="h-4 w-4" />
+  <AlertTitle>We typically respond within 24 hours</AlertTitle>
+  <AlertDescription>
+    For urgent medical concerns, please call us directly at 
+    <a href="tel:+6512345678" className="font-semibold underline ml-1">
+      +65 1234 5678
+    </a>
+  </AlertDescription>
+</Alert>
+
+// On enquiry confirmation
+<div className="text-center py-8">
+  <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+    <CheckCircle2 className="h-8 w-8 text-emerald-600" />
+  </div>
+  
+  <h2 className="text-2xl font-semibold mb-2">Enquiry Received</h2>
+  
+  <p className="text-neutral-600 mb-6">
+    Reference: <strong className="font-mono">ENQ-{referenceId}</strong>
+  </p>
+  
+  <div className="bg-sky-50 border border-sky-200 rounded-lg p-4 max-w-md mx-auto">
+    <div className="flex items-start gap-3">
+      <Mail className="h-5 w-5 text-sky-600 mt-0.5" />
+      <div className="text-left">
+        <p className="font-semibold text-sky-900 mb-1">
+          We'll respond within 24 hours
+        </p>
+        <p className="text-sm text-sky-700">
+          A confirmation email has been sent to <strong>{email}</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+4.4 Accreditation & Certification Display
+Enhancement: Prominent, Explained Badges
+
+React
+
+// AccreditationBanner Component
+export function AccreditationBanner() {
+  const accreditations = [
+    {
+      id: 'moh',
+      name: 'MOH Licensed',
+      icon: '/badges/moh.svg',
+      description: 'Licensed by Ministry of Health Singapore',
+    },
+    {
+      id: 'chas',
+      name: 'CHAS Accepted',
+      icon: '/badges/chas.svg',
+      description: 'Community Health Assist Scheme participating clinic',
+    },
+    {
+      id: 'healthier-sg',
+      name: 'Healthier SG',
+      icon: '/badges/healthier-sg.svg',
+      description: 'Enrolled in national Healthier SG program',
+    },
+  ];
+  
+  return (
+    <div className="bg-neutral-50 border-y py-6">
+      <div className="container">
+        <div className="flex items-center justify-center gap-8 flex-wrap">
+          {accreditations.map(badge => (
+            <TooltipProvider key={badge.id}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-2 cursor-help">
+                    <Image 
+                      src={badge.icon} 
+                      alt={badge.name}
+                      width={40}
+                      height={40}
+                    />
+                    <span className="text-sm font-medium text-neutral-700">
+                      {badge.name}
+                    </span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="max-w-xs">
+                  <p>{badge.description}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ))}
+        </div>
+        
+        <div className="text-center mt-4">
+          <Button variant="link" size="sm" asChild>
+            <Link href="/accreditations">
+              Learn more about our accreditations →
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+4.5 Transparent Pricing Indicators
+Enhancement: Show Accepted Payment & Insurance
+
+React
+
+// On service detail page
+<Card>
+  <CardHeader>
+    <CardTitle>Pricing & Coverage</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="space-y-4">
+      {/* Accepted schemes */}
+      <div>
+        <h4 className="font-semibold text-sm text-neutral-700 mb-2">
+          Accepted Payment Schemes
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          {service.accepted_schemes.map(scheme => (
+            <Badge key={scheme} variant="outline">
+              {scheme}
+            </Badge>
+          ))}
+        </div>
+      </div>
+      
+      {/* Price range (if available) */}
+      <div>
+        <h4 className="font-semibold text-sm text-neutral-700 mb-2">
+          Estimated Cost
+        </h4>
+        <p className="text-2xl font-bold text-neutral-900">
+          ${service.price_min} - ${service.price_max}
+        </p>
+        <p className="text-xs text-neutral-500 mt-1">
+          Prices may vary by clinic and individual circumstances
+        </p>
+      </div>
+      
+      {/* Insurance info */}
+      <Alert>
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          This service may be claimable under Medisave/MediShield Life. 
+          <Button variant="link" size="sm" className="px-1">
+            Check eligibility →
+          </Button>
+        </AlertDescription>
+      </Alert>
+    </div>
+  </CardContent>
+</Card>
+5. Accessibility & Inclusive Design
+5.1 Beyond WCAG 2.2 AA
+Enhancement: Proactive Accessibility Features
+
+Skip Navigation Links
+React
+
+// components/SkipLinks.tsx
+export function SkipLinks() {
+  return (
+    <div className="sr-only focus-within:not-sr-only">
+      <a 
+        href="#main-content"
+        className="
+          fixed top-4 left-4 z-50
+          bg-sky-600 text-white px-4 py-2 rounded
+          focus:ring-2 focus:ring-offset-2 focus:ring-sky-500
+        "
+      >
+        Skip to main content
+      </a>
+      <a 
+        href="#navigation"
+        className="
+          fixed top-4 left-32 z-50
+          bg-sky-600 text-white px-4 py-2 rounded
+          focus:ring-2 focus:ring-offset-2 focus:ring-sky-500
+        "
+      >
+        Skip to navigation
+      </a>
+    </div>
+  );
+}
+
+// In layout
+<body>
+  <SkipLinks />
+  <Header id="navigation" />
+  <main id="main-content">
+    {children}
+  </main>
+</body>
+Reduced Motion Preferences
+React
+
+// hooks/use-prefers-reduced-motion.ts
+export function usePrefersReducedMotion() {
+  const [prefersReduced, setPrefersReduced] = useState(false);
+  
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReduced(mediaQuery.matches);
+    
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReduced(e.matches);
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+  
+  return prefersReduced;
+}
+
+// Usage
+function AnimatedCard() {
+  const prefersReduced = usePrefersReducedMotion();
+  
+  return (
+    <motion.div
+      initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
+      animate={prefersReduced ? {} : { opacity: 1, y: 0 }}
+      transition={prefersReduced ? { duration: 0 } : { duration: 0.3 }}
+    >
+      {/* Content */}
+    </motion.div>
+  );
+}
+High Contrast Mode Support
+CSS
+
+/* globals.css */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: black;
+    --color-text: black;
+    --color-background: white;
+  }
+  
+  button, a {
+    border: 2px solid black !important;
+  }
+}
+Text Resize Support
+React
+
+// Ensure layouts don't break at 200% zoom
+<div className="
+  max-w-full
+  overflow-x-hidden
+  [&_*]:max-w-full
+">
+  {/* Content that respects text resize */}
+</div>
+5.2 Screen Reader Optimizations
+Enhancement: Descriptive ARIA Labels & Live Regions
+
+React
+
+// Clinic locator with live region for results
+<div>
+  <SearchBar
+    aria-label="Search for clinics by location or postal code"
+    aria-describedby="search-help"
+  />
+  <p id="search-help" className="sr-only">
+    Enter a location, postal code, or district name to find nearby clinics
+  </p>
+  
+  {/* Live region announces results */}
+  <div 
+    role="status" 
+    aria-live="polite" 
+    aria-atomic="true"
+    className="sr-only"
+  >
+    {isLoading 
+      ? 'Searching for clinics...' 
+      : `Found ${results.length} clinic${results.length !== 1 ? 's' : ''}`
+    }
+  </div>
+  
+  {/* Results */}
+  <div role="region" aria-label="Search results">
+    {results.map(clinic => (
+      <ClinicCard key={clinic.id} clinic={clinic} />
+    ))}
+  </div>
+</div>
+Form with Descriptive Errors:
+
+React
+
+<form>
+  <div>
+    <Label htmlFor="email">Email Address</Label>
+    <Input
+      id="email"
+      type="email"
+      aria-required="true"
+      aria-invalid={!!errors.email}
+      aria-describedby={errors.email ? 'email-error' : 'email-help'}
+    />
+    <p id="email-help" className="text-xs text-neutral-500 mt-1">
+      We'll send a confirmation to this email
+    </p>
+    {errors.email && (
+      <p id="email-error" role="alert" className="text-xs text-rose-600 mt-1">
+        <AlertCircle className="inline h-3 w-3 mr-1" />
+        {errors.email.message}
+      </p>
+    )}
+  </div>
+</form>
+5.3 Keyboard Navigation Enhancements
+Enhancement: Logical Tab Order & Keyboard Shortcuts
+
+React
+
+// Clinic card with full keyboard support
+<Card
+  tabIndex={0}
+  role="article"
+  aria-labelledby={`clinic-name-${clinic.id}`}
+  onKeyDown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      navigate(`/clinics/${clinic.slug}`);
+    }
+  }}
+  className="focus:ring-2 focus:ring-sky-500"
+>
+  <CardHeader>
+    <CardTitle id={`clinic-name-${clinic.id}`}>
+      {clinic.name}
+    </CardTitle>
+  </CardHeader>
+  
+  <CardContent>
+    {/* Content */}
+  </CardContent>
+  
+  <CardFooter className="gap-2">
+    <Button
+      onClick={handleCall}
+      aria-label={`Call ${clinic.name}`}
+    >
+      <Phone className="mr-2 h-4 w-4" />
+      Call
+    </Button>
+    
+    <Button
+      variant="outline"
+      onClick={handleDirections}
+      aria-label={`Get directions to ${clinic.name}`}
+    >
+      <Navigation className="mr-2 h-4 w-4" />
+      Directions
+    </Button>
+  </CardFooter>
+</Card>
+Global Keyboard Shortcuts:
+
+React
+
+// hooks/use-keyboard-shortcuts.ts
+export function useKeyboardShortcuts() {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd/Ctrl + K: Open search
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        openSearch();
+      }
+      
+      // Cmd/Ctrl + L: Go to locator
+      if ((e.metaKey || e.ctrlKey) && e.key === 'l') {
+        e.preventDefault();
+        navigate('/clinics');
+      }
+      
+      // ? : Show keyboard shortcuts help
+      if (e.key === '?' && !isInputFocused()) {
+        e.preventDefault();
+        openShortcutsDialog();
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+}
+
+// Helper
+function isInputFocused() {
+  const activeElement = document.activeElement;
+  return activeElement?.tagName === 'INPUT' 
+    || activeElement?.tagName === 'TEXTAREA'
+    || activeElement?.getAttribute('contenteditable') === 'true';
+}
+Keyboard Shortcuts Dialog:
+
+React
+
+<Dialog>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Keyboard Shortcuts</DialogTitle>
+    </DialogHeader>
+    
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <span>Search</span>
+        <Kbd>⌘ K</Kbd>
+      </div>
+      
+      <div className="flex items-center justify-between">
+        <span>Find a Clinic</span>
+        <Kbd>⌘ L</Kbd>
+      </div>
+      
+      <div className="flex items-center justify-between">
+        <span>Show this help</span>
+        <Kbd>?</Kbd>
+      </div>
+    </div>
+  </DialogContent>
+</Dialog>
+
+// Kbd component
+function Kbd({ children }: { children: React.ReactNode }) {
+  return (
+    <kbd className="
+      px-2 py-1 
+      text-xs font-semibold 
+      border rounded 
+      bg-neutral-100 
+      text-neutral-900
+      font-mono
+    ">
+      {children}
+    </kbd>
+  );
+}
+5.4 Elderly-Friendly Design
+Healthcare-Specific: Design for Aging Users
+
+Larger Touch Targets
+React
+
+// Minimum 44x44px touch targets (WCAG 2.2 Level AAA)
+<Button className="min-h-[44px] min-w-[44px] text-base">
+  Call Clinic
+</Button>
+
+// Increase spacing between interactive elements
+<div className="flex gap-4"> {/* At least 16px gap */}
+  <Button>Call</Button>
+  <Button>Directions</Button>
+</div>
+Simplified Language Toggle
+React
+
+// Option to switch to "Simple View" with larger text and less density
+export function SimpleViewToggle() {
+  const [simpleView, setSimpleView] = useLocalStorage('simple-view', false);
+  
+  useEffect(() => {
+    if (simpleView) {
+      document.documentElement.classList.add('simple-view');
+    } else {
+      document.documentElement.classList.remove('simple-view');
+    }
+  }, [simpleView]);
+  
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => setSimpleView(!simpleView)}
+    >
+      {simpleView ? 'Standard View' : 'Large Text'}
+    </Button>
+  );
+}
+CSS
+
+/* globals.css */
+.simple-view {
+  /* Increase base font size */
+  font-size: 18px;
+  
+  /* Increase line height */
+  line-height: 1.8;
+  
+  /* Increase button/interactive element sizes */
+  button, a {
+    padding: 1rem 1.5rem !important;
+    font-size: 1.125rem !important;
+  }
+  
+  /* Simplify layout (remove sidebars, single column) */
+  .complex-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+6. Performance & Perceived Speed
+6.1 Advanced Loading Strategies
+Enhancement: Intelligent Prefetching
+
+React
+
+// Prefetch on hover/touch
+import { useRouter } from 'next/navigation';
+
+function ClinicCard({ clinic }) {
+  const router = useRouter();
+  
+  return (
+    <Link
+      href={`/clinics/${clinic.slug}`}
+      onMouseEnter={() => {
+        // Prefetch on hover (desktop)
+        router.prefetch(`/clinics/${clinic.slug}`);
+      }}
+      onTouchStart={() => {
+        // Prefetch on touch start (mobile)
+        router.prefetch(`/clinics/${clinic.slug}`);
+      }}
+    >
+      {/* Card content */}
+    </Link>
+  );
+}
+Predictive Prefetching Based on User Behavior:
+
+React
+
+// Prefetch likely next pages
+function useSmartPrefetch() {
+  const router = useRouter();
+  const pathname = usePathname();
+  
+  useEffect(() => {
+    // If on homepage, prefetch likely next pages
+    if (pathname === '/') {
+      router.prefetch('/clinics');
+      router.prefetch('/services');
+    }
+    
+    // If on services overview, prefetch popular services
+    if (pathname === '/services') {
+      ['gp-consultation', 'health-screening', 'vaccination'].forEach(slug => {
+        router.prefetch(`/services/${slug}`);
+      });
+    }
+    
+    // If on clinic detail, prefetch related clinics
+    if (pathname.startsWith('/clinics/')) {
+      // Prefetch nearby clinics (from context)
+    }
+  }, [pathname]);
+}
+6.2 Image Optimization Strategy
+Enhancement: Advanced Image Handling
+
+React
+
+// Blur placeholder for images
+import Image from 'next/image';
+
+<Image
+  src={clinic.photo_url}
+  alt={clinic.name}
+  width={800}
+  height={600}
+  placeholder="blur"
+  blurDataURL={clinic.photo_blur} // Generated at build time or on upload
+  loading="lazy"
+  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
+  className="object-cover rounded-lg"
+/>
+
+// Responsive image sizes
+<Image
+  src={doctor.photo_url}
+  alt={doctor.full_name}
+  width={400}
+  height={400}
+  sizes="
+    (max-width: 640px) 200px,
+    (max-width: 1024px) 300px,
+    400px
+  "
+/>
+Generate Blur Placeholders:
+
+TypeScript
+
+// lib/blur-placeholder.ts
+import { getPlaiceholder } from 'plaiceholder';
+
+export async function getBlurDataURL(imageUrl: string) {
+  try {
+    const buffer = await fetch(imageUrl).then(res => res.arrayBuffer());
+    const { base64 } = await getPlaiceholder(Buffer.from(buffer));
+    return base64;
+  } catch (error) {
+    // Fallback blur
+    return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
+  }
+}
+6.3 Code Splitting & Lazy Loading
+Enhancement: Aggressive Code Splitting
+
+React
+
+// Lazy load heavy components
+import dynamic from 'next/dynamic';
+
+const Map = dynamic(() => import('@/components/Map'), {
+  loading: () => <MapSkeleton />,
+  ssr: false, // Don't render on server (maps need browser APIs)
+});
+
+const Chart = dynamic(() => import('@/components/Chart'), {
+  loading: () => <Skeleton className="h-64" />,
+});
+
+// Lazy load modals only when needed
+const BookingModal = dynamic(() => import('@/components/BookingModal'));
+
+function ClinicDetail() {
+  const [showBooking, setShowBooking] = useState(false);
+  
+  return (
+    <>
+      <Button onClick={() => setShowBooking(true)}>
+        Book Appointment
+      </Button>
+      
+      {showBooking && <BookingModal />}
+    </>
+  );
+}
+6.4 Service Worker & Offline Support
+Enhancement: Basic Offline Capability
+
+TypeScript
+
+// public/sw.js
+const CACHE_NAME = 'mfc-v1';
+const OFFLINE_URL = '/offline';
+
+const STATIC_ASSETS = [
+  '/',
+  '/offline',
+  '/styles/globals.css',
+  '/images/logo.svg',
+];
+
+// Install
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+  );
+});
+
+// Fetch
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    fetch(event.request)
+      .catch(() => caches.match(event.request))
+      .catch(() => caches.match(OFFLINE_URL))
+  );
+});
+Offline Page:
+
+React
+
+// app/offline/page.tsx
+export default function OfflinePage() {
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="text-center max-w-md">
+        <WifiOff className="h-16 w-16 mx-auto mb-4 text-neutral-400" />
+        
+        <h1 className="text-2xl font-bold mb-2">You're offline</h1>
+        
+        <p className="text-neutral-600 mb-6">
+          Some features require an internet connection. 
+          Please check your connection and try again.
+        </p>
+        
+        <Button onClick={() => window.location.reload()}>
+          <RefreshCw className="mr-2 h-4 w-4" />
+          Try Again
+        </Button>
+      </div>
+    </div>
+  );
+}
+7. Content Strategy & Messaging
+7.1 Voice & Tone Guidelines
+Missing from PRD - Critical for Healthcare
+
+Markdown
+
+# My Family Clinic Voice & Tone Guide
+
+## Core Voice Attributes
+- **Professional yet Approachable**: Expertise without intimidation
+- **Reassuring**: Calm confidence that eases anxiety
+- **Clear**: Plain language over medical jargon
+- **Caring**: Empathetic and patient-focused
+- **Trustworthy**: Transparent and evidence-based
+
+## Tone Adjustments by Context
+
+### Homepage & Marketing
+Tone: Warm, welcoming, confident
+- "Your trusted neighborhood healthcare partner"
+- "Quality care, close to home"
+
+### Service Descriptions
+Tone: Informative, reassuring, clear
+- ✅ "A routine health screening helps catch potential issues early"
+- ❌ "Comprehensive diagnostic panel for pathological detection"
+
+### Error Messages
+Tone: Helpful, solution-focused, never blaming
+- ✅ "We couldn't find clinics in that area. Try expanding your search radius."
+- ❌ "No results found."
+
+### Urgent/Medical Notices
+Tone: Direct, clear, calm
+- ✅ "For urgent medical issues, please call 995 or visit the nearest A&E"
+- ❌ "Don't use this form for emergencies!"
+
+## Language Guidelines
+
+### Do's
+- Use "you" and "your" (second person)
+- Write in active voice
+- Break long sentences into shorter ones
+- Define medical terms when first used
+- Use inclusive language (they/them when gender unknown)
+
+### Don'ts
+- Avoid medical jargon without explanation
+- Don't use ALL CAPS (except acronyms like GP, A&E)
+- Avoid passive voice ("The clinic can be reached" → "You can reach the clinic")
+- Don't make absolute promises ("We'll cure..." → "We can help treat...")
+7.2 Micro-copy Library
+Enhancement: Consistent, Helpful Micro-copy
+
+TypeScript
+
+// lib/copy.ts
+export const copy = {
+  // Loading states
+  loading: {
+    clinics: 'Finding clinics near you...',
+    services: 'Loading services...',
+    doctors: 'Loading doctors...',
+    submitting: 'Sending your message...',
+  },
+  
+  // Empty states
+  empty: {
+    clinics: 'No clinics found in this area',
+    services: 'No services match your search',
+    doctors: 'No doctors found with those criteria',
+    recentlyViewed: 'You haven\'t viewed any clinics yet',
+  },
+  
+  // Success messages
+  success: {
+    enquirySent: 'Enquiry sent! We\'ll respond within 24 hours.',
+    copied: 'Copied to clipboard',
+    saved: 'Clinic saved to your favorites',
+  },
+  
+  // Error messages
+  error: {
+    generic: 'Something went wrong. Please try again.',
+    network: 'Connection lost. Please check your internet.',
+    geolocation: 'Couldn\'t access your location. Please search by postal code.',
+    formValidation: 'Please check the highlighted fields',
+  },
+  
+  // Call-to-actions
+  cta: {
+    findClinic: 'Find a Clinic',
+    locateNearby: 'Locate Nearby Clinics',
+    viewDetails: 'View Details',
+    getDirections: 'Get Directions',
+    callNow: 'Call Now',
+    sendEnquiry: 'Send Enquiry',
+    learnMore: 'Learn More',
+    bookAppointment: 'Book Appointment', // Phase 2
+  },
+  
+  // Helper text
+  help: {
+    clinicSearch: 'Enter a postal code, street name, or district',
+    enquiryResponse: 'We typically respond within 24 hours on business days',
+    geolocationPrompt: 'Allow location access to find the nearest clinic',
+  },
+};
+Usage:
+
+React
+
+import { copy } from '@/lib/copy';
+
+<Button disabled={isLoading}>
+  {isLoading ? copy.loading.submitting : copy.cta.sendEnquiry}
+</Button>
+
+{results.length === 0 && (
+  <EmptyState message={copy.empty.clinics} />
+)}
+7.3 Plain Language for Medical Terms
+Enhancement: Inline Definitions & Tooltips
+
+React
+
+// MedicalTerm component
+function MedicalTerm({ 
+  term, 
+  definition 
+}: { 
+  term: string; 
+  definition: string;
+}) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button className="underline decoration-dotted decoration-sky-500 cursor-help">
+            {term}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent className="max-w-xs">
+          <p className="text-sm">{definition}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+// Usage in content
+<p>
+  We offer comprehensive <MedicalTerm 
+    term="lipid panel" 
+    definition="A blood test that measures cholesterol and triglyceride levels to assess heart disease risk"
+  /> testing as part of our health screening package.
+</p>
+Glossary Link for Complex Services:
+
+React
+
+<Alert>
+  <Info className="h-4 w-4" />
+  <AlertDescription>
+    Unfamiliar with some medical terms? Check our{' '}
+    <Button variant="link" size="sm" className="px-0">
+      medical glossary →
+    </Button>
+  </AlertDescription>
+</Alert>
+8. Mobile-Specific Experience Enhancements
+8.1 Mobile-Optimized Filters
+Enhancement: Bottom Sheet Filters (Thumb-Friendly)
+
+React
+
+// Mobile filter sheet (easier to reach than top dropdown)
+function MobileFilters() {
+  const [open, setOpen] = useState(false);
+  
+  return (
+    <>
+      {/* Floating filter button (bottom right, easy thumb access) */}
+      <Button
+        onClick={() => setOpen(true)}
+        className="md:hidden fixed bottom-4 right-4 z-40 rounded-full shadow-lg"
+        size="lg"
+      >
+        <SlidersHorizontal className="mr-2 h-5 w-5" />
+        Filters
+        {activeFiltersCount > 0 && (
+          <Badge className="ml-2" variant="secondary">
+            {activeFiltersCount}
+          </Badge>
+        )}
+      </Button>
+      
+      {/* Bottom sheet */}
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent 
+          side="bottom" 
+          className="h-[85vh] rounded-t-2xl"
+        >
+          <SheetHeader>
+            <SheetTitle>Filter Clinics</SheetTitle>
+          </SheetHeader>
+          
+          <div className="py-6 space-y-6 overflow-y-auto max-h-[calc(85vh-120px)]">
+            {/* Filter groups */}
+            <FilterGroup title="Services">
+              {services.map(service => (
+                <Checkbox key={service.id} label={service.name} />
+              ))}
+            </FilterGroup>
+            
+            <FilterGroup title="Open Hours">
+              <Checkbox label="Open Now" />
+              <Checkbox label="Open Weekends" />
+            </FilterGroup>
+            
+            <FilterGroup title="Accessibility">
+              <Checkbox label="Wheelchair Access" />
+              <Checkbox label="Elevator Available" />
+            </FilterGroup>
+          </div>
+          
+          {/* Sticky footer with actions */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-white">
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                className="flex-1"
+                onClick={clearFilters}
+              >
+                Clear All
+              </Button>
+              <Button 
+                className="flex-1"
+                onClick={() => {
+                  applyFilters();
+                  setOpen(false);
+                }}
+              >
+                Show {filteredCount} Results
+              </Button>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </>
+  );
+}
+8.2 Native App Integration
+Enhancement: Seamless Handoff to Native Apps
+
+React
+
+// Smart call/directions buttons that use native apps
+function ClinicActions({ clinic }: { clinic: Clinic }) {
+  const isMobile = useMobileDetect();
+  
+  const handleCall = () => {
+    // Direct tel: link on mobile
+    window.location.href = `tel:${clinic.phone}`;
+  };
+  
+  const handleDirections = () => {
+    const { lat, lng } = clinic.geolocation;
+    
+    // iOS: Apple Maps
+    if (isIOS()) {
+      window.location.href = `maps://maps.apple.com/?daddr=${lat},${lng}`;
+    }
+    // Android: Google Maps
+    else if (isAndroid()) {
+      window.location.href = `geo:${lat},${lng}?q=${encodeURIComponent(clinic.name)}`;
+    }
+    // Desktop: Google Maps web
+    else {
+      window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+    }
+  };
+  
+  return (
+    <div className="flex gap-2">
+      <Button onClick={handleCall} className="flex-1">
+        <Phone className="mr-2 h-4 w-4" />
+        Call
+      </Button>
+      <Button variant="outline" onClick={handleDirections} className="flex-1">
+        <Navigation className="mr-2 h-4 w-4" />
+        Directions
+      </Button>
+    </div>
+  );
+}
+8.3 Mobile Form Optimization
+Enhancement: Input Type Optimization
+
+React
+
+<Input
+  type="tel"
+  inputMode="tel"
+  autoComplete="tel"
+  pattern="[0-9]*"
+  placeholder="9123 4567"
+/>
+
+<Input
+  type="email"
+  inputMode="email"
+  autoComplete="email"
+  placeholder="your@email.com"
+/>
+
+<Input
+  type="text"
+  inputMode="numeric"
+  pattern="[0-9]{6}"
+  placeholder="123456"
+  maxLength={6}
+  aria-label="Singapore postal code"
+/>
+Mobile-Optimized Multi-Step Form:
+
+React
+
+// Break long forms into steps on mobile
+function MobileEnquiryForm() {
+  const [step, setStep] = useState(1);
+  
+  return (
+    <div className="md:hidden">
+      {/* Progress indicator */}
+      <div className="mb-6">
+        <div className="flex justify-between text-sm text-neutral-600 mb-2">
+          <span>Step {step} of 3</span>
+          <span>{Math.round((step / 3) * 100)}%</span>
+        </div>
+        <Progress value={(step / 3) * 100} />
+      </div>
+      
+      {/* Step content */}
+      {step === 1 && <PersonalInfoStep />}
+      {step === 2 && <EnquiryDetailsStep />}
+      {step === 3 && <ReviewStep />}
+      
+      {/* Navigation */}
+      <div className="flex gap-2 mt-6">
+        {step > 1 && (
+          <Button variant="outline" onClick={() => setStep(step - 1)}>
+            <ChevronLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
+        )}
+        
+        <Button 
+          className="flex-1"
+          onClick={() => step < 3 ? setStep(step + 1) : handleSubmit()}
+        >
+          {step < 3 ? 'Continue' : 'Submit'}
+          {step < 3 && <ChevronRight className="ml-2 h-4 w-4" />}
+        </Button>
+      </div>
+    </div>
+  );
+}
+9. Error Prevention & Recovery
+9.1 Proactive Error Prevention
+Enhancement: Smart Validation & Hints
+
+React
+
+// Postal code input with validation
+function PostalCodeInput() {
+  const [value, setValue] = useState('');
+  const [isValid, setIsValid] = useState<boolean | null>(null);
+  
+  const validatePostalCode = (code: string) => {
+    // Singapore postal codes are 6 digits
+    const isValidFormat = /^\d{6}$/.test(code);
+    setIsValid(isValidFormat);
+    
+    if (isValidFormat) {
+      // Optionally verify it's a real postal code
+      checkPostalCodeExists(code);
+    }
+  };
+  
+  return (
+    <div>
+      <Label htmlFor="postal-code">Postal Code</Label>
+      <div className="relative">
+        <Input
+          id="postal-code"
+          value={value}
+          onChange={(e) => {
+            const newValue = e.target.value.replace(/\D/g, '').slice(0, 6);
+            setValue(newValue);
+            if (newValue.length === 6) {
+              validatePostalCode(newValue);
+            } else {
+              setIsValid(null);
+            }
+          }}
+          className={
+            isValid === false ? 'border-rose-500' :
+            isValid === true ? 'border-emerald-500' :
+            ''
+          }
+          placeholder="123456"
+          maxLength={6}
+        />
+        
+        {/* Visual feedback */}
+        {isValid !== null && (
+          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+            {isValid ? (
+              <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+            ) : (
+              <XCircle className="h-5 w-5 text-rose-500" />
+            )}
+          </div>
+        )}
+      </div>
+      
+      {/* Helpful hint */}
+      <p className="text-xs text-neutral-500 mt-1">
+        6-digit Singapore postal code
+      </p>
+      
+      {/* Error message */}
+      {isValid === false && (
+        <p className="text-xs text-rose-600 mt-1">
+          Please enter a valid Singapore postal code
+        </p>
+      )}
+    </div>
+  );
+}
+9.2 Graceful Degradation
+Enhancement: Fallbacks for Failed Features
+
+React
+
+// Geolocation with graceful fallback
+function useGeolocation() {
+  const [location, setLocation] = useState<GeolocationCoordinates | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  
+  const requestLocation = () => {
+    if (!('geolocation' in navigator)) {
+      setError('Geolocation is not supported by your browser');
+      return;
+    }
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLocation(position.coords);
+        setError(null);
+      },
+      (error) => {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            setError('Location access denied. Please search by postal code instead.');
+            break;
+          case error.POSITION_UNAVAILABLE:
+            setError('Location information unavailable. Please search manually.');
+            break;
+          case error.TIMEOUT:
+            setError('Location request timed out. Please try again or search manually.');
+            break;
+        }
+      },
+      {
+        timeout: 10000,
+        maximumAge: 300000, // Cache for 5 minutes
+      }
+    );
+  };
+  
+  return { location, error, requestLocation };
+}
+
+// Usage with fallback
+function ClinicLocator() {
+  const { location, error, requestLocation } = useGeolocation();
+  
+  return (
+    <div>
+      {error ? (
+        <Alert variant="warning">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      ) : (
+        <Button onClick={requestLocation}>
+          <Locate className="mr-2 h-4 w-4" />
+          Use My Location
+        </Button>
+      )}
+      
+      {/* Always show manual search as alternative */}
+      <div className="mt-4">
+        <Label>Or search manually</Label>
+        <Input placeholder="Enter postal code or district" />
+      </div>
+    </div>
+  );
+}
+9.3 Enhanced Error Pages
+Enhancement: Helpful, Actionable Error Pages
+
+React
+
+// app/not-found.tsx
+export default function NotFound() {
+  const suggestions = [
+    { label: 'Find a Clinic', href: '/clinics', icon: MapPin },
+    { label: 'Browse Services', href: '/services', icon: Stethoscope },
+    { label: 'Contact Us', href: '/contact', icon: Phone },
+  ];
+  
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center p-4">
+      <div className="text-center max-w-lg">
+        {/* Friendly illustration */}
+        <div className="w-48 h-48 mx-auto mb-6 text-neutral-300">
+          <FileQuestion className="w-full h-full" />
+        </div>
+        
+        <h1 className="text-4xl font-bold mb-2">Page Not Found</h1>
+        
+        <p className="text-neutral-600 mb-8">
+          We couldn't find the page you're looking for. 
+          It may have been moved or doesn't exist.
+        </p>
+        
+        {/* Suggested actions */}
+        <div className="space-y-3">
+          <p className="text-sm font-semibold text-neutral-700">
+            Here are some helpful links:
+          </p>
+          
+          <div className="grid gap-3">
+            {suggestions.map(({ label, href, icon: Icon }) => (
+              <Button
+                key={href}
+                asChild
+                variant="outline"
+                className="justify-start"
+              >
+                <Link href={href}>
+                  <Icon className="mr-2 h-4 w-4" />
+                  {label}
+                </Link>
+              </Button>
+            ))}
+          </div>
+        </div>
+        
+        {/* Search option */}
+        <div className="mt-8 pt-8 border-t">
+          <p className="text-sm text-neutral-600 mb-3">
+            Or try searching for what you need:
+          </p>
+          <SearchBar placeholder="Search clinics, services, doctors..." />
+        </div>
+      </div>
+    </div>
+  );
+}
+500 Error Page:
+
+React
+
+// app/error.tsx
+'use client';
+
+export default function ErrorPage({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center p-4">
+      <div className="text-center max-w-md">
+        <AlertTriangle className="w-16 h-16 mx-auto mb-4 text-amber-500" />
+        
+        <h1 className="text-2xl font-bold mb-2">Something went wrong</h1>
+        
+        <p className="text-neutral-600 mb-6">

@@ -1,0 +1,17 @@
+-- Migration: contact_system_enums
+-- Created at: 1762269949
+
+-- CreateEnum
+CREATE TYPE "ContactMethod" AS ENUM ('EMAIL', 'PHONE', 'SMS', 'WHATSAPP', 'TELEGRAM', 'SLACK', 'TEAMS', 'PORTAL', 'IN_PERSON', 'VIDEO_CALL', 'CHAT', 'MESSAGE_FORM', 'URGENT_HOTLINE');
+
+-- CreateEnum
+CREATE TYPE "ContactHistoryStatus" AS ENUM ('ACTIVE', 'ARCHIVED', 'DELETED', 'COMPLAINED', 'FOLLOWED_UP', 'RESOLVED', 'ESCALATED');
+
+-- CreateEnum
+CREATE TYPE "ContactAccessLevel" AS ENUM ('PUBLIC', 'RESTRICTED', 'CONFIDENTIAL', 'MEDICAL', 'ADMIN', 'OWNER', 'STANDARD', 'ELEVATED');
+
+-- CreateEnum
+CREATE TYPE "ContactPriority" AS ENUM ('LOW', 'NORMAL', 'HIGH', 'URGENT', 'EMERGENCY', 'CRITICAL');
+
+-- CreateEnum
+CREATE TYPE "ContactActivityStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'ON_HOLD', 'ESCALATED', 'RESOLVED');;

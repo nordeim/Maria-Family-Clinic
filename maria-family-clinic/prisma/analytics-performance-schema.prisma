@@ -1,0 +1,587 @@
+// Analytics and Performance Optimization Schema
+// Sub-Phase 9.8: Analytics & Performance Optimization
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Analytics Events Table
+model ContactAnalyticsEvent {
+  id                 String              @id @default(cuid())
+  eventType          ContactEventType
+  eventName          String
+  sessionId          String
+  userId             String?             @map("user_id")
+  formId             String?             @map("form_id")
+  enquiryId          String?             @map("enquiry_id")
+  clinicId           String?             @map("clinic_id")
+  pageUrl            String              @map("page_url")
+  timestamp          DateTime            @default(now())
+  metadata           Json
+  performanceMetrics Json                @map("performance_metrics")
+  userAgent          String              @map("user_agent")
+  deviceInfo         Json                @map("device_info")
+  location           Json
+  
+  // Geographic and performance indexes
+  country            String?
+  region             String?
+  city               String?
+  
+  // Performance tracking
+  loadTime           Int                 @map("load_time")              // milliseconds
+  renderTime         Int                 @map("render_time")            // milliseconds
+  interactionTime    Int                 @map("interaction_time")       // milliseconds
+  formStartTime      DateTime?           @map("form_start_time")
+  formCompleteTime   DateTime?           @map("form_complete_time")
+  totalFormTime      Int?                @map("total_form_time")        // milliseconds
+  abandonTime        DateTime?           @map("abandon_time")
+  
+  // Relationships
+  user               User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+  form               ContactForm?        @relation(fields: [formId], references: [id], onDelete: SetNull)
+  enquiry            Enquiry?            @relation(fields: [enquiryId], references: [id], onDelete: SetNull)
+  clinic             Clinic?             @relation(fields: [clinicId], references: [id], onDelete: SetNull)
+  
+  // Analytics aggregations
+  performanceMetricsAggregate PerformanceMetricsAggregate[]
+  
+  // Indexes
+  @@index([eventType, timestamp])
+  @@index([sessionId, timestamp])
+  @@index([userId, timestamp])
+  @@index([clinicId, timestamp])
+  @@index([pageUrl, timestamp])
+  @@index([timestamp])
+  @@map("contact_analytics_events")
+}
+
+// Performance Metrics Aggregate
+model PerformanceMetricsAggregate {
+  id              String   @id @default(cuid())
+  eventId         String   @map("event_id")
+  metricName      String   @map("metric_name")
+  metricValue     Float    @map("metric_value")
+  percentile      Float?
+  period          String   // 'hour', 'day', 'week', 'month'
+  periodStart     DateTime @map("period_start")
+  periodEnd       DateTime @map("period_end")
+  createdAt       DateTime @default(now())
+  
+  event           ContactAnalyticsEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  
+  @@index([metricName, period, periodStart, periodEnd])
+  @@index([eventId])
+  @@map("performance_metrics_aggregate")
+}
+
+// Customer Satisfaction Tracking
+model CustomerSatisfactionSurvey {
+  id                String          @id @default(cuid())
+  enquiryId         String          @map("enquiry_id")
+  responseId        String?         @map("response_id")
+  overallCSAT       Int             @map("overall_csat")               // 1-10 scale
+  responseTimeCSAT  Int?            @map("response_time_csat")         // 1-10 scale
+  resolutionCSAT    Int?            @map("resolution_csat")            // 1-10 scale
+  communicationCSAT Int?            @map("communication_csat")         // 1-10 scale
+  npsScore          Int?            @map("nps_score")                  // -100 to 100
+  cesScore          Float?          @map("ces_score")                  // 1-5 scale
+  feedback          String?
+  suggestions       String?
+  completedAt       DateTime        @default(now())
+  invitationSent    DateTime?       @map("invitation_sent")
+  invitationType    String?         @map("invitation_type")            // 'email', 'sms', 'in-app'
+  isFollowUp        Boolean         @map("is_follow_up")
+  followUpLevel     Int?            @map("follow_up_level")
+  
+  // Relationships
+  enquiry           Enquiry         @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  response          ContactResponse? @relation(fields: [responseId], references: [id], onDelete: SetNull)
+  
+  // Indexes
+  @@index([enquiryId])
+  @@index([completedAt])
+  @@index([npsScore])
+  @@map("customer_satisfaction_surveys")
+}
+
+// Form Analytics
+model FormAnalytics {
+  id                    String         @id @default(cuid())
+  formId                String         @map("form_id")
+  formName              String         @map("form_name")
+  period                String         // 'hour', 'day', 'week', 'month'
+  periodStart           DateTime       @map("period_start")
+  periodEnd             DateTime       @map("period_end")
+  
+  // Volume metrics
+  totalViews            Int            @map("total_views")
+  totalStarts           Int            @map("total_starts")
+  totalCompletions      Int            @map("total_completions")
+  totalAbandons         Int            @map("total_abandons")
+  
+  // Performance metrics
+  completionRate        Float          @map("completion_rate")
+  abandonmentRate       Float          @map("abandonment_rate")
+  averageTimeToComplete Int?           @map("average_time_to_complete")    // milliseconds
+  averageTimeToAbandon  Int?           @map("average_time_to_abandon")     // milliseconds
+  bounceRate            Float          @map("bounce_rate")
+  
+  // Device breakdown
+  mobileViews           Int            @map("mobile_views")
+  mobileCompletionRate  Float?         @map("mobile_completion_rate")
+  tabletViews           Int            @map("tablet_views")
+  tabletCompletionRate  Float?         @map("tablet_completion_rate")
+  desktopViews          Int            @map("desktop_views")
+  desktopCompletionRate Float?         @map("desktop_completion_rate")
+  
+  // Time analysis
+  morningViews          Int            @map("morning_views")        // 6-12
+  morningCompletionRate Float?         @map("morning_completion_rate")
+  afternoonViews        Int            @map("afternoon_views")      // 12-18
+  afternoonCompletionRate Float?       @map("afternoon_completion_rate")
+  eveningViews          Int            @map("evening_views")        // 18-22
+  eveningCompletionRate Float?         @map("evening_completion_rate")
+  nightViews            Int            @map("night_views")          // 22-6
+  nightCompletionRate   Float?         @map("night_completion_rate")
+  
+  // Error tracking
+  totalErrors           Int            @map("total_errors")
+  uniqueErrorTypes      Int            @map("unique_error_types")
+  
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt @map("updated_at")
+  
+  // Relationships
+  form                  ContactForm    @relation(fields: [formId], references: [id], onDelete: Cascade)
+  
+  // Indexes
+  @@unique([formId, period, periodStart, periodEnd])
+  @@index([period, periodStart, periodEnd])
+  @@map("form_analytics")
+}
+
+// Field Performance Analysis
+model FieldAnalytics {
+  id                String   @id @default(cuid())
+  formId            String   @map("form_id")
+  fieldId           String   @map("field_id")
+  fieldName         String   @map("field_name")
+  fieldType         String   @map("field_type")
+  period            String   // 'hour', 'day', 'week', 'month'
+  periodStart       DateTime @map("period_start")
+  periodEnd         DateTime @map("period_end")
+  
+  // Interaction metrics
+  totalInteractions Int      @map("total_interactions")
+  totalAbandons     Int      @map("total_abandons")
+  abandonmentRate   Float    @map("abandonment_rate")
+  averageTimeSpent  Int?     @map("average_time_spent")    // milliseconds
+  
+  // Error tracking
+  totalErrors       Int      @map("total_errors")
+  errorTypes        Json     @map("error_types")           // {errorType: count}
+  
+  // Performance metrics
+  focusTime         Int?     @map("focus_time")            // average focus duration
+  blurCount         Int?     @map("blur_count")
+  correctionCount   Int?     @map("correction_count")
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  
+  // Relationships
+  form              ContactForm @relation(fields: [formId], references: [id], onDelete: Cascade)
+  
+  // Indexes
+  @@unique([formId, fieldId, period, periodStart, periodEnd])
+  @@index([formId, period, periodStart, periodEnd])
+  @@map("field_analytics")
+}
+
+// Predictive Analytics Models
+model EnquiryVolumeForecast {
+  id                String   @id @default(cuid())
+  clinicId          String   @map("clinic_id")
+  forecastDate      DateTime @map("forecast_date")
+  predictedVolume   Int      @map("predicted_volume")
+  confidence        Float    // 0-1
+  lowerBound        Int      @map("lower_bound")
+  upperBound        Int      @map("upper_bound")
+  actualVolume      Int?     @map("actual_volume")
+  accuracy          Float?   // calculated after actual data available
+  modelVersion      String   @map("model_version")
+  features          Json     // model features used
+  generatedAt       DateTime @default(now())
+  
+  // Relationships
+  clinic            Clinic   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  
+  // Indexes
+  @@unique([clinicId, forecastDate, modelVersion])
+  @@index([clinicId, forecastDate])
+  @@index([forecastDate])
+  @@map("enquiry_volume_forecast")
+}
+
+// Staffing Recommendations
+model StaffingRecommendation {
+  id                String                   @id @default(cuid())
+  clinicId          String                   @map("clinic_id")
+  date              DateTime
+  timeSlot          String                   @map("time_slot")        // '09:00-10:00', etc.
+  recommendedStaff  Int                      @map("recommended_staff")
+  expectedEnquiries Int                      @map("expected_enquiries")
+  expectedResponseTime Int                   @map("expected_response_time") // minutes
+  currentCapacity   Int                      @map("current_capacity")
+  utilization       Float                    // 0-1
+  priority          StaffingPriority
+  reasoning         String
+  modelVersion      String                   @map("model_version")
+  features          Json
+  createdAt         DateTime                 @default(now())
+  
+  // Relationships
+  clinic            Clinic                   @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  
+  // Indexes
+  @@unique([clinicId, date, timeSlot])
+  @@index([clinicId, date])
+  @@map("staffing_recommendations")
+}
+
+enum StaffingPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// A/B Testing Framework
+model ABTest {
+  id                    String         @id @default(cuid())
+  name                  String
+  description           String?
+  status                ABTestStatus   @default(RUNNING)
+  hypothesis            String
+  successMetric         String         @map("success_metric")
+  minimumSampleSize     Int            @map("minimum_sample_size")
+  confidenceLevel       Float          @map("confidence_level")        // 0.95 for 95%
+  significanceThreshold Float          @map("significance_threshold")
+  startDate             DateTime       @map("start_date")
+  endDate               DateTime?      @map("end_date")
+  createdBy             String         @map("created_by")
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt @map("updated_at")
+  
+  // Variants
+  variants              ABTestVariant[]
+  results               ABTestResult[]
+  
+  // Indexes
+  @@index([status, startDate])
+  @@index([createdBy])
+  @@map("ab_tests")
+}
+
+model ABTestVariant {
+  id            String  @id @default(cuid())
+  testId        String  @map("test_id")
+  name          String
+  description   String?
+  trafficSplit  Float   @map("traffic_split")  // 0-1
+  isControl     Boolean @map("is_control")
+  configuration Json    // variant configuration
+  
+  test          ABTest  @relation(fields: [testId], references: [id], onDelete: Cascade)
+  results       ABTestResult[]
+  conversions   ABTestConversion[]
+  
+  @@index([testId])
+  @@map("ab_test_variants")
+}
+
+model ABTestResult {
+  id                      String  @id @default(cuid())
+  testId                  String  @map("test_id")
+  variantId               String  @map("variant_id")
+  metric                  String
+  value                   Float
+  confidence              Float
+  pValue                  Float   @map("p_value")
+  statisticalSignificance Boolean @map("statistical_significance")
+  sampleSize              Int     @map("sample_size")
+  period                  String  // 'hour', 'day', 'week'
+  periodStart             DateTime @map("period_start")
+  periodEnd               DateTime @map("period_end")
+  createdAt               DateTime @default(now())
+  
+  test                    ABTest  @relation(fields: [testId], references: [id], onDelete: Cascade)
+  variant                 ABTestVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  
+  @@unique([testId, variantId, metric, period, periodStart, periodEnd])
+  @@index([testId, period, periodStart, periodEnd])
+  @@map("ab_test_results")
+}
+
+model ABTestConversion {
+  id            String   @id @default(cuid())
+  testId        String   @map("test_id")
+  variantId     String   @map("variant_id")
+  sessionId     String   @map("session_id")
+  userId        String?  @map("user_id")
+  conversionType String  @map("conversion_type")
+  value         Float?
+  timestamp     DateTime @default(now())
+  metadata      Json
+  
+  variant       ABTestVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  user          User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@index([testId, variantId])
+  @@index([sessionId, timestamp])
+  @@index([userId, timestamp])
+  @@map("ab_test_conversions")
+}
+
+enum ABTestStatus {
+  DRAFT
+  RUNNING
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+// Google Analytics Integration
+model GoogleAnalyticsConfig {
+  id                    String   @id @default(cuid())
+  trackingId            String   @unique @map("tracking_id")
+  measurementId         String   @unique @map("measurement_id")
+  apiSecret             String   @map("api_secret")
+  enhancedEcommerce     Boolean  @map("enhanced_ecommerce")
+  crossDomainTracking   Boolean  @map("cross_domain_tracking")
+  customDimensions      Json     @map("custom_dimensions")
+  customMetrics         Json     @map("custom_metrics")
+  eventConfigurations   Json     @map("event_configurations")
+  isActive              Boolean  @map("is_active")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt @map("updated_at")
+  
+  @@map("google_analytics_config")
+}
+
+// Performance Monitoring
+model PerformanceMetric {
+  id            String         @id @default(cuid())
+  name          String
+  value         Float
+  metricType    String         @map("metric_type")  // 'core-web-vitals', 'custom', 'system'
+  pageUrl       String?        @map("page_url")
+  sessionId     String?        @map("session_id")
+  userId        String?        @map("user_id")
+  metadata      Json
+  timestamp     DateTime       @default(now())
+  
+  // Web Vitals specific
+  cls           Float?         // Cumulative Layout Shift
+  fid           Float?         // First Input Delay
+  fcp           Float?         // First Contentful Paint
+  lcp           Float?         // Largest Contentful Paint
+  ttfb          Float?         // Time to First Byte
+  
+  // System metrics
+  memoryUsage   Float?         @map("memory_usage")      // MB
+  cpuUsage      Float?         @map("cpu_usage")         // percentage
+  networkLatency Float?        @map("network_latency")   // milliseconds
+  renderTime    Float?         @map("render_time")       // milliseconds
+  
+  user          User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@index([name, timestamp])
+  @@index([metricType, timestamp])
+  @@index([pageUrl, timestamp])
+  @@index([sessionId, timestamp])
+  @@map("performance_metrics")
+}
+
+// Dashboard Configuration
+model AnalyticsDashboard {
+  id              String            @id @default(cuid())
+  name            String
+  description     String?
+  widgets         Json              // DashboardWidget[]
+  filters         Json              @map("dashboard_filters") // DashboardFilter[]
+  refreshInterval Int               @map("refresh_interval")  // seconds
+  isPublic        Boolean           @map("is_public")
+  createdBy       String            @map("created_by")
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+  
+  @@map("analytics_dashboards")
+}
+
+// Automated Reports
+model AutomatedReport {
+  id              String              @id @default(cuid())
+  name            String
+  description     String?
+  reportType      String              @map("report_type")  // 'scheduled', 'on-demand', 'triggered'
+  schedule        Json?               // ReportSchedule
+  recipients      Json                // ReportRecipient[]
+  template        Json                // ReportTemplate
+  filters         Json                // ReportFilter[]
+  format          String              // 'pdf', 'excel', 'csv', 'html'
+  isActive        Boolean             @map("is_active")
+  lastGenerated   DateTime?           @map("last_generated")
+  nextScheduled   DateTime?           @map("next_scheduled")
+  generatedCount  Int                 @map("generated_count") @default(0)
+  createdBy       String              @map("created_by")
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+  
+  @@map("automated_reports")
+}
+
+// Report Delivery History
+model ReportDelivery {
+  id          String             @id @default(cuid())
+  reportId    String             @map("report_id")
+  recipient   String
+  status      DeliveryStatus
+  format      String
+  filePath    String?            @map("file_path")
+  error       String?
+  sentAt      DateTime           @map("sent_at")
+  
+  @@index([reportId, sentAt])
+  @@map("report_deliveries")
+}
+
+enum DeliveryStatus {
+  PENDING
+  SENT
+  FAILED
+  DELIVERED
+}
+
+// Optimization Insights
+model OptimizationInsight {
+  id                String              @id @default(cuid())
+  insightType       String              @map("insight_type")    // 'performance', 'conversion', 'satisfaction'
+  title             String
+  description       String
+  impact            InsightImpact
+  confidence        Float               // 0-1
+  category          String
+  actionable        Boolean
+  implementation    String?             // implementation suggestions
+  expectedBenefit   String?             @map("expected_benefit")
+  priority          InsightPriority
+  status            InsightStatus       @default(OPEN)
+  assignedTo        String?             @map("assigned_to")
+  createdAt         DateTime            @default(now())
+  resolvedAt        DateTime?           @map("resolved_at")
+  
+  @@index([insightType, priority])
+  @@index([status, createdAt])
+  @@map("optimization_insights")
+}
+
+enum InsightImpact {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum InsightPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum InsightStatus {
+  OPEN
+  IN_PROGRESS
+  IMPLEMENTED
+  DISMISSED
+  REJECTED
+}
+
+// Extend existing enums
+enum ContactEventType {
+  FORM_VIEW
+  FORM_START
+  FORM_FIELD_FOCUS
+  FORM_FIELD_BLUR
+  FORM_FIELD_ERROR
+  FORM_SUBMIT
+  FORM_COMPLETE
+  FORM_ABANDON
+  ENQUIRY_VIEW
+  ENQUIRY_RESPONSE_VIEW
+  ENQUIRY_RATING
+  ENQUIRY_FEEDBACK
+  PAGE_VIEW
+  PAGE_EXIT
+  SEARCH_PERFORMED
+  CLINIC_VIEW
+  DOCTOR_VIEW
+  SLOW_LOAD
+  JS_ERROR
+  NETWORK_ERROR
+  PERFORMANCE_ALERT
+}
+
+// Add indexes for better performance
+// These should be added to the database with separate migration
+/*
+-- Performance optimization indexes
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_analytics_events_clinic_timestamp 
+ON contact_analytics_events (clinic_id, timestamp DESC);
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_analytics_events_user_timestamp 
+ON contact_analytics_events (user_id, timestamp DESC) WHERE user_id IS NOT NULL;
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_performance_metrics_name_timestamp 
+ON performance_metrics (name, timestamp DESC);
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_satisfaction_survey_nps_completed 
+ON customer_satisfaction_surveys (nps_score, completed_at DESC);
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_ab_test_status_dates 
+ON ab_tests (status, start_date, end_date) WHERE status = 'RUNNING';
+
+-- Materialized views for faster analytics queries
+CREATE MATERIALIZED VIEW daily_analytics_summary AS
+SELECT 
+  DATE(timestamp) as date,
+  clinic_id,
+  event_type,
+  COUNT(*) as event_count,
+  AVG(performance_metrics->>'loadTime')::numeric as avg_load_time,
+  AVG(performance_metrics->>'renderTime')::numeric as avg_render_time
+FROM contact_analytics_events
+WHERE timestamp >= NOW() - INTERVAL '90 days'
+GROUP BY DATE(timestamp), clinic_id, event_type
+WITH NO DATA;
+
+CREATE UNIQUE INDEX ON daily_analytics_summary (date, clinic_id, event_type);
+
+-- Refresh strategy for materialized view
+CREATE OR REPLACE FUNCTION refresh_daily_analytics()
+RETURNS void AS $$
+BEGIN
+  REFRESH MATERIALIZED VIEW CONCURRENTLY daily_analytics_summary;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Schedule daily refresh at 2 AM
+SELECT cron.schedule('refresh-analytics', '0 2 * * *', 'SELECT refresh_daily_analytics();');
+*/

@@ -1,0 +1,62 @@
+{
+  "name": "my-family-clinic-integration-testing",
+  "version": "1.0.0",
+  "description": "Comprehensive integration testing suite for My Family Clinic platform",
+  "main": "index.js",
+  "scripts": {
+    "test:integration": "./scripts/run-integration-tests.sh staging 4 300",
+    "test:integration:system": "npx vitest run integration/system/integration-test-suite.ts --reporter=verbose",
+    "test:integration:third-party": "npx vitest run integration/third-party/integration-test-suite.ts --reporter=verbose",
+    "test:integration:cross-platform": "npx playwright test integration/cross-platform/cross-platform-test-suite.ts --reporter=verbose",
+    "test:integration:healthcare": "npx vitest run integration/healthcare-workflow/healthcare-workflow-test-suite.ts --reporter=verbose",
+    "test:integration:data": "npx vitest run integration/data-consistency/data-consistency-test-suite.ts --reporter=verbose",
+    "test:integration:local": "./scripts/run-integration-tests.sh local 4 300",
+    "test:integration:parallel": "./scripts/run-integration-tests.sh staging 8 600",
+    "test:integration:report": "node scripts/generate-integration-report.js",
+    "test:integration:watch": "npx vitest watch integration/",
+    "test:integration:coverage": "npx vitest run integration/ --coverage",
+    "test:integration:performance": "npx vitest run integration/ --benchmark"
+  },
+  "keywords": [
+    "healthcare",
+    "integration-testing",
+    "medical",
+    "clinic",
+    "appointment-booking",
+    "cross-platform",
+    "api-testing",
+    "healthier-sg"
+  ],
+  "author": "My Family Clinic Development Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "axios": "^1.6.0",
+    "puppeteer": "^21.0.0",
+    "vitest": "^1.0.0",
+    "zod": "^3.22.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.0",
+    "google-maps-api": "^3.0.0",
+    "ws": "^8.14.0"
+  },
+  "test": {
+    "environment": "node",
+    "coverage": {
+      "provider": "v8",
+      "reporter": ["text", "json", "html"],
+      "exclude": [
+        "node_modules/**",
+        "coverage/**",
+        "dist/**"
+      ]
+    }
+  },
+  "browserslist": [
+    "last 2 versions",
+    "> 1%",
+    "not dead"
+  ]
+}

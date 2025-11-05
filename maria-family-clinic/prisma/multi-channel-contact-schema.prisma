@@ -1,0 +1,1196 @@
+// ========================================
+// MULTI-CHANNEL CONTACT INTEGRATION SYSTEM
+// Sub-Phase 9.7: Comprehensive Multi-Channel Communication Platform
+// Extends existing contact system with unified multi-channel support
+// ========================================
+
+// Communication Channel Configuration
+model CommunicationChannel {
+  id                String   @id @default(cuid())
+  name              String   @unique // 'phone', 'email', 'chat', 'whatsapp', etc.
+  displayName       String
+  type              ChannelType
+  category          ChannelCategory
+  
+  // Channel configuration
+  isActive          Boolean  @default(true)
+  isEnabled         Boolean  @default(true)
+  requiresAuth      Boolean  @default(false)
+  supportsRealTime  Boolean  @default(false)
+  supportsFiles     Boolean  @default(false)
+  maxFileSize       Int?     // Maximum file size in bytes
+  supportedFileTypes String[] @default([])
+  
+  // API configuration
+  apiEndpoint       String?  // External API endpoint
+  apiKey            String?  // Encrypted API key
+  webhookUrl        String?  // Webhook for incoming messages
+  rateLimit         Int?     // Messages per minute
+  timeout           Int?     // Timeout in seconds
+  
+  // Healthcare compliance
+  hipaaCompliant    Boolean  @default(false)
+  requiresConsent   Boolean  @default(true)
+  dataRetention     Int?     // Days to retain messages
+  encryptionRequired Boolean @default(false)
+  
+  // Integration settings
+  syncEnabled       Boolean  @default(true)
+  autoResponse      Boolean  @default(true)
+  intelligentRouting Boolean @default(true)
+  
+  // UI configuration
+  icon              String?  // Icon for UI
+  color             String?  // Brand color
+  description       String?  @db.Text
+  
+  // Performance metrics
+  messageCount      Int      @default(0)
+  avgResponseTime   Int?     // Average response time in seconds
+  successRate       Float?   // Success rate percentage
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relationships
+  messages          ChannelMessage[]
+  conversations     ChannelConversation[]
+  integrations      ChannelIntegration[]
+  rules             RoutingRule[]
+
+  @@index([type])
+  @@index([isActive])
+  @@index([category])
+  @@map("communication_channels")
+}
+
+// Channel Integration Management
+model ChannelIntegration {
+  id                String   @id @default(cuid())
+  channelId         String
+  name              String
+  type              IntegrationType
+  
+  // Integration details
+  provider          String   // 'twilio', 'whatsapp', 'telegram', etc.
+  providerConfig    Json     @default("{}")
+  credentials       Json     @default("{}") // Encrypted credentials
+  
+  // Configuration
+  isActive          Boolean  @default(true)
+  autoStart         Boolean  @default(false)
+  webhooksEnabled   Boolean  @default(true)
+  
+  // Health monitoring
+  lastHealthCheck   DateTime?
+  healthStatus      IntegrationHealth @default(UNKNOWN)
+  errorCount        Int      @default(0)
+  uptimePercentage  Float?   // Uptime percentage
+  
+  // Usage statistics
+  messagesProcessed Int      @default(0)
+  lastMessageAt     DateTime?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  channel           CommunicationChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@index([channelId])
+  @@index([type])
+  @@index([isActive])
+  @@map("channel_integrations")
+}
+
+// Unified Conversation Management
+model ChannelConversation {
+  id                String   @id @default(cuid())
+  channelId         String
+  
+  // Conversation identification
+  conversationId    String   @unique // External conversation ID
+  subject           String?
+  priority          ConversationPriority @default(NORMAL)
+  
+  // Participants
+  customerId        String?  // Customer/user ID
+  customerName      String
+  customerEmail     String?
+  customerPhone     String?
+  agentId           String?  // Assigned agent
+  agentName         String?
+  
+  // Conversation state
+  status            ConversationStatus @default(ACTIVE)
+  subStatus         String?  // Detailed status
+  isClosed          Boolean  @default(false)
+  isArchived        Boolean  @default(false)
+  
+  // Healthcare context
+  clinicId          String?  // Related clinic
+  doctorId          String?  // Related doctor
+  serviceId         String?  // Related service
+  patientId         String?  // Related patient
+  appointmentId     String?  // Related appointment
+  
+  // Communication preferences
+  preferredChannel  String?  // Preferred communication method
+  language          String   @default("en")
+  timezone          String?  // Customer timezone
+  businessHours     Boolean  @default(false)
+  
+  // SLA tracking
+  slaTarget         Int?     // Target response time in minutes
+  slaBreached       Boolean  @default(false)
+  firstResponseAt   DateTime?
+  lastResponseAt    DateTime?
+  resolvedAt        DateTime?
+  
+  // Analytics
+  messageCount      Int      @default(0)
+  agentResponseCount Int     @default(0)
+  customerResponseCount Int  @default(0)
+  escalationCount   Int      @default(0)
+  
+  // Integration data
+  externalRefs      Json     @default("{}") // External system references
+  metadata          Json     @default("{}")
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  lastMessageAt     DateTime @default(now())
+  closedAt          DateTime?
+
+  channel           CommunicationChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@index([channelId])
+  @@index([customerId])
+  @@index([status])
+  @@index([priority])
+  @@index([createdAt])
+  @@index([lastMessageAt])
+  @@map("channel_conversations")
+}
+
+// Channel Message Management
+model ChannelMessage {
+  id                String   @id @default(cuid())
+  channelId         String
+  conversationId    String?
+  
+  // Message identification
+  messageId         String   @unique // External message ID
+  threadId          String?  // Thread/conversation ID
+  
+  // Content
+  content           String   @db.Text
+  messageType       MessageType
+  mediaType         MediaType?
+  
+  // Participants
+  senderId          String?  // Sender user ID
+  senderName        String
+  senderType        MessageSenderType
+  senderChannel     String   // Channel from which message was sent
+  recipientId       String?  // Recipient user ID
+  recipientName     String?
+  recipientType     MessageRecipientType?
+  
+  // Message state
+  status            MessageStatus @default(PENDING)
+  deliveryStatus    DeliveryStatus @default(PENDING)
+  
+  // Timestamps
+  sentAt            DateTime @default(now())
+  deliveredAt       DateTime?
+  readAt            DateTime?
+  processedAt       DateTime?
+  
+  // Healthcare context
+  clinicId          String?  // Related clinic
+  doctorId          String?  // Related doctor
+  serviceId         String?  // Related service
+  patientId         String?  // Related patient
+  
+  // Message features
+  hasAttachments    Boolean  @default(false)
+  attachmentCount   Int      @default(0)
+  attachments       Json     @default("[]")
+  
+  // AI and automation
+  sentiment         MessageSentiment @default(NEUTRAL)
+  intent            MessageIntent?
+  confidence        Float?   // AI confidence score
+  requiresResponse  Boolean  @default(false)
+  autoResponseSent  Boolean  @default(false)
+  
+  // Voice-to-text
+  isVoiceMessage    Boolean  @default(false)
+  transcript        String?  @db.Text
+  audioDuration     Int?     // Duration in seconds
+  speechConfidence  Float?   // Speech recognition confidence
+  
+  // Processing
+  processed         Boolean  @default(false)
+  processingNotes   String?  @db.Text
+  errorMessage      String?  @db.Text
+  
+  // Metadata
+  metadata          Json     @default("{}")
+  tags              String[] @default([])
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  channel           CommunicationChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  conversation      ChannelConversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+
+  @@index([channelId])
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([messageId])
+  @@index([status])
+  @@index([sentAt])
+  @@index([sentiment])
+  @@map("channel_messages")
+}
+
+// Chatbot Configuration and Management
+model ChatbotConfig {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  displayName       String
+  description       String?  @db.Text
+  
+  // Bot configuration
+  isActive          Boolean  @default(true)
+  isDefault         Boolean  @default(false)
+  version           String   @default("1.0")
+  
+  // Healthcare context
+  clinicId          String?  // Specific clinic or null for global
+  medicalSpecialty  String?  // Medical specialty focus
+  language          String   @default("en")
+  
+  // Bot capabilities
+  canSchedule       Boolean  @default(false)
+  canProvideInfo    Boolean  @default(true)
+  canEscalate       Boolean  @default(true)
+  canHandleEmergencies Boolean @default(false)
+  maxEscalationLevel EscalationLevel @default(L2_SUPERVISOR)
+  
+  // NLP Configuration
+  nlpProvider       String?  // 'openai', 'google', 'aws'
+  nlpConfig         Json     @default("{}")
+  confidenceThreshold Float   @default(0.7)
+  responseTimeout   Int      @default(30) // Seconds
+  
+  // Response templates
+  greetingTemplate  String?  @db.Text
+  escalationTemplate String? @db.Text
+  fallbackTemplate  String?  @db.Text
+  closingTemplate   String?  @db.Text
+  
+  // Knowledge base
+  knowledgeBaseId   String?  // Linked knowledge base
+  maxKnowledgeItems Int      @default(5)
+  
+  // Operating hours
+  operatingHours    Json     @default("{}")
+  businessHoursOnly Boolean  @default(false)
+  timezone          String?  // Bot timezone
+  
+  // Performance tracking
+  totalInteractions Int      @default(0)
+  successfulResolutions Int @default(0)
+  escalationCount   Int      @default(0)
+  avgResponseTime   Int?     // Average response time in seconds
+  satisfactionScore Float?   // Average satisfaction score
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([clinicId])
+  @@map("chatbot_configs")
+}
+
+// Chatbot Interaction Log
+model ChatbotInteraction {
+  id                String   @id(cuid())
+  chatbotId         String
+  conversationId    String?
+  messageId         String?
+  
+  // Interaction details
+  customerId        String?
+  customerName      String
+  sessionId         String   // Session identifier
+  
+  // User input
+  userMessage       String   @db.Text
+  userIntent        String?  // Detected intent
+  userSentiment     MessageSentiment @default(NEUTRAL)
+  
+  // Bot response
+  botResponse       String   @db.Text
+  responseType      ChatbotResponseType
+  confidence        Float?   // Bot confidence in response
+  responseTime      Int?     // Response generation time in ms
+  
+  // NLP results
+  entities          Json     @default("[]") // Extracted entities
+  context           Json     @default("{}") // Conversation context
+  intentConfidence  Float?   // Intent detection confidence
+  
+  // Action taken
+  action            String?  // Action performed by bot
+  actionData        Json     @default("{}")
+  escalationTriggered Boolean @default(false)
+  
+  // Outcome
+  resolved          Boolean  @default(false)
+  customerSatisfaction Float? // Customer satisfaction rating
+  feedback          String?  @db.Text
+  
+  // Healthcare context
+  clinicId          String?
+  doctorId          String?
+  serviceId         String?
+  medicalKeywords   String[] @default([])
+  
+  // Metadata
+  channel           String   // Channel where interaction occurred
+  deviceType        DeviceType?
+  browserType       String?
+  
+  createdAt         DateTime @default(now())
+
+  @@index([chatbotId])
+  @@index([customerId])
+  @@index([sessionId])
+  @@index([createdAt])
+  @@map("chatbot_interactions")
+}
+
+// Social Media Integration
+model SocialMediaAccount {
+  id                String   @id @default(cuid())
+  platform          SocialPlatform
+  accountName       String
+  displayName       String
+  accountUrl        String?
+  
+  // Account configuration
+  isActive          Boolean  @default(true)
+  isMonitored       Boolean  @default(true)
+  autoResponse      Boolean  @default(false)
+  
+  // Healthcare context
+  clinicId          String?  // Associated clinic
+  department        String?  // Department responsible
+  
+  // API configuration
+  apiKey            String?  // Encrypted API credentials
+  accessToken       String?  // Encrypted access token
+  refreshToken      String?  // Encrypted refresh token
+  webhookUrl        String?  // Webhook for incoming messages
+  
+  // Monitoring configuration
+  keywords          String[] @default([]) // Keywords to monitor
+  mentions          Boolean  @default(true)
+  hashtags          String[] @default([])
+  blacklistTerms    String[] @default([])
+  
+  // Response configuration
+  responseTemplate  String?  @db.Text
+  escalationRequired Boolean @default(true)
+  responseDelay     Int?     // Delay before responding (minutes)
+  
+  // Performance metrics
+  totalMentions     Int      @default(0)
+  responsesGiven    Int      @default(0)
+  avgResponseTime   Int?     // Average response time in minutes
+  sentimentScore    Float?   // Overall sentiment score
+  
+  // Health monitoring
+  lastCheck         DateTime?
+  connectionStatus  ConnectionStatus @default(UNKNOWN)
+  errorCount        Int      @default(0)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([platform])
+  @@index([isActive])
+  @@index([clinicId])
+  @@map("social_media_accounts")
+}
+
+// Social Media Mention Tracking
+model SocialMediaMention {
+  id                String   @id @default(cuid())
+  socialAccountId   String
+  postId            String   @unique
+  author            String
+  authorId          String?
+  content           String   @db.Text
+  
+  // Post metadata
+  postUrl           String?
+  platform          SocialPlatform
+  mentionType       MentionType
+  
+  // Status
+  status            MentionStatus @default(NEW)
+  isPublic          Boolean  @default(true)
+  isUrgent          Boolean  @default(false)
+  requiresResponse  Boolean  @default(false)
+  
+  // Healthcare context
+  clinicId          String?
+  doctorId          String?
+  serviceId         String?
+  medicalKeywords   String[] @default([])
+  
+  // Response tracking
+  responseSent      Boolean  @default(false)
+  responseAt        DateTime?
+  responseBy        String?  // User who responded
+  escalated         Boolean  @default(false)
+  escalationReason  String?  @db.Text
+  
+  // Sentiment analysis
+  sentiment         MessageSentiment @default(NEUTRAL)
+  urgencyScore      Float?   // Urgency score (0-1)
+  
+  // Engagement metrics
+  likes             Int      @default(0)
+  shares            Int      @default(0)
+  comments          Int      @default(0)
+  reach             Int?     // Estimated reach
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  socialAccount     SocialMediaAccount @relation(fields: [socialAccountId], references: [id], onDelete: Cascade)
+
+  @@index([socialAccountId])
+  @@index([platform])
+  @@index([status])
+  @@index([sentiment])
+  @@index([createdAt])
+  @@map("social_media_mentions")
+}
+
+// Voice-to-Text Configuration
+model VoiceConfig {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  provider          VoiceProvider
+  isActive          Boolean  @default(true)
+  
+  // API configuration
+  apiEndpoint       String?
+  apiKey            String?  // Encrypted API key
+  model             String?  // AI model to use
+  
+  // Language support
+  supportedLanguages String[] @default(["en"])
+  defaultLanguage    String   @default("en")
+  
+  // Healthcare vocabulary
+  medicalVocabulary  String[] @default([])
+  customTerms        Json     @default("{}")
+  
+  // Configuration
+  confidenceThreshold Float   @default(0.7)
+  maxDuration        Int?     // Maximum audio duration in seconds
+  sampleRate         Int?     // Audio sample rate
+  encoding           String?  // Audio encoding format
+  
+  // Processing options
+  enablePunctuation  Boolean  @default(true)
+  enableSpeakerId    Boolean  @default(false)
+  enableSentiment    Boolean  @default(false)
+  
+  // Performance
+  avgProcessingTime  Int?     // Average processing time in seconds
+  successRate        Float?   // Success rate percentage
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([provider])
+  @@index([isActive])
+  @@map("voice_configs")
+}
+
+// Video Consultation Integration
+model VideoConsultation {
+  id                String   @id @default(cuid())
+  patientId         String?
+  doctorId          String?
+  clinicId          String?
+  
+  // Consultation details
+  consultationId    String   @unique
+  appointmentId     String?  // Related appointment
+  subject           String?
+  priority          ConsultationPriority @default(NORMAL)
+  
+  // Status
+  status            VideoConsultationStatus @default(PENDING)
+  scheduledAt       DateTime?
+  startedAt         DateTime?
+  endedAt           DateTime?
+  duration          Int?     // Duration in minutes
+  
+  // Video platform
+  platform          VideoPlatform
+  meetingUrl        String?
+  meetingId         String?
+  accessCode        String?  // Encrypted access code
+  
+  // Participants
+  patientName       String
+  patientEmail      String?
+  patientPhone      String?
+  patientDevice     String?  // Patient's device info
+  doctorName        String?
+  doctorEmail       String?
+  
+  // Healthcare context
+  serviceType       String?  // Type of medical service
+  consultationType  String?  // Initial, follow-up, emergency, etc.
+  medicalNotes      String?  @db.Text
+  prescriptions     Json     @default("[]")
+  
+  // Technical details
+  connectionQuality VideoQuality @default(UNKNOWN)
+  technicalIssues   String?  @db.Text
+  recordingEnabled  Boolean  @default(false)
+  recordingUrl      String?  // Encrypted recording URL
+  
+  // Integration
+  calendarEventId   String?  // Calendar integration
+  paymentStatus     PaymentStatus @default(PENDING)
+  
+  // Analytics
+  connectionAttempts Int     @default(0)
+  dropoutCount      Int      @default(0)
+  satisfactionScore Float?   // Patient satisfaction
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([doctorId])
+  @@index([clinicId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@map("video_consultations")
+}
+
+// WhatsApp Business Integration
+model WhatsAppBusiness {
+  id                String   @id @default(cuid())
+  clinicId          String?
+  
+  // Account details
+  businessName      String
+  displayName       String
+  phoneNumber       String   @unique
+  verifiedName      String?  // WhatsApp verified business name
+  
+  // API configuration
+  accessToken       String?  // Encrypted access token
+  webhookVerifyToken String? // Webhook verification token
+  webhookUrl        String?
+  
+  // Configuration
+  isActive          Boolean  @default(true)
+  autoReply         Boolean  @default(false)
+  businessHours     Json     @default("{}")
+  
+  // Templates
+  welcomeMessage    String?  @db.Text
+  autoReplyMessage  String?  @db.Text
+  offHoursMessage   String?  @db.Text
+  
+  // Healthcare compliance
+  hipaaCompliant    Boolean  @default(false)
+  consentRequired   Boolean  @default(true)
+  dataRetention     Int?     // Days to retain messages
+  
+  // Performance
+  messageCount      Int      @default(0)
+  responseRate      Float?   // Response rate percentage
+  avgResponseTime   Int?     // Average response time in minutes
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([clinicId])
+  @@index([isActive])
+  @@map("whatsapp_business_accounts")
+}
+
+// Unified Contact History
+model UnifiedContactHistory {
+  id                String   @id @default(cuid())
+  customerId        String
+  contactId         String?  // Related contact/enquiry
+  conversationId    String?
+  
+  // Interaction summary
+  interactionType   ContactInteractionType
+  channel           String   // Channel used
+  subject           String?
+  summary           String?  @db.Text
+  
+  // Participants
+  primaryContact    String   // Name of primary contact
+  agentName         String?  // Agent involved
+  teamName          String?  // Team involved
+  
+  // Healthcare context
+  clinicId          String?
+  doctorId          String?
+  serviceId         String?
+  patientId         String?
+  appointmentId     String?
+  
+  // Status and outcome
+  status            ContactHistoryStatus @default(COMPLETED)
+  outcome           String?  @db.Text
+  satisfaction      Float?   // Customer satisfaction (1-5)
+  
+  // Timing
+  startedAt         DateTime
+  endedAt           DateTime?
+  responseTime      Int?     // Response time in minutes
+  resolutionTime    Int?     // Resolution time in minutes
+  
+  // Metadata
+  messageCount      Int      @default(0)
+  escalationCount   Int      @default(0)
+  followUpRequired  Boolean  @default(false)
+  nextAction        String?  @db.Text
+  
+  // Analytics
+  cost              Float?   // Estimated cost
+  efficiency        Float?   // Efficiency score
+  qualityScore      Float?   // Quality score
+  
+  createdAt         DateTime @default(now())
+
+  @@index([customerId])
+  @@index([contactId])
+  @@index([clinicId])
+  @@index([status])
+  @@index([startedAt])
+  @@map("unified_contact_history")
+}
+
+// Live Chat Sessions
+model LiveChatSession {
+  id                String   @id @default(cuid())
+  sessionId         String   @unique
+  customerId        String?
+  customerName      String
+  customerEmail     String?
+  customerPhone     String?
+  
+  // Session details
+  clinicId          String?
+  doctorId          String?
+  serviceId         String?
+  department        String?  // Department handling chat
+  
+  // Participants
+  assignedAgent     String?
+  assignedAgentName String?
+  isAgentAssigned   Boolean  @default(false)
+  agentJoinedAt     DateTime?
+  
+  // Session state
+  status            ChatSessionStatus @default(WAITING)
+  priority          ChatPriority @default(NORMAL)
+  queuePosition     Int?     // Position in queue
+  
+  // Chat configuration
+  isTyping          Boolean  @default(false)
+  isArchived        Boolean  @default(false)
+  isEmergency       Boolean  @default(false)
+  requiresCallback  Boolean  @default(false)
+  
+  // Healthcare context
+  patientType       PatientType @default(NEW)
+  urgencyLevel      UrgencyLevel @default(ROUTINE)
+  medicalKeywords   String[] @default([])
+  
+  // Timing
+  startedAt         DateTime @default(now())
+  firstResponseAt   DateTime?
+  endedAt           DateTime?
+  
+  // Performance
+  messageCount      Int      @default(0)
+  waitTime          Int?     // Wait time in seconds
+  responseTime      Int?     // Response time in seconds
+  resolutionTime    Int?     // Resolution time in seconds
+  
+  // WebSocket info
+  connectionId      String?  // WebSocket connection ID
+  lastActivity      DateTime @default(now())
+  
+  // Integration
+  escalationTriggered Boolean @default(false)
+  escalatedAt       DateTime?
+  integrationData   Json     @default("{}")
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([sessionId])
+  @@index([customerId])
+  @@index([status])
+  @@index([priority])
+  @@index([startedAt])
+  @@map("live_chat_sessions")
+}
+
+// Routing Rules for Multi-Channel
+model RoutingRule {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  description       String?  @db.Text
+  
+  // Rule configuration
+  isActive          Boolean  @default(true)
+  priority          Int      @default(0) // Lower number = higher priority
+  channelId         String?  // Specific channel or null for all
+  
+  // Conditions
+  conditions        Json     @default("[]") // Array of conditions
+  logicOperator     LogicOperator @default(AND)
+  
+  // Actions
+  targetType        RoutingTargetType
+  targetId          String?  // Agent, team, or department ID
+  targetName        String
+  action            String?  // Action to perform
+  
+  // Load balancing
+  method            RoutingMethod @default(DIRECT)
+  roundRobinGroup   String?  // For round-robin routing
+  maxWorkload       Int?     // Maximum workload
+  availabilityCheck Boolean  @default(true)
+  
+  // Timing
+  businessHoursOnly Boolean  @default(false)
+  effectiveHours    Json     @default("{}")
+  timezone          String?  // Rule timezone
+  
+  // Fallback
+  fallbackEnabled   Boolean  @default(false)
+  fallbackRuleId    String?  // Fallback routing rule
+  
+  // Performance tracking
+  usageCount        Int      @default(0)
+  successRate       Float?   // Success rate
+  avgResponseTime   Int?     // Average response time
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  channel           CommunicationChannel? @relation(fields: [channelId], references: [id], onDelete: SetNull)
+
+  @@index([isActive])
+  @@index([priority])
+  @@index([channelId])
+  @@index([targetType, targetId])
+  @@map("routing_rules")
+}
+
+// ========================================
+// ENUMS FOR MULTI-CHANNEL SYSTEM
+// ========================================
+
+// Channel Types
+enum ChannelType {
+  EMAIL
+  SMS
+  PHONE
+  CHAT
+  WHATSAPP
+  TELEGRAM
+  FACEBOOK
+  TWITTER
+  INSTAGRAM
+  LINKEDIN
+  WEB_FORM
+  VIDEO_CALL
+  VOICE_MESSAGE
+  SOCIAL_MEDIA
+  MOBILE_APP
+  PORTAL
+  API
+}
+
+// Channel Categories
+enum ChannelCategory {
+  SYNCHRONOUS    // Real-time communication
+  ASYNCHRONOUS   // Non-real-time communication
+  SOCIAL         // Social media platforms
+  BUSINESS       // Business communication tools
+  EMERGENCY      // Emergency communication channels
+  ACCESSIBILITY  // Accessibility-focused channels
+}
+
+// Integration Types
+enum IntegrationType {
+  INBOUND        // Incoming message integration
+  OUTBOUND       // Outgoing message integration
+  BIDIRECTIONAL  // Two-way communication
+  WEBHOOK        // Webhook-based integration
+  API            // API-based integration
+  SOCIAL         // Social media integration
+  VOICE          // Voice services integration
+  VIDEO          // Video conferencing integration
+}
+
+// Integration Health Status
+enum IntegrationHealth {
+  HEALTHY
+  WARNING
+  CRITICAL
+  DOWN
+  UNKNOWN
+  MAINTENANCE
+}
+
+// Conversation Status
+enum ConversationStatus {
+  ACTIVE
+  WAITING
+  PENDING
+  ON_HOLD
+  ESCALATED
+  RESOLVED
+  CLOSED
+  ARCHIVED
+  CANCELLED
+}
+
+// Conversation Priority
+enum ConversationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+  CRITICAL
+  VIP
+  EMERGENCY
+}
+
+// Message Types
+enum MessageType {
+  TEXT
+  IMAGE
+  DOCUMENT
+  AUDIO
+  VIDEO
+  LOCATION
+  CONTACT
+  STICKER
+  TEMPLATE
+  SYSTEM
+  NOTIFICATION
+  CAROUSEL
+  QUICK_REPLY
+  INTERACTIVE
+  FORM
+}
+
+// Media Types
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+  APPLICATION
+  OTHER
+}
+
+// Message Sender Types
+enum MessageSenderType {
+  CUSTOMER
+  AGENT
+  BOT
+  SYSTEM
+  AUTOMATION
+  WEBHOOK
+  API
+}
+
+// Message Recipient Types
+enum MessageRecipientType {
+  CUSTOMER
+  AGENT
+  GROUP
+  BROADCAST
+  SYSTEM
+  API
+}
+
+// Message Status
+enum MessageStatus {
+  PENDING
+  SENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+  CANCELLED
+  EXPIRED
+}
+
+// Delivery Status
+enum DeliveryStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+  BOUNCED
+  REPLIED
+  UNSUBSCRIBED
+}
+
+// Message Sentiment
+enum MessageSentiment {
+  VERY_NEGATIVE
+  NEGATIVE
+  NEUTRAL
+  POSITIVE
+  VERY_POSITIVE
+  UNKNOWN
+}
+
+// Message Intent
+enum MessageIntent {
+  GREETING
+  QUESTION
+  COMPLAINT
+  COMPLIMENT
+  REQUEST
+  APPOINTMENT
+  EMERGENCY
+  INFORMATION
+  COMPLAINT
+  SUPPORT
+  ESCALATION
+  GOODBYE
+  UNKNOWN
+}
+
+// Social Platforms
+enum SocialPlatform {
+  FACEBOOK
+  TWITTER
+  INSTAGRAM
+  LINKEDIN
+  YOUTUBE
+  TIKTOK
+  TUMBLR
+  REDDIT
+  PINTEREST
+  SNAPCHAT
+  WECHAT
+  LINE
+}
+
+// Mention Types
+enum MentionType {
+  DIRECT_MENTION
+  HASHTAG
+  COMMENT
+  SHARE
+  DIRECT_MESSAGE
+  TAG
+  REFERENCE
+  BRAND_MENTION
+  EMERGENCY
+}
+
+// Mention Status
+enum MentionStatus {
+  NEW
+  REVIEWED
+  RESPONDED
+  ESCALATED
+  IGNORED
+  RESOLVED
+}
+
+// Connection Status
+enum ConnectionStatus {
+  CONNECTED
+  DISCONNECTED
+  ERROR
+  MAINTENANCE
+  UNKNOWN
+  RATE_LIMITED
+}
+
+// Voice Providers
+enum VoiceProvider {
+  GOOGLE
+  AWS_POLLY
+  AZURE
+  OPENAI_WHISPER
+  DEEPGRAM
+  ASSEMBLYAI
+  REV
+  SPEECHMATICS
+  COQUI
+  WAVE2VEC
+}
+
+// Video Platforms
+enum VideoPlatform {
+  ZOOM
+  TEAMS
+  GOOGLE_MEET
+  SKYPE
+  WHATSAPP_VIDEO
+  FACETIME
+  WEBEX
+  GOTOMEETING
+  JITSI
+  DAILY
+  TWILIO_VIDEO
+  AGORA
+  VONAGE
+  OPENVIDU
+}
+
+// Video Consultation Status
+enum VideoConsultationStatus {
+  PENDING
+  SCHEDULED
+  WAITING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+  RESCHEDULED
+  TECHNICAL_ISSUE
+}
+
+// Video Quality
+enum VideoQuality {
+  EXCELLENT
+  GOOD
+  FAIR
+  POOR
+  UNKNOWN
+  DISCONNECTED
+}
+
+// Payment Status
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELLED
+  PARTIALLY_REFUNDED
+}
+
+// Consultation Priority
+enum ConsultationPriority {
+  ROUTINE
+  URGENT
+  EMERGENCY
+  PRIORITY
+  SAME_DAY
+  WALK_IN
+}
+
+// Chat Session Status
+enum ChatSessionStatus {
+  WAITING
+  ACTIVE
+  TRANSFERRED
+  ON_HOLD
+  ESCALATED
+  COMPLETED
+  CANCELLED
+  TIMEOUT
+  ABANDONED
+  TRANSFERRED
+}
+
+// Chat Priority
+enum ChatPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+  CRITICAL
+  VIP
+  EMERGENCY
+}
+
+// Contact Interaction Types
+enum ContactInteractionType {
+  INITIAL_CONTACT
+  FOLLOW_UP
+  RESOLUTION
+  ESCALATION
+  COMPLAINT
+  COMPLIMENT
+  INFORMATION_REQUEST
+  APPOINTMENT_BOOKING
+  MEDICAL_CONSULTATION
+  TECHNICAL_SUPPORT
+  EMERGENCY_CONTACT
+}
+
+// Contact History Status
+enum ContactHistoryStatus {
+  IN_PROGRESS
+  PENDING
+  COMPLETED
+  ESCALATED
+  CANCELLED
+  ON_HOLD
+  TRANSFERRED
+}
+
+// Chatbot Response Types
+enum ChatbotResponseType {
+  GREETING
+  INFORMATION
+  ESCALATION
+  BOOKING
+  FAQ
+  EMERGENCY
+  GOODBYE
+  FALLBACK
+  CONFIRMATION
+  REJECTION
+  CLARIFICATION
+}
+
+// Logic Operators
+enum LogicOperator {
+  AND
+  OR
+  NOT
+  XOR
+}

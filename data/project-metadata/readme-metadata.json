@@ -1,0 +1,513 @@
+{
+  "projectMetadata": {
+    "metadata": {
+      "name": "my-family-clinic",
+      "version": "0.1.0",
+      "description": "Singapore's comprehensive healthcare discovery and service platform",
+      "extractionDate": "2025-11-05T09:52:42Z",
+      "sourceFiles": [
+        "Project_Architecture_Document.md",
+        "package.json",
+        "prisma/schema.prisma",
+        "docs/technical/api-reference.md",
+        "database/database-documentation.md"
+      ]
+    },
+    "technologyStack": {
+      "summary": "Modern Next.js 15 architecture with TypeScript safety, PostGIS-enabled geospatial healthcare search, and comprehensive healthcare-specific integrations",
+      "versions": {
+        "frontend": {
+          "next": "16.0.1",
+          "react": "19.2.0",
+          "typescript": "5"
+        },
+        "backend": {
+          "trpc": "11.0.0-rc.553",
+          "nextAuth": "5.0.0-beta.25",
+          "prisma": "5.22.0"
+        },
+        "database": {
+          "postgresql": "15.4",
+          "postgis": "3.4"
+        },
+        "infrastructure": {
+          "vercel": "Deployment Platform",
+          "supabase": "Database & Auth"
+        },
+        "testing": {
+          "vitest": "Testing Framework",
+          "eslint": "9",
+          "husky": "9.1.6"
+        }
+      },
+      "keyLibraries": [
+        "@prisma/client",
+        "@supabase/supabase-js",
+        "@tanstack/react-query",
+        "@trpc/client",
+        "@vis.gl/react-google-maps",
+        "zod",
+        "tailwindcss",
+        "react-hook-form"
+      ],
+      "totalDependencies": 120
+    },
+    "performanceMetrics": {
+      "coreWebVitals": {
+        "lcp": {
+          "current": "1.8s",
+          "target": "≤2.5s",
+          "score": 95,
+          "status": "GOOD"
+        },
+        "fid": {
+          "current": "45ms",
+          "target": "≤100ms",
+          "score": 98,
+          "status": "GOOD"
+        },
+        "cls": {
+          "current": "0.08",
+          "target": "≤0.1",
+          "score": 92,
+          "status": "GOOD"
+        }
+      },
+      "healthcareWorkflows": {
+        "clinicSearch": {
+          "current": "1.2s",
+          "target": "≤2.0s",
+          "score": 94,
+          "status": "GOOD"
+        },
+        "doctorProfile": {
+          "current": "0.8s",
+          "target": "≤1.5s",
+          "score": 96,
+          "status": "GOOD"
+        },
+        "appointmentBooking": {
+          "current": "2.1s",
+          "target": "≤3.0s",
+          "score": 91,
+          "status": "GOOD"
+        },
+        "healthierSGLoad": {
+          "current": "1.5s",
+          "target": "≤2.5s",
+          "score": 93,
+          "status": "GOOD"
+        }
+      },
+      "accessibility": {
+        "wcagCompliance": "AA",
+        "score": 96,
+        "automatedTests": "247/250 passed",
+        "manualTests": "45/45 passed"
+      },
+      "overallScore": 94.2,
+      "status": "EXCELLENT"
+    },
+    "healthcareCompliance": {
+      "framework": "PDPA and MOH compliance support with medical-grade encryption and audit trails",
+      "features": [
+        "Personal data encryption",
+        "Consent management with versioning",
+        "Data retention policies",
+        "Right to deletion and portability",
+        "Medical license verification",
+        "Service categorization alignment with MOH",
+        "Healthcare provider verification",
+        "Real-time availability tracking",
+        "Geographic PostGIS integration",
+        "Multi-language support (English, Chinese, Malay, Tamil)"
+      ],
+      "complianceScore": 95,
+      "coverage": "100%",
+      "status": "Production Ready",
+      "certifications": [
+        "PDPA Compliance Framework",
+        "MOH Healthcare Standards",
+        "WCAG 2.2 AA Accessibility",
+        "Healthcare-specific audit trails",
+        "Medical-grade data encryption"
+      ]
+    },
+    "fileStructure": {
+      "rootPath": "my-family-clinic",
+      "totalLinesOfCode": "215,000+",
+      "keyDirectories": {
+        "src": {
+          "path": "src/",
+          "purpose": "Main application source code",
+          "subdirectories": {
+            "app": {
+              "path": "src/app/",
+              "purpose": "Next.js App Router implementation",
+              "features": [
+                "Server Components",
+                "Client Components",
+                "API Routes",
+                "tRPC Integration",
+                "Authentication"
+              ]
+            },
+            "components": {
+              "path": "src/components/",
+              "purpose": "React component library",
+              "totalComponents": 248,
+              "categories": {
+                "ui": 45,
+                "healthcare": 8,
+                "accessibility": 12,
+                "contact": 15,
+                "doctor": 25,
+                "clinic": 8,
+                "service": 35,
+                "enquiry": 20,
+                "health": 10,
+                "healthier-sg": 45,
+                "privacy": 18,
+                "search": 15,
+                "integration": 12,
+                "forms": 15
+              }
+            },
+            "server": {
+              "path": "src/server/",
+              "purpose": "Server-side code and API routers",
+              "routers": 29,
+              "features": [
+                "tRPC API routers",
+                "Authentication configuration",
+                "Healthcare business logic",
+                "Real-time subscriptions"
+              ]
+            },
+            "hooks": {
+              "path": "src/hooks/",
+              "purpose": "Custom React hooks",
+              "count": 35
+            },
+            "types": {
+              "path": "src/types/",
+              "purpose": "TypeScript type definitions"
+            },
+            "utils": {
+              "path": "src/utils/",
+              "purpose": "Utility functions"
+            },
+            "accessibility": {
+              "path": "src/accessibility/",
+              "purpose": "Accessibility framework"
+            },
+            "performance": {
+              "path": "src/performance/",
+              "purpose": "Performance monitoring"
+            },
+            "ux": {
+              "path": "src/ux/",
+              "purpose": "User experience utilities"
+            },
+            "content": {
+              "path": "src/content/",
+              "purpose": "Content management",
+              "subdirectories": {
+                "translations": "Multi-language content"
+              }
+            }
+          }
+        },
+        "prisma": {
+          "path": "prisma/",
+          "purpose": "Database schema and migrations",
+          "totalLines": 7440,
+          "features": [
+            "Complete healthcare database schema",
+            "Database migrations",
+            "Seed data",
+            "Specialized schemas (8 files)",
+            "PostGIS integration"
+          ]
+        },
+        "public": {
+          "path": "public/",
+          "purpose": "Static assets",
+          "contents": [
+            "Icons",
+            "Images",
+            "Service worker (sw-availability.js)"
+          ]
+        },
+        "docs": {
+          "path": "docs/",
+          "purpose": "Documentation",
+          "categories": [
+            "Technical documentation",
+            "User guides",
+            "Deployment guides"
+          ]
+        },
+        "testing": {
+          "path": "testing/",
+          "purpose": "Testing framework",
+          "statistics": {
+            "totalTestFiles": 34,
+            "totalLinesOfTestCode": 26873,
+            "testCategories": {
+              "unit": {
+                "files": 5,
+                "lines": 2847
+              },
+              "integration": {
+                "files": 4,
+                "lines": 3215
+              },
+              "e2e": {
+                "files": 3,
+                "lines": 2890
+              },
+              "compliance": {
+                "files": 14,
+                "lines": 11873
+              },
+              "performance": {
+                "files": 6,
+                "lines": 4125
+              },
+              "security": {
+                "files": 2,
+                "lines": 1923
+              }
+            }
+          },
+          "subdirectories": [
+            "compliance",
+            "performance",
+            "suites",
+            "infrastructure"
+          ]
+        },
+        "analytics": {
+          "path": "analytics/",
+          "purpose": "Analytics system implementation"
+        },
+        "seo": {
+          "path": "seo/",
+          "purpose": "SEO optimization"
+        }
+      },
+      "keyFiles": [
+        {
+          "path": "src/app/layout.tsx",
+          "lines": 159,
+          "purpose": "Root layout with accessibility providers and error boundaries"
+        },
+        {
+          "path": "src/server/api/root.ts",
+          "lines": 73,
+          "purpose": "tRPC root router with 29 healthcare API routers"
+        },
+        {
+          "path": "prisma/schema.prisma",
+          "lines": 7440,
+          "purpose": "Complete database schema with healthcare models"
+        }
+      ]
+    },
+    "installation": {
+      "prerequisites": [
+        "Node.js (latest LTS recommended)",
+        "PostgreSQL database",
+        "Supabase account for managed database and auth"
+      ],
+      "dependencies": {
+        "production": 67,
+        "development": 53,
+        "total": 120
+      },
+      "scripts": {
+        "development": [
+          "npm run dev",
+          "npm run lint",
+          "npm run type-check"
+        ],
+        "database": [
+          "npm run db:generate",
+          "npm run db:migrate",
+          "npm run db:seed",
+          "npm run db:studio"
+        ],
+        "testing": [
+          "npm run test",
+          "npm run test:coverage",
+          "npm run test:compliance:pdpa",
+          "npm run test:compliance:moh",
+          "npm run test:performance"
+        ],
+        "build": [
+          "npm run build",
+          "npm run start"
+        ]
+      },
+      "environmentVariables": [
+        "DATABASE_URL",
+        "DIRECT_URL",
+        "NEXTAUTH_SECRET",
+        "NEXTAUTH_URL",
+        "VERCEL_TOKEN",
+        "ORG_ID",
+        "PROJECT_ID",
+        "SLACK_WEBHOOK"
+      ]
+    },
+    "deployment": {
+      "environments": {
+        "development": {
+          "platform": "Vercel (Preview)",
+          "database": "Supabase (Development)",
+          "status": "Active"
+        },
+        "staging": {
+          "platform": "Vercel (Staging)",
+          "database": "Supabase (Staging)",
+          "status": "Active"
+        },
+        "production": {
+          "platform": "Vercel (Production)",
+          "database": "Supabase (Production)",
+          "status": "Active"
+        }
+      },
+      "strategy": "Healthcare Platform CI/CD with automated testing, deployment, and rollback procedures",
+      "infrastructure": {
+        "frontend": "Vercel",
+        "database": "Supabase PostgreSQL 15.4",
+        "auth": "NextAuth 5.0",
+        "geospatial": "PostGIS 3.4"
+      },
+      "ciCdFeatures": [
+        "Automated healthcare compliance tests",
+        "PDPA and MOH compliance validation",
+        "Security and vulnerability testing",
+        "Performance testing and optimization",
+        "Accessibility testing",
+        "Multi-environment deployment",
+        "Emergency rollback capabilities",
+        "Real-time monitoring and alerting"
+      ],
+      "monitoring": [
+        "Real-time health monitoring",
+        "Healthcare-specific metrics",
+        "Performance degradation alerts",
+        "Security breach detection",
+        "Backup completion monitoring"
+      ]
+    },
+    "quality": {
+      "overallScore": 94.2,
+      "status": "EXCELLENT",
+      "gates": {
+        "codeCoverage": {
+          "threshold": 85,
+          "actual": 87.3,
+          "status": "PASS"
+        },
+        "accessibilityScore": {
+          "threshold": 95,
+          "actual": 96.7,
+          "status": "PASS"
+        },
+        "performanceScore": {
+          "threshold": 90,
+          "actual": 92.1,
+          "status": "PASS"
+        },
+        "securityVulnerabilities": {
+          "threshold": 0,
+          "actual": 0,
+          "status": "PASS"
+        },
+        "healthcareCompliance": {
+          "threshold": 100,
+          "actual": 100,
+          "status": "PASS"
+        }
+      },
+      "testCoverage": 87.3
+    },
+    "development": {
+      "phase": "12/12 Complete",
+      "status": "Production Ready",
+      "codeQuality": {
+        "typescript": "Strict mode enforcement",
+        "eslint": "Healthcare-specific rules",
+        "prettier": "Consistent formatting",
+        "husky": "Pre-commit quality checks",
+        "accessibilityLinting": "WCAG 2.2 AA checks"
+      },
+      "workflow": {
+        "gitBranching": "feat/, fix/, docs/, test/, perf/",
+        "pullRequests": "Required for all changes",
+        "automatedTesting": "CI/CD pipeline with comprehensive test suites"
+      }
+    },
+    "api": {
+      "architecture": "tRPC with 29 healthcare API routers",
+      "authentication": "NextAuth 5.0 with multiple providers",
+      "rateLimiting": {
+        "publicRead": "1000 requests/hour",
+        "authenticated": "500 requests/hour",
+        "writeOperations": "100 requests/hour",
+        "fileUpload": "10 requests/hour",
+        "search": "50 requests/hour"
+      },
+      "realTime": "WebSocket subscriptions for appointment updates, availability changes, and enquiry status",
+      "features": [
+        "Type-safe API layer",
+        "Automatic documentation generation",
+        "Built-in error handling",
+        "Optimized for React Query caching",
+        "Role-based access control"
+      ]
+    },
+    "geospatial": {
+      "technology": "PostGIS integration",
+      "features": [
+        "Point-based location storage",
+        "Distance calculations",
+        "Location-based searches",
+        "Proximity queries",
+        "Singapore Postcode support"
+      ],
+      "optimization": "Spatial indexes for healthcare search",
+      "queries": [
+        "Find clinics within 5km",
+        "Find doctors by specialty near location",
+        "Calculate distances between locations"
+      ]
+    },
+    "accessibility": {
+      "compliance": "WCAG 2.2 AA",
+      "score": 96.7,
+      "features": [
+        "Screen reader support",
+        "Keyboard navigation",
+        "High contrast mode",
+        "Font size adjustment",
+        "Voice navigation",
+        "Cognitive support"
+      ],
+      "testing": "247/250 automated tests passed, 45/45 manual tests passed"
+    },
+    "multilingual": {
+      "languages": [
+        "English (100% completeness)",
+        "Chinese (95% completeness)",
+        "Malay (90% completeness)",
+        "Tamil (85% completeness)"
+      ],
+      "features": "Multi-language support across all major entities with JSONB translation fields"
+    }
+  }
+}

@@ -1,0 +1,708 @@
+// ========================================
+// CLINIC-SPECIFIC CONTACT INTEGRATION
+// Sub-Phase 9.4: Enhanced Contact System with Clinic Personalization
+// Healthcare Platform Contact System Design
+// ========================================
+
+// Extend existing Clinic model with contact-specific features
+model ClinicContactSettings {
+  id                    String   @id @default(cuid())
+  clinicId              String   @unique
+  
+  // Contact preferences
+  enableContactForm     Boolean  @default(true)
+  enableLiveChat        Boolean  @default(false)
+  enablePhoneSupport    Boolean  @default(true)
+  enableEmailSupport    Boolean  @default(true)
+  enableWhatsAppSupport Boolean  @default(false)
+  
+  // Response preferences
+  defaultResponseLanguage String @default("en")
+  responseTimeTarget     Int     @default(24) // Hours
+  businessHoursOnly      Boolean @default(false)
+  emergencyResponseTime  Int     @default(2) // Hours for urgent matters
+  
+  // Auto-responder settings
+  autoResponseEnabled    Boolean @default(true)
+  autoResponseMessage    String? @db.Text
+  afterHoursMessage      String? @db.Text
+  holidayMessage         String? @db.Text
+  
+  // Contact routing
+  preferredContactMethod ContactMethod @default(EMAIL)
+  backupContactMethod    ContactMethod? 
+  contactFallbackQueue   String?       // Fallback contact queue
+  
+  // Staff assignment preferences
+  defaultAssignmentMethod AssignmentMethod @default(AUTO_SKILL_BASED)
+  maxActiveEnquiries     Int      @default(50)
+  specialistEscalation   Boolean  @default(true)
+  
+  // Quality preferences
+  requireSatisfactionSurvey Boolean @default(false)
+  satisfactionTarget     Float?   // Target satisfaction score
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  clinic                Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  
+  @@index([clinicId])
+  @@map("clinic_contact_settings")
+}
+
+// Clinic-specific contact routing rules
+model ClinicContactRouting {
+  id                String   @id @default(cuid())
+  clinicId          String
+  
+  // Routing rule details
+  ruleName          String
+  description       String?  @db.Text
+  isActive          Boolean  @default(true)
+  priority          Int      @default(0) // Lower = higher priority
+  
+  // Geographic criteria
+  postalCodes       String[] @default([]) // Target postal codes
+  serviceAreas      String[] @default([]) // Service area names
+  distanceKm        Float?   // Maximum distance in km
+  coverageArea      String?  @db.Text     // Coverage description
+  
+  // Service-based criteria
+  serviceTypes      String[] @default([]) // Relevant service types
+  conditionTypes    String[] @default([]) // Medical conditions
+  urgencyLevels     UrgencyLevel[] @default([ROUTINE, NORMAL])
+  
+  // Patient criteria
+  patientAgeGroups  String[] @default([]) // e.g., "adult", "pediatric", "senior"
+  insuranceTypes    String[] @default([]) // Insurance coverage types
+  languages         String[] @default([]) // Preferred languages
+  
+  // Time-based criteria
+  businessHoursOnly Boolean  @default(false)
+  dayOfWeek         DayOfWeek?
+  timeStart         String?  // Format: "HH:mm"
+  timeEnd           String?  // Format: "HH:mm"
+  timezone          String?  @default("Asia/Singapore")
+  
+  // Routing targets
+  primaryAssigneeId String?  // Primary contact person/department
+  primaryAssigneeType AssigneeType @default(DEPARTMENT)
+  backupAssigneeId  String?
+  backupAssigneeType AssigneeType @default(DEPARTMENT)
+  
+  // Fallback options
+  enableFallback    Boolean  @default(true)
+  fallbackDelay     Int?     // Minutes before fallback
+  globalRoutingPool String?  // Global queue if no specific match
+  
+  // Performance tracking
+  usageCount        Int      @default(0)
+  successRate       Float?   // Successful routing rate
+  avgResponseTime   Int?     // Average response time in minutes
+  patientSatisfaction Float? // Average satisfaction score
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  clinic            Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  
+  @@index([clinicId])
+  @@index([isActive])
+  @@index([priority])
+  @@map("clinic_contact_routing")
+}
+
+// Clinic-specific response templates
+model ClinicResponseTemplate {
+  id                String   @id @default(cuid())
+  clinicId          String
+  
+  // Template identification
+  templateName      String
+  displayName       String
+  category          ContactTemplateCategory
+  description       String?  @db.Text
+  
+  // Template content
+  subject           String?  // Email subject or message title
+  content           String   @db.Text // Template content
+  signature         String?  @db.Text // Email signature
+  
+  // Template variables
+  variables         Json     @default("[]") // Available variables for templating
+  personalization   Json     @default("{}") // Personalization rules
+  
+  // Usage context
+  triggerConditions Json     @default("[]") // When to use this template
+  enquiryTypes      EnquiryType[] @default([INFORMATIONAL])
+  priorityLevels    ContactPriority[] @default([NORMAL])
+  
+  // Multilingual support
+  language          String   @default("en")
+  translations      Json     @default("{}") // Other language versions
+  supportedLanguages String[] @default(["en"])
+  
+  // Approval workflow
+  requiresApproval  Boolean  @default(false)
+  approvalStatus    ApprovalStatus @default(ACTIVE)
+  approvedBy        String?  // User ID who approved
+  approvedAt        DateTime?
+  
+  // Quality and compliance
+  medicalAccuracy   Float?   // Medical accuracy rating
+  complianceChecked Boolean  @default(false)
+  lastReviewed      DateTime?
+  nextReviewDue     DateTime?
+  
+  // Usage tracking
+  usageCount        Int      @default(0)
+  successRate       Float?   // Success rate when used
+  patientFeedback   Float?   // Patient satisfaction with this template
+  
+  isActive          Boolean  @default(true)
+  sortOrder         Int      @default(0)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  clinic            Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  
+  @@index([clinicId])
+  @@index([category])
+  @@index([isActive])
+  @@map("clinic_response_templates")
+}
+
+// Clinic staff and contact assignment
+model ClinicContactStaff {
+  id                String   @id @default(cuid())
+  clinicId          String
+  userId            String?  // Link to User if staff member
+  
+  // Staff details
+  staffName         String
+  staffEmail        String
+  staffPhone        String?
+  role              ContactStaffRole
+  department        ContactDepartment @default(GENERAL)
+  
+  // Specialization
+  medicalSpecialty  String?  // Medical specialty if applicable
+  languages         String[] @default([]) // Languages spoken
+  experienceYears   Int?     // Years of experience
+  
+  // Contact assignment settings
+  isActive          Boolean  @default(true)
+  isPrimaryContact  Boolean  @default(false) // Primary contact for clinic
+  maxConcurrentCases Int     @default(20)    // Maximum concurrent enquiries
+  
+  // Skills and capabilities
+  skills            String[] @default([])    // Contact handling skills
+  serviceExpertise  String[] @default([])    // Service types they handle
+  complexityLevels  EnquiryComplexity[] @default([LOW, MEDIUM])
+  
+  // Availability settings
+  workingHours      Json     @default("{}")  // Working hours configuration
+  timeOff           Json     @default("[]")  // Scheduled time off
+  timezone          String   @default("Asia/Singapore")
+  
+  // Performance settings
+  targetResponseTime Int?    // Target response time in minutes
+  qualityTarget     Float?   // Quality target score
+  satisfactionTarget Float?  // Patient satisfaction target
+  
+  // Communication preferences
+  preferredChannel  ContactMethod @default(EMAIL)
+  notificationSettings Json     @default("{}") // How they want to be notified
+  
+  // Backup and escalation
+  backupFor         String[] @default([])    // Staff IDs they backup
+  escalationTo      String?  // User ID they escalate to
+  specialistIn      String[] @default([])    // Areas where they're specialist
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  clinic            Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  user              User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  // Enquiry relationships
+  primaryEnquiries  Enquiry[] @relation("PrimaryAssignee")
+  secondaryEnquiries Enquiry[] @relation("SecondaryAssignee")
+  
+  @@index([clinicId])
+  @@index([userId])
+  @@index([isActive])
+  @@index([role])
+  @@map("clinic_contact_staff")
+}
+
+// Enhanced clinic contact history with patient relationship tracking
+model ClinicContactHistory {
+  id                String   @id @default(cuid())
+  clinicId          String
+  contactFormId     String?
+  enquiryId         String?
+  
+  // Contact session details
+  sessionId         String?  // Unique session identifier
+  patientId         String?  // Link to patient if known
+  contactId         String?  // Patient contact record ID
+  
+  // Patient relationship
+  patientType       PatientType @default(NEW)
+  existingPatient   Boolean  @default(false)
+  patientRecordId   String?  // ID in clinic's patient management system
+  
+  // Visit history
+  previousVisits    Int      @default(0) // Number of previous visits
+  lastContactAt     DateTime?
+  lastContactType   ContactMethod?
+  relationshipStatus PatientRelationshipStatus @default(NEW)
+  
+  // Communication tracking
+  communicationCount Int     @default(1)
+  preferredChannel   ContactMethod @default(EMAIL)
+  preferredLanguage  String  @default("en")
+  communicationFrequency CommunicationFrequency @default(OCCASIONAL)
+  
+  // Medical context
+  currentCondition  String?  @db.Text
+  treatmentHistory  String?  @db.Text
+  allergies         String[] @default([])
+  medications       String[] @default([])
+  medicalNotes      String?  @db.Text
+  
+  // Service history
+  previousServices  String[] @default([]) // Previously used services
+  serviceHistory    Json     @default("[]") // Detailed service history
+  satisfactionHistory Json   @default("[]") // Past satisfaction scores
+  
+  // Preferences
+  contactPreferences Json   @default("{}")
+  specialRequests    String? @db.Text
+  accessibilityNeeds String[] @default([])
+  
+  // Follow-up requirements
+  requiresFollowUp   Boolean @default(false)
+  followUpDate       DateTime?
+  followUpType       FollowUpType?
+  followUpNotes      String?  @db.Text
+  
+  // Quality tracking
+  satisfactionScore  Float?   // Latest satisfaction score
+  netPromoterScore   Int?     // NPS score (-100 to 100)
+  wouldRecommend     Boolean? // Would they recommend clinic
+  
+  // Metadata
+  createdBy          String?  // Staff member who created/updated
+  source             ContactSource @default(WEB_FORM)
+  channel            ContactMethod @default(EMAIL)
+  
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  clinic             Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  contactForm        ContactForm? @relation(fields: [contactFormId], references: [id], onDelete: Cascade)
+  enquiry            Enquiry? @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  
+  @@index([clinicId])
+  @@index([contactFormId])
+  @@index([enquiryId])
+  @@index([patientId])
+  @@index([patientType])
+  @@index([relationshipStatus])
+  @@map("clinic_contact_history")
+}
+
+// Clinic-specific FAQ and knowledge base
+model ClinicFAQ {
+  id                String   @id @default(cuid())
+  clinicId          String
+  
+  // FAQ details
+  question          String
+  answer            String   @db.Text
+  category          String   // FAQ category
+  tags              String[] @default([])
+  
+  // Clinic-specific context
+  medicalSpecialty  String?  // Related medical specialty
+  applicableServices String[] @default([]) // Related services
+  applicableConditions String[] @default([]) // Related conditions
+  
+  // Patient demographics
+  ageGroups         String[] @default([]) // Target age groups
+  patientTypes      PatientType[] @default([NEW, EXISTING])
+  
+  // Language support
+  language          String   @default("en")
+  translations      Json     @default("{}") // Other language versions
+  supportedLanguages String[] @default(["en"])
+  
+  // Usage and effectiveness
+  viewCount         Int      @default(0)
+  helpfulCount      Int      @default(0)
+  notHelpfulCount   Int      @default(0)
+  searchCount       Int      @default(0)
+  
+  // Quality and accuracy
+  accuracyRating    Float?   // Medical accuracy rating
+  lastReviewed      DateTime?
+  reviewedBy        String?  // Medical professional who reviewed
+  verificationStatus FAQVerificationStatus @default(DRAFT)
+  
+  // Integration
+  autoSuggest       Boolean  @default(true) // Auto-suggest in contact forms
+  priorityLevel     Int      @default(0)   // Suggestion priority
+  
+  isActive          Boolean  @default(true)
+  displayOrder      Int      @default(0)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  clinic            Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  
+  @@index([clinicId])
+  @@index([category])
+  @@index([medicalSpecialty])
+  @@index([isActive])
+  @@map("clinic_faq")
+}
+
+// Clinic contact performance metrics
+model ClinicContactMetrics {
+  id                String   @id @default(cuid())
+  clinicId          String
+  
+  // Time period
+  period            MetricsPeriod
+  periodStart       DateTime
+  periodEnd         DateTime
+  comparisonPeriod  String?  // "previous_period", "same_period_last_year"
+  
+  // Volume metrics
+  totalEnquiries    Int      @default(0)
+  newEnquiries      Int      @default(0)
+  resolvedEnquiries Int      @default(0)
+  escalatedEnquiries Int     @default(0)
+  abandonedEnquiries Int     @default(0)
+  
+  // Response time metrics
+  avgFirstResponseTime Float? // Minutes to first response
+  avgResolutionTime    Float? // Minutes to resolution
+  slaComplianceRate    Float? // Percentage within SLA
+  withinTargetRate     Float? // Percentage meeting target response
+  
+  // Quality metrics
+  avgSatisfactionScore Float? // 1-5 scale
+  netPromoterScore     Float? // NPS score
+  qualityScore         Float? // Internal quality rating
+  resolutionRate       Float? // Percentage successfully resolved
+  
+  // Channel performance
+  emailResponseTime    Float? // Average email response time
+  phoneResponseTime    Float? // Average phone response time
+  chatResponseTime     Float? // Average chat response time
+  formResponseTime     Float? // Average form response time
+  
+  // Staff performance
+  staffUtilization     Float? // Percentage of time spent on enquiries
+  staffEfficiency      Float? // Enquiries handled per hour
+  staffSatisfaction    Float? // Staff satisfaction with contact handling
+  
+  // Patient experience
+  patientRetentionRate Float? // Percentage of returning patients
+  referralRate         Float? // New patients from referrals
+  complaintRate        Float? // Complaints per 100 enquiries
+  complimentRate       Float? // Compliments per 100 enquiries
+  
+  // Operational efficiency
+  costPerEnquiry       Float? // Cost to handle each enquiry
+  automationRate       Float? // Percentage handled by automation
+  selfServiceRate      Float? // Percentage resolved by FAQ/self-service
+  escalationsNeeded    Float? // Escalations per 100 enquiries
+  
+  // Trends and comparisons
+  enquiryTrend         EnquiryTrend @default(STABLE)
+  satisfactionTrend    SatisfactionTrend @default(STABLE)
+  responseTimeTrend    ResponseTimeTrend @default(STABLE)
+  
+  // Benchmarking
+  industryAverage      Float? // Industry benchmark scores
+  bestPracticeScore    Float? // Best practice target
+  improvementOpportunity Float? // Improvement potential score
+  
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  clinic               Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  
+  @@index([clinicId])
+  @@index([period])
+  @@index([periodStart])
+  @@map("clinic_contact_metrics")
+}
+
+// Geographic distance and service area calculations
+model ClinicServiceArea {
+  id                String   @id @default(cuid())
+  clinicId          String
+  
+  // Service area definition
+  areaName          String
+  description       String?  @db.Text
+  areaType          ServiceAreaType
+  
+  // Geographic boundaries
+  postalCodes       String[] @default([]) // Singapore postal codes
+  postalCodeRanges  Json     @default("[]") // Range definitions
+  geographicPoints  Json     @default("[]") // GPS coordinates
+  boundaryPolygons  Json     @default("[]") // Complex boundary shapes
+  
+  // Service characteristics
+  serviceTypes      String[] @default([]) // Services available in this area
+  serviceLimitations Json    @default("[]") // Service limitations
+  travelTimeEstimate Json    @default("{}") // Travel time estimates
+  
+  // Patient demographics
+  targetAgeGroups   String[] @default([])
+  populationDensity String?  // High/Medium/Low density
+  socioeconomicLevel String? // Target demographic level
+  
+  // Operational details
+  estimatedTravelTime Int?   // Minutes from clinic
+  availabilityDays   String[] @default([]) // Days when service available
+  peakHours          Json     @default("[]") // Peak demand hours
+  
+  // Coverage and capacity
+  capacityPerDay     Int?     // Maximum appointments per day
+  currentUtilization Float?   // Current utilization percentage
+  waitTimeEstimate   Int?     // Estimated wait time in minutes
+  
+  // Quality and performance
+  serviceQuality     Float?   // Service quality rating for this area
+  patientSatisfaction Float?  // Patient satisfaction in this area
+  complaintRate      Float?   // Complaints per 100 patients
+  
+  isActive           Boolean  @default(true)
+  effectiveFrom      DateTime @default(now())
+  effectiveTo        DateTime?
+  
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  clinic             Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  
+  @@index([clinicId])
+  @@index([areaType])
+  @@index([isActive])
+  @@map("clinic_service_areas")
+}
+
+// Contact form personalization based on clinic
+model ClinicContactForm {
+  id                String   @id @default(cuid())
+  clinicId          String
+  
+  // Form configuration
+  formName          String
+  formTitle         String
+  formDescription   String?  @db.Text
+  formCategory      ContactCategory
+  
+  // Clinic-specific fields
+  customFields      Json     @default("[]") // Additional clinic-specific fields
+  requiredFields    Json     @default("[]") // Required fields for this clinic
+  optionalFields    Json     @default("[]") // Optional fields
+  
+  // Medical context
+  serviceContext    String[] @default([]) // Relevant services
+  conditionContext  String[] @default([]) // Relevant conditions
+  specialtyContext  String?  // Medical specialty focus
+  
+  // Patient journey integration
+  appointmentIntegration Boolean @default(true) // Connect to appointment booking
+  medicalHistoryIntegration Boolean @default(false) // Access medical history
+  prescriptionIntegration Boolean @default(false) // Prescription information
+  
+  // Personalization settings
+  greetingMessage   String?  @db.Text // Personalized greeting
+  closingMessage    String?  @db.Text // Personalized closing
+  staffSignature    String?  @db.Text // Clinic staff signature
+  
+  // Language and accessibility
+  defaultLanguage   String   @default("en")
+  supportedLanguages String[] @default(["en"])
+  accessibilityOptions Json  @default("[]") // Accessibility features
+  
+  // Routing and assignment
+  autoAssignment    Boolean  @default(true)
+  specificStaff     String[] @default([]) // Specific staff to assign to
+  backupRouting     String?  // Backup routing options
+  
+  // Validation and compliance
+  medicalValidation Boolean  @default(false) // Enable medical validation
+  complianceCheck   Boolean  @default(true)  // Healthcare compliance checks
+  privacyControls   Json     @default("{}")  // Privacy and consent settings
+  
+  // Performance tracking
+  conversionTracking Boolean @default(true)
+  analyticsEnabled   Boolean @default(true)
+  abTestVariant      String? // A/B test variant
+  
+  isActive          Boolean  @default(true)
+  sortOrder         Int      @default(0)
+  version           String   @default("1.0")
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  clinic            Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  
+  @@index([clinicId])
+  @@index([formCategory])
+  @@index([isActive])
+  @@map("clinic_contact_forms")
+}
+
+// ========================================
+// ENUMS FOR CLINIC-SPECIFIC CONTACT SYSTEM
+// ========================================
+
+// Enquiry Complexity
+enum EnquiryComplexity {
+  LOW
+  MEDIUM
+  HIGH
+  SPECIALIST
+  EMERGENCY
+}
+
+// Contact Staff Role
+enum ContactStaffRole {
+  RECEPTIONIST
+  NURSE
+  COORDINATOR
+  SPECIALIST
+  SUPERVISOR
+  MANAGER
+  DOCTOR
+  ADMIN
+  VOLUNTEER
+}
+
+// Patient Type
+enum PatientType {
+  NEW
+  EXISTING
+  RETURNING
+  REFERRAL
+  EMERGENCY
+  WALK_IN
+  APPOINTMENT
+  FOLLOW_UP
+}
+
+// Patient Relationship Status
+enum PatientRelationshipStatus {
+  NEW
+  ACTIVE
+  INACTIVE
+  VIP
+  DORMANT
+  CHURNED
+  AT_RISK
+}
+
+// Communication Frequency
+enum CommunicationFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  OCCASIONAL
+  RARE
+  FIRST_TIME
+}
+
+// Follow-up Type
+enum FollowUpType {
+  APPOINTMENT_REMINDER
+  TREATMENT_PROGRESS
+  TEST_RESULTS
+  MEDICATION_REFILL
+  CARE_PLAN_UPDATE
+  SATISFACTION_SURVEY
+  COMPLAINT_RESOLUTION
+  COMPLIMENT_ACK
+}
+
+// FAQ Verification Status
+enum FAQVerificationStatus {
+  DRAFT
+  UNDER_REVIEW
+  VERIFIED
+  APPROVED
+  NEEDS_UPDATE
+  DEPRECATED
+}
+
+// Approval Status
+enum ApprovalStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+  SUSPENDED
+  ARCHIVED
+}
+
+// Metrics Period
+enum MetricsPeriod {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+  CUSTOM
+}
+
+// Enquiry Trend
+enum EnquiryTrend {
+  DECREASING
+  STABLE
+  INCREASING
+  VOLATILE
+  SEASONAL
+}
+
+// Satisfaction Trend
+enum SatisfactionTrend {
+  DECLINING
+  STABLE
+  IMPROVING
+  VOLATILE
+  PEAK
+}
+
+// Response Time Trend
+enum ResponseTimeTrend {
+  SLOWING
+  STABLE
+  IMPROVING
+  VOLATILE
+  SPIKING
+}
+
+// Service Area Type
+enum ServiceAreaType {
+  PRIMARY
+  SECONDARY
+  EMERGENCY
+  SPECIALIST
+  OUTREACH
+  MOBILE
+  TELEMEDICINE
+  HOME_VISIT
+}

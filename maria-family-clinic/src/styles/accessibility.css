@@ -1,0 +1,708 @@
+/**
+ * Healthier SG Accessibility Styles
+ * Comprehensive CSS for WCAG 2.2 AA compliance
+ */
+
+/* =============================================================================
+   ACCESSIBILITY FOUNDATION STYLES
+   ============================================================================= */
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.sr-only-focusable:not(:focus):not(:active) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Skip links styling */
+.skip-link {
+  position: absolute !important;
+  top: -40px !important;
+  left: 6px !important;
+  background: #000 !important;
+  color: #fff !important;
+  padding: 8px !important;
+  text-decoration: none !important;
+  z-index: 1000 !important;
+  border-radius: 4px !important;
+  font-weight: bold !important;
+  transition: top 0.3s !important;
+}
+
+.skip-link:focus {
+  top: 6px !important;
+  outline: 2px solid #fff !important;
+  outline-offset: 2px !important;
+}
+
+/* =============================================================================
+   HIGH CONTRAST MODE STYLES
+   ============================================================================= */
+
+.high-contrast {
+  /* Enhanced contrast for high contrast mode */
+  --background: #000000 !important;
+  --foreground: #ffffff !important;
+  --card: #1a1a1a !important;
+  --card-foreground: #ffffff !important;
+  --popover: #1a1a1a !important;
+  --popover-foreground: #ffffff !important;
+  --primary: #ffffff !important;
+  --primary-foreground: #000000 !important;
+  --secondary: #333333 !important;
+  --secondary-foreground: #ffffff !important;
+  --muted: #222222 !important;
+  --muted-foreground: #cccccc !important;
+  --accent: #333333 !important;
+  --accent-foreground: #ffffff !important;
+  --destructive: #ff4444 !important;
+  --destructive-foreground: #ffffff !important;
+  --border: #555555 !important;
+  --input: #222222 !important;
+  --ring: #ffffff !important;
+}
+
+.high-contrast * {
+  color: inherit !important;
+  border-color: inherit !important;
+}
+
+.high-contrast button,
+.high-contrast input,
+.high-contrast select,
+.high-contrast textarea {
+  background-color: var(--input) !important;
+  border: 2px solid var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.high-contrast button:hover,
+.high-contrast button:focus {
+  background-color: var(--accent) !important;
+  border-color: var(--primary) !important;
+}
+
+.high-contrast a {
+  color: var(--primary) !important;
+  text-decoration: underline !important;
+  font-weight: bold !important;
+}
+
+.high-contrast a:hover,
+.high-contrast a:focus {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  outline: 2px solid var(--primary-foreground) !important;
+  outline-offset: 2px !important;
+}
+
+/* =============================================================================
+   FONT SIZE VARIATIONS
+   ============================================================================= */
+
+:root {
+  --base-font-size: 16px;
+  --base-line-height: 1.5;
+}
+
+.font-size-small {
+  --base-font-size: 14px;
+}
+
+.font-size-large {
+  --base-font-size: 18px;
+}
+
+.font-size-extra-large {
+  --base-font-size: 20px;
+}
+
+html {
+  font-size: var(--base-font-size);
+  line-height: var(--base-line-height);
+}
+
+/* =============================================================================
+   REDUCED MOTION STYLES
+   ============================================================================= */
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Allow essential animations in reduced motion mode */
+.reduce-motion .loading-spinner,
+.reduce-motion .progress-indicator,
+.reduce-motion .status-indicator {
+  animation: none !important;
+}
+
+.reduce-motion .status-indicator {
+  background-color: var(--status-color, inherit) !important;
+}
+
+/* =============================================================================
+   COLOR BLIND SUPPORT STYLES
+   ============================================================================= */
+
+/* Deuteranopia (Red-Green Colorblindness) */
+.colorblind-deuteranopia {
+  --success-color: #0066cc; /* Blue instead of green */
+  --warning-color: #cc9900; /* Yellow-Orange instead of red */
+  --error-color: #cc6600; /* Orange instead of red */
+  --info-color: #9966cc; /* Purple instead of blue */
+}
+
+.colorblind-deuteranopia .success {
+  color: var(--success-color) !important;
+  border-color: var(--success-color) !important;
+}
+
+.colorblind-deuteranopia .warning {
+  color: var(--warning-color) !important;
+  border-color: var(--warning-color) !important;
+}
+
+.colorblind-deuteranopia .error {
+  color: var(--error-color) !important;
+  border-color: var(--error-color) !important;
+}
+
+/* Protanopia (Red Colorblindness) */
+.colorblind-protanopia {
+  --success-color: #0066cc; /* Blue instead of green */
+  --warning-color: #cc9900; /* Yellow-Orange instead of red */
+  --error-color: #cc6600; /* Orange instead of red */
+  --info-color: #9966cc; /* Purple */
+}
+
+/* Tritanopia (Blue-Yellow Colorblindness) */
+.colorblind-tritanopia {
+  --success-color: #cc6600; /* Orange instead of green */
+  --warning-color: #cc9900; /* Yellow */
+  --error-color: #cc0033; /* Red */
+  --info-color: #6600cc; /* Purple instead of blue */
+}
+
+/* =============================================================================
+   LARGE TARGETS MODE
+   ============================================================================= */
+
+.large-targets button,
+.large-targets [role="button"],
+.large-targets a,
+.large-targets input[type="checkbox"],
+.large-targets input[type="radio"],
+.large-targets select {
+  min-height: 44px !important;
+  min-width: 44px !important;
+  padding: 12px 16px !important;
+  font-size: 16px !important;
+}
+
+.large-targets .clickable {
+  min-height: 44px !important;
+  padding: 12px !important;
+}
+
+/* =============================================================================
+   KEYBOARD NAVIGATION STYLES
+   ============================================================================= */
+
+/* Enhanced focus indicators for keyboard navigation */
+.keyboard-navigation *:focus {
+  outline: 3px solid var(--ring, #3b82f6) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 1px var(--background, #ffffff) !important;
+}
+
+/* Skip links visible when using keyboard */
+.keyboard-navigation .skip-link {
+  top: 6px !important;
+}
+
+/* Tab order indicators */
+.tab-order-indicator::before {
+  content: attr(data-tab-order) ": ";
+  position: absolute;
+  left: -20px;
+  color: var(--muted-foreground, #6b7280);
+  font-size: 12px;
+}
+
+/* =============================================================================
+   SCREEN READER OPTIMIZED STYLES
+   ============================================================================= */
+
+.screen-reader-optimized {
+  /* Improved semantic structure */
+  --heading-font-size: 1.5em;
+  --list-style-type: disc;
+  --table-border-collapse: collapse;
+}
+
+.screen-reader-optimized h1,
+.screen-reader-optimized h2,
+.screen-reader-optimized h3,
+.screen-reader-optimized h4,
+.screen-reader-optimized h5,
+.screen-reader-optimized h6 {
+  font-size: var(--heading-font-size);
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.screen-reader-optimized ul,
+.screen-reader-optimized ol {
+  list-style-type: var(--list-style-type);
+  margin-left: 2em;
+}
+
+.screen-reader-optimized table {
+  border-collapse: var(--table-border-collapse);
+  border-spacing: 0;
+}
+
+.screen-reader-optimized th,
+.screen-reader-optimized td {
+  border: 1px solid var(--border, #d1d5db);
+  padding: 8px;
+  text-align: left;
+}
+
+.screen-reader-optimized th {
+  font-weight: bold;
+  background-color: var(--muted, #f3f4f6);
+}
+
+/* =============================================================================
+   SIMPLE LANGUAGE MODE
+   ============================================================================= */
+
+.simple-language {
+  /* Simplified vocabulary and structure */
+  font-family: Arial, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+}
+
+.simple-language p,
+.simple-language li,
+.simple-language div {
+  max-width: 70ch !important;
+}
+
+.simple-language h1,
+.simple-language h2,
+.simple-language h3 {
+  margin-top: 2em !important;
+  margin-bottom: 1em !important;
+  clear: both !important;
+}
+
+.simple-language .complex-term {
+  text-decoration: underline !important;
+}
+
+.simple-language .complex-term:hover::after {
+  content: " (" attr(data-explanation) ")";
+  font-size: 0.9em;
+  color: var(--muted-foreground, #6b7280);
+}
+
+/* =============================================================================
+   VOICE NAVIGATION INDICATORS
+   ============================================================================= */
+
+.voice-listening {
+  position: relative;
+}
+
+.voice-listening::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px solid #ef4444;
+  border-radius: inherit;
+  animation: voice-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes voice-pulse {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.voice-command-indicator {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: var(--accent, #f3f4f6);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--accent-foreground, #374151);
+}
+
+.voice-command-indicator::before {
+  content: "🎤";
+  margin-right: 4px;
+}
+
+/* =============================================================================
+   LOADING AND PROGRESS INDICATORS
+   ============================================================================= */
+
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border, #d1d5db);
+  border-radius: 50%;
+  border-top-color: var(--primary, #3b82f6);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.progress-indicator {
+  width: 100%;
+  height: 4px;
+  background-color: var(--muted, #f3f4f6);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-indicator::after {
+  content: "";
+  display: block;
+  width: var(--progress, 0%);
+  height: 100%;
+  background-color: var(--primary, #3b82f6);
+  transition: width 0.3s ease;
+}
+
+/* =============================================================================
+   STATUS AND ERROR STYLES
+   ============================================================================= */
+
+.status-message {
+  padding: 12px 16px;
+  border-radius: 6px;
+  border-left: 4px solid;
+  margin: 8px 0;
+}
+
+.status-message.success {
+  background-color: #f0fdf4;
+  border-left-color: var(--success-color, #22c55e);
+  color: var(--success-color, #22c55e);
+}
+
+.status-message.error {
+  background-color: #fef2f2;
+  border-left-color: var(--error-color, #ef4444);
+  color: var(--error-color, #ef4444);
+}
+
+.status-message.warning {
+  background-color: #fffbeb;
+  border-left-color: var(--warning-color, #f59e0b);
+  color: var(--warning-color, #f59e0b);
+}
+
+.status-message.info {
+  background-color: #eff6ff;
+  border-left-color: var(--info-color, #3b82f6);
+  color: var(--info-color, #3b82f6);
+}
+
+/* =============================================================================
+   FORM ACCESSIBILITY STYLES
+   ============================================================================= */
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: var(--foreground, #1f2937);
+}
+
+.form-label.required::after {
+  content: " *";
+  color: var(--error-color, #ef4444);
+  font-weight: bold;
+}
+
+.form-error {
+  color: var(--error-color, #ef4444);
+  font-size: 14px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.form-error::before {
+  content: "⚠️";
+  margin-right: 4px;
+}
+
+.form-help {
+  color: var(--muted-foreground, #6b7280);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* Required field indicator */
+.required-field {
+  position: relative;
+}
+
+.required-field::after {
+  content: "*";
+  color: var(--error-color, #ef4444);
+  position: absolute;
+  top: 0;
+  right: -10px;
+  font-weight: bold;
+}
+
+/* =============================================================================
+   NAVIGATION AND MENU STYLES
+   ============================================================================= */
+
+.nav-menu {
+  position: relative;
+}
+
+.nav-menu[aria-expanded="false"] .nav-submenu {
+  display: none;
+}
+
+.nav-menu[aria-expanded="true"] .nav-submenu {
+  display: block;
+}
+
+.nav-submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: var(--background, #ffffff);
+  border: 1px solid var(--border, #d1d5db);
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+
+.nav-menu:focus-within .nav-submenu {
+  display: block;
+}
+
+/* Breadcrumb navigation */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--muted-foreground, #6b7280);
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+  content: "›";
+  margin: 0 8px;
+  color: var(--muted-foreground, #6b7280);
+}
+
+.breadcrumb-item a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover,
+.breadcrumb-item a:focus {
+  color: var(--primary, #3b82f6);
+  text-decoration: underline;
+}
+
+/* =============================================================================
+   ACCESSIBILITY TEST MODE
+   ============================================================================= */
+
+.accessibility-test-mode {
+  /* Visual indicators for testing */
+  outline: 2px dashed #ff0000 !important;
+  outline-offset: 2px !important;
+}
+
+.accessibility-test-mode *:focus {
+  outline: 3px solid #00ff00 !important;
+  outline-offset: 1px !important;
+  background-color: rgba(255, 255, 0, 0.1) !important;
+}
+
+/* Test mode indicators */
+.accessibility-test-mode::before {
+  content: attr(data-test-mode);
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #ff0000;
+  color: white;
+  padding: 4px 8px;
+  font-size: 12px;
+  z-index: 9999;
+}
+
+/* =============================================================================
+   RESPONSIVE ACCESSIBILITY
+   ============================================================================= */
+
+/* Mobile accessibility considerations */
+@media (max-width: 768px) {
+  .mobile-accessibility {
+    /* Larger touch targets on mobile */
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Simplified navigation on mobile */
+  .mobile-nav {
+    flex-direction: column;
+  }
+  
+  /* Readable font sizes on small screens */
+  .mobile-text {
+    font-size: 16px; /* Prevent zoom on iOS */
+    line-height: 1.5;
+  }
+}
+
+/* =============================================================================
+   PRINT ACCESSIBILITY
+   ============================================================================= */
+
+@media print {
+  .print-hidden {
+    display: none !important;
+  }
+  
+  .print-visible {
+    display: block !important;
+  }
+  
+  /* High contrast for print */
+  * {
+    color: black !important;
+    background: white !important;
+  }
+  
+  /* Ensure links are visible in print */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 12px;
+  }
+  
+  /* Page breaks */
+  .page-break-before {
+    page-break-before: always;
+  }
+  
+  .page-break-after {
+    page-break-after: always;
+  }
+  
+  .page-break-inside-avoid {
+    page-break-inside: avoid;
+  }
+}
+
+/* =============================================================================
+   ANIMATION PREFERENCES
+   ============================================================================= */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =============================================================================
+   HIGH CONTRAST PREFERENCES
+   ============================================================================= */
+
+@media (prefers-contrast: high) {
+  :root {
+    --background: #000000;
+    --foreground: #ffffff;
+    --border: #ffffff;
+    --primary: #ffffff;
+    --secondary: #000000;
+  }
+  
+  * {
+    border-color: var(--border) !important;
+  }
+}
+
+/* =============================================================================
+   DARK MODE ACCESSIBILITY
+   ============================================================================= */
+
+@media (prefers-color-scheme: dark) {
+  .auto-dark-mode {
+    --background: #0f172a;
+    --foreground: #f8fafc;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --border: #334155;
+  }
+}

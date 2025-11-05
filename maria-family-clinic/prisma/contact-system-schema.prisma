@@ -1,0 +1,1425 @@
+// ========================================
+// CONTACT & ENQUIRY MANAGEMENT SYSTEM
+// Sub-Phase 9.1: Comprehensive Database Architecture
+// Healthcare Platform Contact System Design
+// ========================================
+
+// Core Contact Management Models
+// These models extend the existing healthcare platform schema
+
+// Contact Form Categories - Defines different types of enquiries
+model ContactCategory {
+  id                String   @id @default(cuid())
+  name              String   @unique // 'general', 'appointment', 'healthier_sg', 'urgent', 'technical_support'
+  displayName       String
+  description       String?  @db.Text
+  
+  // Category characteristics
+  requiresAuth      Boolean  @default(false) // Requires user login
+  requiresVerification Boolean @default(false) // Requires identity verification
+  priority          ContactCategoryPriority @default(STANDARD)
+  department        ContactDepartment
+  
+  // Form configuration
+  formFields        Json     @default("[]") // Required form fields for this category
+  validationRules   Json     @default("{}") // Category-specific validation
+  autoResponse      Boolean  @default(true) // Send automatic confirmation
+  responseTemplate  String?  // Template for auto-response
+  
+  // Routing and assignment
+  defaultAssignee   String?  // Default agent/department ID
+  routingRules      Json     @default("[]") // Automatic routing rules
+  escalationRules   Json     @default("[]") // Escalation triggers
+  
+  // SLA and response times
+  responseSLAHours  Int      @default(24) // Target response time in hours
+  resolutionSLADays Int      @default(7)  // Target resolution time in days
+  
+  // Status and metadata
+  isActive          Boolean  @default(true)
+  sortOrder         Int      @default(0)
+  icon              String?  // Icon for UI display
+  color             String?  // Color theme for category
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relationships
+  enquiries         Enquiry[]
+  templates         ContactFormTemplate[]
+
+  @@index([name])
+  @@index([isActive])
+  @@index([priority])
+  @@map("contact_categories")
+}
+
+// Contact Form Templates - Reusable form configurations
+model ContactFormTemplate {
+  id                String   @id @default(cuid())
+  categoryId        String
+  name              String
+  displayName       String
+  
+  // Form structure
+  formConfig        Json     @default("{}") // Complete form configuration
+  fieldDefinitions  Json     @default("[]") // Field definitions and validation
+  conditionalLogic  Json     @default("{}") // Dynamic field visibility rules
+  layout            Json     @default("{}") // UI layout configuration
+  
+  // Healthcare-specific features
+  medicalFields     Boolean  @default(false) // Includes medical information fields
+  requiresNric      Boolean  @default(false) // Requires Singapore NRIC
+  requiresConsent   Boolean  @default(false) // Requires privacy consent
+  hipaaCompliant    Boolean  @default(false) // Healthcare compliance required
+  
+  // Multilingual support
+  translations      Json     @default("{}") // Translations for different languages
+  supportedLanguages String[] @default(["en"]) // Supported language codes
+  
+  // Versioning
+  version           String   @default("1.0")
+  isActive          Boolean  @default(true)
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  category          ContactCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId])
+  @@index([isActive])
+  @@map("contact_form_templates")
+}
+
+// Main Contact Form Submission
+model ContactForm {
+  id                String   @id @default(cuid())
+  
+  // Form identification
+  referenceNumber   String   @unique // Auto-generated reference
+  categoryId        String
+  templateId        String?
+  
+  // Form data
+  subject           String
+  message           String   @db.Text
+  formData          Json     @default("{}") // All form field values
+  
+  // Contact information
+  contactName       String
+  contactEmail      String
+  contactPhone      String?
+  preferredContactMethod ContactMethod @default(EMAIL)
+  
+  // Healthcare-specific information
+  userId            String?  // If submitted by registered user
+  patientId         String?  // Patient ID if applicable
+  clinicId          String?  // Related clinic
+  doctorId          String?  // Related doctor
+  serviceId         String?  // Related service
+  
+  // Medical information (if applicable)
+  medicalInformation String? @db.Text
+  urgencyLevel      UrgencyLevel @default(ROUTINE)
+  appointmentUrgency AppointmentUrgency @default(STANDARD)
+  
+  // Submission details
+  submissionSource  ContactSource @default(WEB_FORM)
+  userAgent         String?
+  ipAddress         String?
+  referrerUrl       String?
+  sessionId         String?
+  
+  // Consent and compliance
+  privacyConsent    Boolean  @default(false)
+  marketingConsent  Boolean  @default(false)
+  dataRetentionConsent Boolean @default(false)
+  consentVersion    String?  // Version of consent text
+  gdprConsent       Boolean  @default(false)
+  pdpaConsent       Boolean  @default(false)
+  
+  // Processing status
+  status            ContactStatus @default(SUBMITTED)
+  processingNotes   String?  @db.Text
+  
+  // Automated processing
+  autoProcessed     Boolean  @default(false)
+  spamCheckResult   SpamCheckResult @default(PENDING)
+  duplicateCheck    Boolean  @default(false)
+  duplicateOfId     String?  // ID of duplicate form if found
+  
+  // Response tracking
+  responseRequired  Boolean  @default(true)
+  autoResponseSent  Boolean  @default(false)
+  responseDue       DateTime?
+  responseSent      DateTime?
+  firstResponseTime Int?     // Minutes to first response
+  
+  // Priority and routing
+  priority          ContactPriority @default(NORMAL)
+  assignedAgentId   String?
+  assignedDepartment ContactDepartment @default(GENERAL)
+  
+  // Audit trail
+  createdBy         String?  // User ID or 'anonymous'
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relationships
+  category          ContactCategory @relation(fields: [categoryId], references: [id])
+  template          ContactFormTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  user              User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  clinic            Clinic? @relation(fields: [clinicId], references: [id], onDelete: SetNull)
+  doctor            Doctor? @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+  service           Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  
+  // Related entities
+  enquiry           Enquiry?
+  assignments       ContactAssignment[]
+  histories         ContactHistory[]
+  responses         ContactResponse[]
+  analytics         ContactFormAnalytics?
+
+  @@index([referenceNumber])
+  @@index([categoryId])
+  @@index([status])
+  @@index([priority])
+  @@index([userId])
+  @@index([clinicId])
+  @@index([doctorId])
+  @@index([serviceId])
+  @@index([createdAt])
+  @@index([responseDue])
+  @@index([contactEmail])
+  @@index([contactPhone])
+  @@map("contact_forms")
+}
+
+// Detailed Enquiry Management
+model Enquiry {
+  id                String   @id @default(cuid())
+  contactFormId     String?  @unique
+  
+  // Enquiry identification
+  enquiryNumber     String   @unique // Auto-generated enquiry number
+  title             String
+  
+  // Category and type
+  categoryId        String
+  enquiryType       EnquiryType
+  
+  // Status tracking
+  status            EnquiryStatus @default(NEW)
+  subStatus         String?       // Detailed status (waiting_for_customer, etc.)
+  resolutionStatus  ResolutionStatus @default(OPEN)
+  
+  // Priority and urgency
+  priority          EnquiryPriority @default(NORMAL)
+  urgencyLevel      UrgencyLevel @default(ROUTINE)
+  businessImpact    BusinessImpact @default(LOW)
+  
+  // Assignment and routing
+  assignedAgentId   String?
+  assignedTeam      ContactTeam?
+  supervisorId      String?
+  originalAssignee  String?      // Who was originally assigned
+  
+  // Healthcare-specific routing
+  department        ContactDepartment @default(GENERAL)
+  specializedTeam   String?      // e.g., 'healthier_sg_specialists'
+  medicalReview     Boolean      @default(false) // Requires medical review
+  complianceReview  Boolean      @default(false) // Requires compliance review
+  
+  // Related entities
+  userId            String?      // Customer user ID
+  patientId         String?      // Patient ID if applicable
+  clinicId          String?      // Related clinic
+  doctorId          String?      // Related doctor
+  serviceId         String?      // Related service
+  appointmentId     String?      // Related appointment
+  
+  // Enquiry content
+  description       String       @db.Text
+  initialInquiry    String       @db.Text
+  customerExpectations String?  @db.Text
+  requiredAction    String?      @db.Text
+  
+  // Resolution tracking
+  resolutionSummary String?      @db.Text
+  resolutionNotes   String?      @db.Text
+  closureReason     String?      @db.Text
+  customerSatisfaction Int?      // 1-5 rating
+  
+  // SLA tracking
+  slaBreached       Boolean      @default(false)
+  slaBreachReason   String?      @db.Text
+  escalationCount   Int          @default(0)
+  lastEscalationAt  DateTime?
+  
+  // Follow-up requirements
+  requiresFollowUp  Boolean      @default(false)
+  followUpRequired  Boolean      @default(false)
+  followUpDate      DateTime?
+  followUpNotes     String?      @db.Text
+  followUpCompleted Boolean      @default(false)
+  
+  // Integration tracking
+  externalReference String?      // External system reference
+  integrationStatus IntegrationSyncStatus @default(PENDING)
+  syncData          Json         @default("{}")
+  
+  // Workflow tracking
+  workflowStage     String       @default("intake") // intake, investigation, resolution, closure
+  workflowData      Json         @default("{}")
+  
+  // Metadata
+  sourceChannel     ContactSource @default(WEB_FORM)
+  tags              String[]      @default([])
+  customFields      Json          @default("{}")
+  
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  assignedAt        DateTime?
+  resolvedAt        DateTime?
+  closedAt          DateTime?
+
+  // Relationships
+  contactForm       ContactForm @relation(fields: [contactFormId], references: [id], onDelete: Cascade)
+  category          ContactCategory @relation(fields: [categoryId], references: [id])
+  user              User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  clinic            Clinic? @relation(fields: [clinicId], references: [id], onDelete: SetNull)
+  doctor            Doctor? @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+  service           Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  
+  // Related entities
+  assignments       ContactAssignment[]
+  histories         ContactHistory[]
+  responses         ContactResponse[]
+  analytics         ContactEnquiryAnalytics?
+  escalations       ContactEscalation[]
+
+  @@index([enquiryNumber])
+  @@index([categoryId])
+  @@index([status])
+  @@index([priority])
+  @@index([assignedAgentId])
+  @@index([assignedTeam])
+  @@index([userId])
+  @@index([clinicId])
+  @@index([doctorId])
+  @@index([serviceId])
+  @@index([createdAt])
+  @@index([resolvedAt])
+  @@index([followUpDate])
+  @@index([slaBreached])
+  @@index([urgencyLevel])
+  @@map("enquiries")
+}
+
+// Contact Assignment Management
+model ContactAssignment {
+  id                String   @id @default(cuid())
+  enquiryId         String
+  contactFormId     String?
+  
+  // Assignment details
+  assigneeType      AssigneeType // AGENT, TEAM, DEPARTMENT
+  assigneeId        String?      // Agent/team/department ID
+  assigneeName      String       // Denormalized for performance
+  
+  // Assignment context
+  assignmentReason  String?      @db.Text
+  assignedBy        String       // User ID who made assignment
+  assignmentMethod  AssignmentMethod // MANUAL, AUTO_ROUND_ROBIN, AUTO_SKILL_BASED
+  skillMatch        Json         @default("{}") // Skills matching data
+  
+  // Assignment status
+  status            AssignmentStatus @default(ACTIVE)
+  acceptedAt        DateTime?
+  declinedAt        DateTime?
+  declineReason     String?      @db.Text
+  
+  // Reassignment tracking
+  isReassignment    Boolean      @default(false)
+  previousAssignee  String?
+  reassignmentReason String?     @db.Text
+  
+  // Workload management
+  currentWorkload   Int          @default(0) // Current number of active enquiries
+  workloadLimit     Int?         // Maximum workload for this assignee
+  
+  // Performance tracking
+  assignmentScore   Float?       // How well this assignment matches requirements
+  responseTime      Int?         // Minutes to first response
+  resolutionTime    Int?         // Minutes to resolution
+  
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  enquiry           Enquiry @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  contactForm       ContactForm? @relation(fields: [contactFormId], references: [id], onDelete: Cascade)
+
+  @@index([enquiryId])
+  @@index([contactFormId])
+  @@index([assigneeType, assigneeId])
+  @@index([status])
+  @@index([assignedBy])
+  @@index([createdAt])
+  @@map("contact_assignments")
+}
+
+// Contact History and Communication Trail
+model ContactHistory {
+  id                String   @id @default(cuid())
+  enquiryId         String
+  contactFormId     String?
+  
+  // History entry details
+  actionType        ContactActionType
+  actionDescription String   @db.Text
+  
+  // Actor information
+  actorType         ActorType // USER, AGENT, SYSTEM, AUTOMATION
+  actorId           String?   // ID of who performed the action
+  actorName         String    // Name for display
+  actorEmail        String?
+  
+  // Change tracking
+  fieldChanged      String?   // Field that was changed
+  oldValue          String?   @db.Text
+  newValue          String?   @db.Text
+  changeReason      String?   @db.Text
+  
+  // Communication details
+  communicationType CommunicationType
+  messageContent    String?   @db.Text
+  messageSubject    String?
+  messageDirection  MessageDirection @default(OUTBOUND)
+  
+  // External communication
+  externalSystem    String?   // External system involved
+  externalReference String?   // Reference in external system
+  deliveryStatus    DeliveryStatus?
+  
+  // Time tracking
+  timeSpent         Int?      // Minutes spent on this action
+  responseTime      Int?      // Minutes to respond
+  
+  // Healthcare compliance
+  medicalRecord     Boolean   @default(false)
+  containsPHI       Boolean   @default(false) // Protected Health Information
+  hipaaCompliant    Boolean   @default(false)
+  auditTrail        Boolean   @default(true)
+  
+  // Metadata
+  metadata          Json      @default("{}")
+  tags              String[]  @default([])
+  
+  createdAt         DateTime  @default(now())
+
+  enquiry           Enquiry @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  contactForm       ContactForm? @relation(fields: [contactFormId], references: [id], onDelete: Cascade)
+
+  @@index([enquiryId])
+  @@index([contactFormId])
+  @@index([actionType])
+  @@index([actorType, actorId])
+  @@index([createdAt])
+  @@index([communicationType])
+  @@map("contact_histories")
+}
+
+// Contact Responses and Communication
+model ContactResponse {
+  id                String   @id @default(cuid())
+  enquiryId         String
+  contactFormId     String?
+  
+  // Response details
+  responseType      ResponseType
+  subject           String?
+  content           String    @db.Text
+  
+  // Sender information
+  senderType        SenderType
+  senderId          String?   // ID of sender
+  senderName        String
+  senderEmail       String?
+  senderSignature   String?   // Email signature
+  
+  // Recipient information
+  recipientType     RecipientType
+  recipientId       String?   // ID of recipient
+  recipientName     String
+  recipientEmail    String
+  
+  // Communication channel
+  channel           CommunicationChannel
+  channelReference  String?   // Message ID, ticket ID, etc.
+  
+  // Response status
+  status            ResponseStatus @default(DRAFT)
+  sentAt            DateTime?
+  deliveredAt       DateTime?
+  readAt            DateTime?
+  repliedAt         DateTime?
+  
+  // Quality tracking
+  satisfactionRating Int?     // 1-5 rating from recipient
+  qualityScore      Float?    // Internal quality assessment
+  responseTime      Int?      // Minutes from enquiry to response
+  
+  // Template and automation
+  templateUsed      String?   // Template used for response
+  autoGenerated     Boolean   @default(false)
+  automationRules   Json      @default("[]")
+  
+  // Healthcare compliance
+  medicalAdvice     Boolean   @default(false)
+  disclaimerRequired Boolean  @default(false)
+  complianceChecked Boolean   @default(false)
+  privacyReviewed   Boolean   @default(false)
+  
+  // Attachments and files
+  attachments       Json      @default("[]") // Array of attachment info
+  attachmentCount   Int       @default(0)
+  
+  // Follow-up actions
+  requiresFollowUp  Boolean   @default(false)
+  followUpDate      DateTime?
+  followUpNotes     String?   @db.Text
+  followUpCompleted Boolean   @default(false)
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  enquiry           Enquiry @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  contactForm       ContactForm? @relation(fields: [contactFormId], references: [id], onDelete: Cascade)
+
+  @@index([enquiryId])
+  @@index([contactFormId])
+  @@index([responseType])
+  @@index([senderType, senderId])
+  @@index([channel])
+  @@index([status])
+  @@index([sentAt])
+  @@index([recipientEmail])
+  @@map("contact_responses")
+}
+
+// Contact Routing and Assignment Rules
+model ContactRouting {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  displayName       String
+  description       String?  @db.Text
+  
+  // Routing configuration
+  isActive          Boolean  @default(true)
+  priority          Int      @default(0) // Lower number = higher priority
+  categoryId        String?  // Specific category, null for all
+  
+  // Routing criteria
+  criteria          Json     @default("{}") // Conditions for routing
+  weight            Float    @default(1.0)  // Rule weight
+  
+  // Routing targets
+  targetType        RoutingTargetType
+  targetId          String?  // Agent, team, or department ID
+  targetName        String
+  
+  // Routing methods
+  routingMethod     RoutingMethod @default(DIRECT)
+  roundRobinGroup   String?       // For round-robin routing
+  skillRequirements Json          @default("[]") // Required skills
+  
+  // Availability checks
+  checkAvailability Boolean  @default(true)
+  maxWorkload       Int?     // Maximum concurrent enquiries
+  businessHoursOnly Boolean  @default(false)
+  timezone          String?  // Target timezone
+  
+  // Fallback configuration
+  fallbackEnabled   Boolean  @default(false)
+  fallbackTarget    String?  // Fallback routing target
+  fallbackDelay     Int?     // Minutes before fallback triggers
+  
+  // Performance tracking
+  usageCount        Int      @default(0)
+  successRate       Float?   // Success rate of this routing rule
+  avgResponseTime   Int?     // Average response time in minutes
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([priority])
+  @@index([categoryId])
+  @@index([targetType, targetId])
+  @@map("contact_routing")
+}
+
+// Contact Escalation Management
+model ContactEscalation {
+  id                String   @id @default(cuid())
+  enquiryId         String
+  
+  // Escalation details
+  escalationType    EscalationType
+  escalationReason  String   @db.Text
+  triggeredBy       String   @db.Text // Reason for escalation
+  
+  // Escalation levels
+  fromLevel         EscalationLevel
+  toLevel           EscalationLevel
+  levelData         Json     @default("{}")
+  
+  // Timing
+  triggeredAt       DateTime @default(now())
+  processedAt       DateTime?
+  resolvedAt        DateTime?
+  
+  // Actors
+  triggeredByUser   String?  // User who triggered escalation
+  escalatedToUser   String?  // User who received escalation
+  escalatedToTeam   String?  // Team that received escalation
+  
+  // Status and resolution
+  status            EscalationStatus @default(ACTIVE)
+  resolutionNotes   String?  @db.Text
+  customerNotified  Boolean  @default(false)
+  
+  // Impact tracking
+  slaImpact         Json     @default("{}") // SLA impact data
+  resolutionTime    Int?     // Minutes to resolve escalation
+  
+  // Automation
+  autoTriggered     Boolean  @default(false)
+  automationRule    String?  // Rule that triggered escalation
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  enquiry           Enquiry @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+
+  @@index([enquiryId])
+  @@index([status])
+  @@index([triggeredAt])
+  @@index([escalatedToUser])
+  @@map("contact_escalations")
+}
+
+// Contact Analytics and Performance Tracking
+model ContactFormAnalytics {
+  id                String   @id @default(cuid())
+  contactFormId     String   @unique
+  
+  // Submission metrics
+  submissionTime    Int      @default(0) // Seconds to complete form
+  fieldCompletionTime Json   @default("{}") // Time per field
+  abandonRate       Float?   // Form abandonment rate
+  completionRate    Float?   // Form completion rate
+  
+  // User experience metrics
+  userSatisfaction  Float?   // 1-5 rating from user
+  errorCount        Int      @default(0)
+  correctionCount   Int      @default(0) // How many times user corrected data
+  
+  // Channel performance
+  deviceType        DeviceType?
+  browserType       String?
+  referralSource    String?
+  conversionFunnel  Json     @default("{}")
+  
+  // Content analysis
+  messageSentiment  SentimentScore @default(NEUTRAL)
+  urgencyDetected   Boolean  @default(false)
+  spamScore         Float?   // Spam detection score
+  
+  // Integration metrics
+  apiResponseTime   Int?     // Milliseconds
+  databaseQueryTime Int?     // Milliseconds
+  processingTime    Int?     // Total processing time
+  
+  // A/B testing
+  testVariant       String?  // A/B test variant
+  testResults       Json     @default("{}")
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  contactForm       ContactForm @relation(fields: [contactFormId], references: [id], onDelete: Cascade)
+
+  @@index([contactFormId])
+  @@map("contact_form_analytics")
+}
+
+model ContactEnquiryAnalytics {
+  id                String   @id @default(cuid())
+  enquiryId         String   @unique
+  
+  // Resolution metrics
+  totalResolutionTime Int?   // Total minutes to resolution
+  firstResponseTime  Int?     // Minutes to first response
+  followUpCount      Int      @default(0) // Number of follow-ups needed
+  communicationCount Int      @default(0) // Total communications
+  
+  // Quality metrics
+  customerSatisfaction Float? // 1-5 rating
+  agentSatisfaction   Float?  // Agent self-rating
+  qualityScore        Float?  // Internal quality assessment
+  
+  // Efficiency metrics
+  resolutionEfficiency Float? // Score based on time vs complexity
+  knowledgeBaseUsage   Float? // How much KB was used
+  escalationRate       Float? // Whether escalation was needed
+  
+  // Cost metrics
+  handlingCost        Float?  // Estimated cost to handle
+  agentTimeCost       Float?  // Agent time cost
+  systemResourceCost  Float?  // System resource cost
+  
+  // Outcome tracking
+  resolved           Boolean  @default(false)
+  customerRetained   Boolean? // Whether customer was retained
+  repeatContact      Boolean  @default(false) // Customer contacted again
+  
+  // Learning and improvement
+  lessonsLearned     String?  @db.Text
+  improvementSuggestions String? @db.Text
+  processImprovements Json     @default("[]")
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  enquiry           Enquiry @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+
+  @@index([enquiryId])
+  @@map("contact_enquiry_analytics")
+}
+
+// Contact Templates and Auto-Responses
+model ContactTemplate {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  displayName       String
+  description       String?  @db.Text
+  
+  // Template configuration
+  category          ContactTemplateCategory
+  usage             TemplateUsage
+  language          String   @default("en")
+  
+  // Content
+  subject           String?
+  content           String   @db.Text
+  variables         Json     @default("[]") // Available template variables
+  
+  // Healthcare compliance
+  medicalAdvice     Boolean  @default(false)
+  disclaimerRequired Boolean  @default(false)
+  complianceNote    String?  @db.Text
+  
+  // Personalization
+  personalizationEnabled Boolean @default(true)
+  dynamicContent    Boolean  @default(false)
+  
+  // Versioning
+  version           String   @default("1.0")
+  isActive          Boolean  @default(true)
+  
+  // Usage tracking
+  usageCount        Int      @default(0)
+  lastUsedAt        DateTime?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([category])
+  @@index([isActive])
+  @@index([usageCount])
+  @@map("contact_templates")
+}
+
+// Contact Knowledge Base Integration
+model ContactKnowledgeBase {
+  id                String   @id @default(cuid())
+  title             String
+  content           String   @db.Text
+  
+  // Categorization
+  category          String
+  tags              String[] @default([])
+  relatedTopics     String[] @default([])
+  
+  // Healthcare specific
+  medicalSpecialty  String?  // Related medical specialty
+  applicableConditions String[] @default([])
+  ageGroup          String?  // Target age group
+  
+  // Usage tracking
+  viewCount         Int      @default(0)
+  helpfulCount      Int      @default(0)
+  unhelpfulCount    Int      @default(0)
+  
+  // Search optimization
+  keywords          String[] @default([])
+  searchTerms       String[] @default([])
+  
+  // Quality and status
+  status            KBStatus @default(ACTIVE)
+  verifiedBy        String?  // Medical professional verification
+  verifiedAt        DateTime?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([category])
+  @@index([status])
+  @@index([medicalSpecialty])
+  @@map("contact_knowledge_base")
+}
+
+// ========================================
+// CLINIC INTEGRATION EXTENSIONS
+// Add clinic-specific relationships and fields to existing models
+// ========================================
+
+// Extend ContactForm with clinic-specific fields
+// Note: This assumes ContactForm already has clinicId field, adding additional clinic context
+
+// Clinic-specific contact preferences per form
+model ContactFormClinicPreference {
+  id                    String   @id @default(cuid())
+  contactFormId         String   @unique
+  clinicId              String
+  
+  // Clinic-specific routing
+  preferredStaffId      String?  // Preferred staff member for this enquiry
+  serviceContext        String?  // Service that prompted this contact
+  urgencyOverride       UrgencyLevel? // Override normal urgency assessment
+  
+  // Patient context
+  patientType           PatientType @default(NEW)
+  isReturningPatient    Boolean  @default(false)
+  preferredLanguage     String   @default("en")
+  
+  // Clinic workflow integration
+  requiresAppointment   Boolean  @default(false)
+  appointmentType       String?  // Type of appointment needed
+  followUpRequired      Boolean  @default(false)
+  
+  // Communication preferences
+  preferredResponseTime Int?     // Preferred response time in hours
+  avoidCommunication    String[] @default([]) // Channels to avoid
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  contactForm           ContactForm @relation(fields: [contactFormId], references: [id], onDelete: Cascade)
+  clinic                Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  
+  @@index([contactFormId])
+  @@index([clinicId])
+  @@map("contact_form_clinic_preferences")
+}
+
+// Clinic availability for contact handling
+model ClinicContactAvailability {
+  id                    String   @id @default(cuid())
+  clinicId              String
+  
+  // Time period
+  dayOfWeek             DayOfWeek
+  startTime             String   // Format: "HH:mm"
+  endTime               String   // Format: "HH:mm"
+  
+  // Availability context
+  contactType           ContactMethod // Type of contact available
+  isEmergencyAvailable  Boolean  @default(false)
+  maxWaitTime           Int?     // Maximum wait time in minutes
+  
+  // Staff availability
+  availableStaff        String[] @default([]) // Staff IDs available
+  staffCount            Int      @default(0)
+  
+  // Service availability
+  serviceTypes          String[] @default([]) // Services that can be discussed
+  languagesAvailable    String[] @default(["en"])
+  
+  // Capacity and limits
+  maxConcurrentContacts Int      @default(10)
+  currentContacts       Int      @default(0)
+  waitlistEnabled       Boolean  @default(false)
+  
+  // Special conditions
+  requiresAppointment   Boolean  @default(false)
+  requiresInsurance     Boolean  @default(false)
+  minAgeRequirement     Int?     // Minimum age requirement
+  
+  isActive              Boolean  @default(true)
+  notes                 String?  @db.Text
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  clinic                Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  
+  @@unique([clinicId, dayOfWeek, contactType, startTime])
+  @@index([clinicId])
+  @@index([isActive])
+  @@map("clinic_contact_availability")
+}
+
+// Enhanced clinic contact assignments with workload management
+model ClinicContactAssignment {
+  id                    String   @id @default(cuid())
+  clinicId              String
+  contactFormId         String?
+  enquiryId             String?
+  staffId               String?  // Contact assignment to staff member
+  
+  // Assignment details
+  assignmentType        AssignmentType // DIRECT, ROUND_ROBIN, SKILL_BASED, etc.
+  priority              AssignmentPriority @default(NORMAL)
+  
+  // Workload management
+  currentWorkload       Int      @default(0) // Current active assignments
+  maxWorkload           Int      @default(20) // Maximum allowed workload
+  workloadPercentage    Float    @default(0) // Current workload as percentage
+  
+  // Performance tracking
+  avgResponseTime       Int?     // Average response time in minutes
+  qualityScore          Float?   // Quality rating for this assignment
+  satisfactionScore     Float?   // Patient satisfaction for handled cases
+  
+  // Assignment reasoning
+  assignmentReason      String?  @db.Text // Why this assignment was made
+  skillMatch            String[] @default([]) // Skills that matched requirements
+  experienceLevel       String?  // Experience level of assigned staff
+  
+  // Time tracking
+  assignedAt            DateTime @default(now())
+  acceptedAt            DateTime?
+  completedAt           DateTime?
+  
+  // Status
+  status                ContactAssignmentStatus @default(ACTIVE)
+  notes                 String?  @db.Text
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  clinic                Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+  contactForm           ContactForm? @relation(fields: [contactFormId], references: [id], onDelete: Cascade)
+  enquiry               Enquiry? @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  
+  @@index([clinicId])
+  @@index([contactFormId])
+  @@index([enquiryId])
+  @@index([staffId])
+  @@index([status])
+  @@map("clinic_contact_assignments")
+}
+
+// ========================================
+// ENUMS FOR CONTACT SYSTEM
+// ========================================
+
+// Contact Categories
+enum ContactCategoryPriority {
+  LOW
+  STANDARD
+  HIGH
+  URGENT
+  CRITICAL
+}
+
+// Contact Departments
+enum ContactDepartment {
+  GENERAL
+  APPOINTMENTS
+  HEALTHIER_SG
+  TECHNICAL_SUPPORT
+  MEDICAL_INQUIRIES
+  BILLING
+  COMPLIANCE
+  QUALITY_ASSURANCE
+  EMERGENCY
+}
+
+// Contact Status
+enum ContactStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  ASSIGNED
+  IN_PROGRESS
+  WAITING_CUSTOMER
+  PENDING_RESOLUTION
+  RESOLVED
+  CLOSED
+  CANCELLED
+  ESCALATED
+}
+
+// Contact Priority
+enum ContactPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+  CRITICAL
+  EMERGENCY
+}
+
+// Contact Source
+enum ContactSource {
+  WEB_FORM
+  EMAIL
+  PHONE
+  CHAT
+  MOBILE_APP
+  SOCIAL_MEDIA
+  WALK_IN
+  REFERRAL
+  API
+  SMS
+}
+
+// Contact Method
+enum ContactMethod {
+  EMAIL
+  PHONE
+  SMS
+  CHAT
+  MAIL
+  IN_PERSON
+}
+
+// Spam Check Result
+enum SpamCheckResult {
+  PENDING
+  CLEAN
+  SUSPICIOUS
+  SPAM
+  MALICIOUS
+}
+
+// Enquiry Status
+enum EnquiryStatus {
+  NEW
+  UNDER_REVIEW
+  ASSIGNED
+  IN_PROGRESS
+  WAITING_CUSTOMER
+  WAITING_INTERNAL
+  PENDING_RESOLUTION
+  RESOLVED
+  CLOSED
+  CANCELLED
+  ESCALATED
+}
+
+// Enquiry Type
+enum EnquiryType {
+  INFORMATIONAL
+  COMPLAINT
+  COMPLIMENT
+  SUGGESTION
+  SUPPORT_REQUEST
+  TECHNICAL_ISSUE
+  BILLING_INQUIRY
+  APPOINTMENT_RELATED
+  MEDICAL_INQUIRY
+  COMPLIANCE_ISSUE
+}
+
+// Enquiry Priority
+enum EnquiryPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+  CRITICAL
+  EMERGENCY
+}
+
+// Resolution Status
+enum ResolutionStatus {
+  OPEN
+  IN_PROGRESS
+  PENDING_CUSTOMER
+  PENDING_INTERNAL
+  RESOLVED
+  CLOSED
+  CANCELLED
+}
+
+// Business Impact
+enum BusinessImpact {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+  REPUTATIONAL
+  LEGAL
+  FINANCIAL
+}
+
+// Contact Team
+enum ContactTeam {
+  GENERAL_SUPPORT
+  APPOINTMENT_TEAM
+  HEALTHIER_SG_SPECIALISTS
+  TECHNICAL_SUPPORT
+  MEDICAL_CONSULTANTS
+  BILLING_SUPPORT
+  COMPLIANCE_TEAM
+  ESCALATION_TEAM
+  EMERGENCY_RESPONSE
+}
+
+// Urgency Level
+enum UrgencyLevel {
+  LOW
+  ROUTINE
+  NORMAL
+  HIGH
+  URGENT
+  CRITICAL
+  EMERGENCY
+}
+
+// Appointment Urgency
+enum AppointmentUrgency {
+  STANDARD
+  PRIORITY
+  URGENT
+  EMERGENCY
+  WALK_IN
+  SAME_DAY
+}
+
+// Assignee Type
+enum AssigneeType {
+  AGENT
+  TEAM
+  DEPARTMENT
+  SPECIALIST
+  SUPERVISOR
+}
+
+// Assignment Method
+enum AssignmentMethod {
+  MANUAL
+  AUTO_ROUND_ROBIN
+  AUTO_SKILL_BASED
+  AUTO_LOAD_BALANCED
+  AUTO_SPECIALIST
+  AUTO_ESCALATION
+}
+
+// Assignment Status
+enum AssignmentStatus {
+  ACTIVE
+  ACCEPTED
+  DECLINED
+  COMPLETED
+  TRANSFERRED
+  ESCALATED
+}
+
+// Contact Action Type
+enum ContactActionType {
+  CREATED
+  ASSIGNED
+  STATUS_CHANGED
+  RESPONDED
+  ESCALATED
+  RESOLVED
+  CLOSED
+  REOPENED
+  MERGED
+  SPLIT
+  UPDATED
+  NOTE_ADDED
+  FILE_ATTACHED
+  TEMPLATE_APPLIED
+  AUTOMATION_TRIGGERED
+}
+
+// Actor Type
+enum ActorType {
+  USER
+  AGENT
+  SUPERVISOR
+  SYSTEM
+  AUTOMATION
+  ADMIN
+  API
+  INTEGRATION
+}
+
+// Communication Type
+enum CommunicationType {
+  EMAIL
+  PHONE_CALL
+  SMS
+  CHAT_MESSAGE
+  LETTER
+  IN_PERSON
+  SYSTEM_NOTIFICATION
+  AUTOMATED_RESPONSE
+  TICKET_UPDATE
+  STATUS_CHANGE
+}
+
+// Message Direction
+enum MessageDirection {
+  INBOUND
+  OUTBOUND
+  INTERNAL
+}
+
+// Delivery Status
+enum DeliveryStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+  BOUNCED
+  REPLIED
+}
+
+// Response Type
+enum ResponseType {
+  INITIAL_RESPONSE
+  FOLLOW_UP
+  RESOLUTION
+  CLOSURE
+  ESCALATION_NOTE
+  INTERNAL_NOTE
+  CUSTOMER_UPDATE
+  SYSTEM_AUTOMATION
+  TEMPLATE_RESPONSE
+}
+
+// Sender Type
+enum SenderType {
+  AGENT
+  SUPERVISOR
+  SYSTEM
+  AUTOMATION
+  TEMPLATE
+  SPECIALIST
+}
+
+// Recipient Type
+enum RecipientType {
+  CUSTOMER
+  AGENT
+  SUPERVISOR
+  DEPARTMENT
+  TEAM
+  SPECIALIST
+  SYSTEM
+}
+
+// Communication Channel
+enum CommunicationChannel {
+  EMAIL
+  SMS
+  PHONE
+  CHAT
+  TICKET_SYSTEM
+  PORTAL
+  MAIL
+  IN_PERSON
+  SYSTEM
+  API
+}
+
+// Response Status
+enum ResponseStatus {
+  DRAFT
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  REPLIED
+  FAILED
+  CANCELLED
+}
+
+// Device Type
+enum DeviceType {
+  DESKTOP
+  MOBILE
+  TABLET
+  UNKNOWN
+}
+
+// Sentiment Score
+enum SentimentScore {
+  VERY_NEGATIVE
+  NEGATIVE
+  NEUTRAL
+  POSITIVE
+  VERY_POSITIVE
+  MIXED
+}
+
+// Routing Target Type
+enum RoutingTargetType {
+  AGENT
+  TEAM
+  DEPARTMENT
+  SPECIALIST
+  QUEUE
+  POOL
+}
+
+// Routing Method
+enum RoutingMethod {
+  DIRECT
+  ROUND_ROBIN
+  SKILL_BASED
+  LOAD_BALANCED
+  PRIORITY_BASED
+  SPECIALIST
+  GEOGRAPHIC
+  LANGUAGE_BASED
+  AVAILABILITY
+}
+
+// Escalation Type
+enum EscalationType {
+  SLA_BREACH
+  CUSTOMER_REQUEST
+  COMPLEXITY
+  SUPERVISOR_REQUEST
+  SPECIALIST_REQUIRED
+  COMPLIANCE_ISSUE
+  EMERGENCY
+  TECHNICAL
+  COMPLAINT
+  QUALITY_ISSUE
+}
+
+// Escalation Level
+enum EscalationLevel {
+  L1_AGENT
+  L2_SUPERVISOR
+  L3_SPECIALIST
+  L4_MANAGER
+  L5_DIRECTOR
+  L6_EXECUTIVE
+  EMERGENCY
+  COMPLIANCE
+  TECHNICAL
+  MEDICAL
+}
+
+// Escalation Status
+enum EscalationStatus {
+  ACTIVE
+  IN_PROGRESS
+  RESOLVED
+  CANCELLED
+  ESCALATED_FURTHER
+}
+
+// Contact Template Category
+enum ContactTemplateCategory {
+  AUTO_RESPONSE
+  ACKNOWLEDGMENT
+  RESOLUTION
+  ESCALATION
+  CLOSURE
+  FOLLOW_UP
+  ERROR_MESSAGE
+  INFORMATION_REQUEST
+  COMPLAINT_RESPONSE
+  COMPLIMENT_ACKNOWLEDGMENT
+}
+
+// Template Usage
+enum TemplateUsage {
+  AUTOMATIC
+  MANUAL
+  TRIGGERED
+  SCHEDULED
+  CONDITIONAL
+  ON_DEMAND
+}
+
+// Knowledge Base Status
+enum KBStatus {
+  DRAFT
+  UNDER_REVIEW
+  ACTIVE
+  ARCHIVED
+  DEPRECATED
+  UNDER_REVISION
+  VERIFIED
+}
+
+// Integration Sync Status
+enum IntegrationSyncStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELLED
+  RETRYING
+  MANUAL_REVIEW
+}
+
+// Additional enums for clinic integration
+enum PatientType {
+  NEW
+  EXISTING
+  RETURNING
+  REFERRAL
+  EMERGENCY
+  WALK_IN
+  APPOINTMENT
+  FOLLOW_UP
+}
+
+enum AssignmentType {
+  DIRECT
+  ROUND_ROBIN
+  SKILL_BASED
+  WORKLOAD_BALANCED
+  SPECIALIST
+  EMERGENCY
+  VIP
+  PREFERRED
+  AUTOMATED
+  MANUAL
+}
+
+enum AssignmentPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+  CRITICAL
+  VIP
+  EMERGENCY
+}
+
+enum ContactAssignmentStatus {
+  PENDING
+  ACTIVE
+  ACCEPTED
+  IN_PROGRESS
+  COMPLETED
+  ESCALATED
+  TRANSFERRED
+  CANCELLED
+  TIMEOUT
+  FAILED
+}

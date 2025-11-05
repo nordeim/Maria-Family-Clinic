@@ -1,0 +1,93 @@
+{
+  "_source_id": 12,
+  "sources": {
+    "Project Metadata Extraction": {
+      "file:///workspace/my-family-clinic/Project_Architecture_Document.md": {
+        "id": 1,
+        "publisher": "My Family Clinic Development Team",
+        "url": "file:///workspace/my-family-clinic/Project_Architecture_Document.md",
+        "title": "Project Architecture Document v2.1",
+        "info": "Complete project overview, technology stack, file structure (215,000+ lines), performance metrics (Core Web Vitals: LCP 1.8s, FID 45ms, CLS 0.08), quality scores (94.2% overall), 12 development phases completed, deployment strategies on Vercel/Supabase, CI/CD pipeline implementation"
+      },
+      "file:///workspace/my-family-clinic/package.json": {
+        "id": 2,
+        "publisher": "My Family Clinic",
+        "url": "file:///workspace/my-family-clinic/package.json",
+        "title": "Package.json - Dependencies and Scripts",
+        "info": "Complete dependency inventory with versions, scripts for development (30+ npm scripts), testing framework configuration (compliance, performance, accessibility), production build setup"
+      },
+      "file:///workspace/my-family-clinic/prisma/schema.prisma": {
+        "id": 3,
+        "publisher": "My Family Clinic",
+        "url": "file:///workspace/my-family-clinic/prisma/schema.prisma",
+        "title": "Prisma Database Schema",
+        "info": "Comprehensive database schema with 7440 lines of models, PostGIS integration, healthcare-specific entities, compliance models (ConsentRecord, AuditLog), indexing strategies for performance optimization"
+      },
+      "file:///workspace/docs/technical/api-reference.md": {
+        "id": 4,
+        "publisher": "My Family Clinic",
+        "url": "file:///workspace/docs/technical/api-reference.md",
+        "title": "API Reference Documentation",
+        "info": "Complete API documentation for tRPC endpoints, 29 healthcare API routers, authentication (NextAuth 5), rate limiting policies (1000-100 requests/hour), WebSocket subscriptions for real-time features, error handling"
+      },
+      "file:///workspace/database/database-documentation.md": {
+        "id": 5,
+        "publisher": "My Family Clinic",
+        "url": "file:///workspace/database/database-documentation.md",
+        "title": "Database Documentation",
+        "info": "Database architecture documentation, PostGIS geospatial integration, healthcare compliance framework (PDPA, MOH), performance optimization strategies, security and data protection measures, backup and recovery procedures"
+      }
+    },
+    "README Best Practices for Healthcare Technology": {
+      "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/content-premarket-submissions-device-software-functions": {
+        "id": 6,
+        "publisher": "U.S. Food and Drug Administration",
+        "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/content-premarket-submissions-device-software-functions",
+        "title": "Content of Premarket Submissions for Device Software Functions",
+        "info": "FDA guidance on medical device software documentation requirements, including system architecture, data flow diagrams, and risk management documentation"
+      },
+      "https://www.hhs.gov/sites/default/files/ocr/privacy/hipaa/administrative/securityrule/techsafeguards.pdf": {
+        "id": 7,
+        "publisher": "U.S. Department of Health and Human Services",
+        "url": "https://www.hhs.gov/sites/default/files/ocr/privacy/hipaa/administrative/securityrule/techsafeguards.pdf",
+        "title": "HIPAA Security Rule Technical Safeguards",
+        "info": "Comprehensive HIPAA technical safeguards requirements for medical software, including access control, audit controls, integrity measures, and transmission security documentation standards"
+      },
+      "https://openregulatory.com/articles/medical-device-software-architecture-documentation-iec-62304": {
+        "id": 8,
+        "publisher": "OpenRegulatory",
+        "url": "https://openregulatory.com/articles/medical-device-software-architecture-documentation-iec-62304",
+        "title": "Medical Device Software Architecture Documentation (IEC 62304)",
+        "info": "IEC 62304 requirements for medical device software architecture documentation, including high-level system diagrams, interface documentation, and visual representation best practices"
+      },
+      "https://www.hipaajournal.com/hipaa-compliance-for-medical-software-applications/": {
+        "id": 9,
+        "publisher": "HIPAA Journal",
+        "url": "https://www.hipaajournal.com/hipaa-compliance-for-medical-software-applications/",
+        "title": "HIPAA Compliance for Medical Software Applications",
+        "info": "Detailed requirements for HIPAA-compliant documentation in medical software, including business associate agreements, security management processes, and training documentation requirements"
+      },
+      "https://enlil.com/blog/fda-software-as-a-medical-device-guidelines-explained/": {
+        "id": 10,
+        "publisher": "Enlil",
+        "url": "https://enlil.com/blog/fda-software-as-a-medical-device-guidelines-explained/",
+        "title": "FDA Software as a Medical Device Guidelines",
+        "info": "Comprehensive FDA SaMD guidelines covering regulatory compliance, documentation practices, quality systems, cybersecurity requirements, and postmarket responsibilities"
+      },
+      "https://sunstonepilot.com/2021/08/documentation-for-medical-device-software/": {
+        "id": 11,
+        "publisher": "Sunstone Pilot",
+        "url": "https://sunstonepilot.com/2021/08/documentation-for-medical-device-software/",
+        "title": "Documentation for Medical Device Software",
+        "info": "Medical device software documentation requirements including IEC 62304 processes, FDA guidance comparison (old vs new), template examples, and compliance presentation standards"
+      },
+      "https://github.com/openregulatory/templates": {
+        "id": 12,
+        "publisher": "OpenRegulatory",
+        "url": "https://github.com/openregulatory/templates",
+        "title": "Healthcare Technology Regulatory Compliance Templates",
+        "info": "Free templates for ISO 13485, IEC 62304, ISO 14971 and IEC 62366 compliance, provided as markdown files and downloadable in multiple formats"
+      }
+    }
+  }
+}

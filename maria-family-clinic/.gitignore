@@ -1,0 +1,159 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+/dist
+
+# misc
+.DS_Store
+*.pem
+Thumbs.db
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.local.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# database
+/prisma/migrations/*
+!/prisma/migrations/migration_lock.toml
+/prisma/generated/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# logs
+logs
+*.log
+
+# runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# coverage directory used by tools like istanbul
+lib-cov
+
+# nyc test coverage
+.nyc_output
+
+# dependency directories
+jspm_packages/
+
+# optional npm cache directory
+.npm
+
+# optional eslint cache
+.eslintcache
+
+# optional REPL history
+.node_repl_history
+
+# output of 'npm pack'
+*.tgz
+
+# yarn integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env.test
+.env.production
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# next.js build output
+.next
+
+# nuxt.js build output
+.nuxt
+
+# vuepress build output
+.vuepress/dist
+
+# serverless directories
+.serverless
+
+# fusebox cache
+.fusebox/
+
+# dynamodb local files
+.dynamodb/
+
+# ternjs port file
+.tern-port
+
+# stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# temporary folders
+tmp/
+temp/
+
+# backup files
+*.backup
+*.bak
+
+# healthcare-specific sensitive files
+/patient-data/
+/clinic-data/
+/medical-records/
+*.hipaa
+*.phi
+
+# deployment files
+deployment.zip
+deploy/
+.deployment
+
+# monitoring and analytics
+.sentry-release
+
+# local database files
+*.sqlite
+*.sqlite3
+*.db
+
+# OS generated files
+.DS_Store?
+ehthumbs.db
+Icon?

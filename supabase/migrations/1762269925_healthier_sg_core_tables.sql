@@ -1,0 +1,78 @@
+-- Migration: healthier_sg_core_tables
+-- Created at: 1762269925
+
+-- CreateTable
+CREATE TABLE "healthier_sg_programs" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "displayName" TEXT NOT NULL,
+    "description" TEXT,
+    "category" "HealthierSGCategory" NOT NULL,
+    "eligibilityCriteria" JSONB NOT NULL DEFAULT '{}',
+    "benefits" JSONB NOT NULL DEFAULT '[]',
+    "requirements" JSONB NOT NULL DEFAULT '{}',
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "isMandatory" BOOLEAN NOT NULL DEFAULT false,
+    "startDate" TIMESTAMP(3),
+    "endDate" TIMESTAMP(3),
+    "launchDate" TIMESTAMP(3),
+    "programCode" TEXT NOT NULL,
+    "mohProgramId" TEXT,
+    "governmentUrl" TEXT,
+    "legislationReference" TEXT,
+    "participationTargets" JSONB NOT NULL DEFAULT '{}',
+    "successMetrics" JSONB NOT NULL DEFAULT '[]',
+    "reportingFrequency" "HealthierSGReportingFrequency" NOT NULL DEFAULT 'MONTHLY',
+    "responsibleMinistry" TEXT,
+    "programManager" TEXT,
+    "budgetAllocation" DOUBLE PRECISION,
+    "lastUpdated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "version" TEXT NOT NULL DEFAULT '1.0',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "healthier_sg_programs_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "program_enrollments" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "programId" TEXT NOT NULL,
+    "clinicId" TEXT,
+    "doctorId" TEXT,
+    "enrollmentDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "enrollmentMethod" "HealthierSGEnrollmentMethod" NOT NULL,
+    "enrollmentSource" TEXT NOT NULL,
+    "enrollmentChannel" TEXT NOT NULL,
+    "status" "HealthierSGEnrollmentStatus" NOT NULL DEFAULT 'ACTIVE',
+    "effectiveFrom" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "effectiveTo" TIMESTAMP(3),
+    "suspensionReason" TEXT,
+    "suspensionDate" TIMESTAMP(3),
+    "isVerified" BOOLEAN NOT NULL DEFAULT false,
+    "verificationDate" TIMESTAMP(3),
+    "verifiedBy" TEXT,
+    "verificationMethod" TEXT,
+    "enrollmentData" JSONB NOT NULL DEFAULT '{}',
+    "personalInfo" JSONB NOT NULL DEFAULT '{}',
+    "emergencyContact" JSONB,
+    "emergencyContactVerified" BOOLEAN NOT NULL DEFAULT false,
+    "priorityLevel" TEXT,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "lastActivity" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "nextReviewDate" TIMESTAMP(3),
+    "reviewFrequency" TEXT,
+    "reminderSettings" JSONB NOT NULL DEFAULT '{}',
+    "communicationPreferences" JSONB NOT NULL DEFAULT '{}',
+    "programFee" DOUBLE PRECISION,
+    "governmentSubsidy" DOUBLE PRECISION,
+    "outOfPocketCost" DOUBLE PRECISION,
+    "paymentStatus" TEXT,
+    "lastPaymentDate" TIMESTAMP(3),
+    "nextPaymentDue" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "program_enrollments_pkey" PRIMARY KEY ("id")
+);;
