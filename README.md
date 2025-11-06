@@ -1,74 +1,86 @@
-# Customer Support AI Agent
+# Maria Family Clinic - Healthcare Platform
 
 <div align="center">
 
-![Customer Support AI Agent](https://img.shields.io/badge/Customer%20Support-AI%20Agent-blue?style=for-the-badge)
-![FastAPI](https://img.shields.io/badge/FastAPI-Latest-109989?style=for-the-badge&logo=fastapi)
+![Maria Family Clinic](https://img.shields.io/badge/Maria%20Family%20Clinic-Healthcare%20Platform-blue?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=for-the-badge&logo=react)
+![FastAPI](https://img.shields.io/badge/FastAPI-Latest-109989?style=for-the-badge&logo=fastapi)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript)
-![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-336791?style=for-the-badge&logo=postgresql)
+![AI Agent](https://img.shields.io/badge/Microsoft%20Agent%20Framework-Healthcare%20AI-0078D4?style=for-the-badge)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)
 ![MIT License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-**Intelligent customer support automation powered by Microsoft Agent Framework and RAG**
+**Modern healthcare management platform with AI-powered patient support**
 
-[![Deploy to Production](https://img.shields.io/badge/Deploy-Production Ready-success?style=for-the-badge)](https://github.com/nordeim/customer-support-agent/deploy)
-[![API Documentation](https://img.shields.io/badge/API-Documented-blue?style=for-the-badge)](docs/api.md)
-[![Architecture Guide](https://img.shields.io/badge/Architecture-Documented-purple?style=for-the-badge)](docs/architecture.md)
+[![Deploy to Production](https://img.shields.io/badge/Deploy-Production%20Ready-success?style=for-the-badge)](docs/deployment.md)
+[![Healthcare Compliance](https://img.shields.io/badge/Healthcare-HIPAA%20Ready-red?style=for-the-badge)](docs/security.md)
+[![AI-Powered](https://img.shields.io/badge/AI-Powered%20Support-purple?style=for-the-badge)](docs/architecture.md)
+[![Real-time](https://img.shields.io/badge/Real--time-Communication-00D4AA?style=for-the-badge)](docs/monitoring.md)
 
 </div>
 
 ---
 
-## 🚀 Features
+## 🏥 **Features & Capabilities**
 
-### Core Capabilities
-- **🤖 Intelligent Conversations**: Context-aware dialogue management using Microsoft Agent Framework
-- **📚 Knowledge Base Integration**: RAG implementation with Chroma vector database and EmbeddingGemma-300m
-- **📎 Attachment Processing**: Support for document uploads with Markitdown parsing
-- **🧠 Memory System**: SQLite-based persistent memory for conversation context
-- **⚡ Escalation Mechanism**: Automatic escalation to human agents when needed
-- **🌐 Multi-Channel Support**: RESTful API with WebSocket support for real-time communication
-- **📊 Comprehensive Monitoring**: Prometheus metrics and Grafana dashboards
+### **Patient Features**
+- **📅 Appointment Booking**: Real-time scheduling with calendar integration
+- **👤 Patient Profiles**: Comprehensive health records management
+- **📄 Document Upload**: Secure medical document handling and processing
+- **💬 AI Chat Support**: Intelligent healthcare assistance with medical knowledge
+- **📊 Appointment History**: Complete medical journey tracking
+- **📱 Real-time Notifications**: SMS/Email appointment updates and reminders
+- **🔒 Secure Communication**: HIPAA-compliant messaging with healthcare providers
+
+### **Healthcare Provider Features**
+- **📋 Admin Dashboard**: Comprehensive clinic management interface
+- **👥 Patient Management**: Complete patient database with search capabilities
+- **🗓️ Schedule Management**: Provider availability and appointment coordination
+- **📈 Analytics & Reporting**: Performance metrics and healthcare analytics
+- **📁 Document Management**: Medical records organization and retrieval
+- **🤖 AI Agent Integration**: Automated patient support and triage
+
+### **Technical Features**
+- **🏗️ Microservices Architecture**: Scalable, maintainable system design
+- **⚡ Real-time Communication**: WebSocket-enabled live updates
+- **🧠 AI-Powered Support**: Microsoft Agent Framework integration
+- **🔍 Vector Database**: RAG implementation for medical knowledge retrieval
+- **📊 Full Observability**: Prometheus + Grafana monitoring stack
+- **🛡️ Enterprise Security**: JWT, encryption, and compliance-ready
 - **🚀 Production-Ready**: Docker containerization with CI/CD pipeline
-
-### Business Value
-- **⏱️ Reduced Response Time**: Instant responses to common queries
-- **🌙 24/7 Availability**: Round-the-clock support without human intervention
-- **📈 Consistent Quality**: Standardized responses regardless of agent availability
-- **💰 Cost Efficiency**: Reduced operational costs through automation
-- **📈 Scalability**: Handle increasing customer volumes without additional resources
-- **📊 Data Insights**: Analytics on customer queries and satisfaction
 
 ---
 
-## 🛠 Technology Stack
+## 🛠️ **Technology Stack**
 
 <div align="center">
 
-### Frontend
+### **Frontend**
 ![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=flat-square&logo=react) 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript) 
 ![CSS Modules](https://img.shields.io/badge/CSS%20Modules-Latest-000000?style=flat-square)
 
-### Backend  
+### **Backend**
 ![FastAPI](https://img.shields.io/badge/FastAPI-Latest-109989?style=flat-square&logo=fastapi)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)
 ![Microsoft Agent Framework](https://img.shields.io/badge/Microsoft%20Agent%20Framework-Latest-0078D4?style=flat-square)
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-Latest-FF6B6B?style=flat-square)
 
-### Database & Storage
+### **Database & Storage**
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-336791?style=flat-square&logo=postgresql)
 ![SQLite](https://img.shields.io/badge/SQLite-Latest-003B57?style=flat-square)
 ![Redis](https://img.shields.io/badge/Redis-Latest-DC382D?style=flat-square&logo=redis)
-![Chroma](https://img.shields.io/badge/Chroma-Latest-8B5CF6?style=flat-square)
+![ChromaDB](https://img.shields.io/badge/ChromaDB-Latest-8B5CF6?style=flat-square)
+![Supabase](https://img.shields.io/badge/Supabase-Backend%20Services-3ECF8E?style=flat-square)
 
-### AI/ML Components
+### **AI & Machine Learning**
 ![EmbeddingGemma-300m](https://img.shields.io/badge/EmbeddingGemma--300m-Google-4285F4?style=flat-square)
+![RAG](https://img.shields.io/badge/RAG-Implementation-FF6B6B?style=flat-square)
 ![Markitdown](https://img.shields.io/badge/Markitdown-Latest-FF6B6B?style=flat-square)
 
-### Infrastructure & Monitoring
+### **Infrastructure & Monitoring**
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker)
 ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-Latest-2088FF?style=flat-square&logo=github)
 ![Prometheus](https://img.shields.io/badge/Prometheus-Latest-E6522C?style=flat-square&logo=prometheus)
@@ -78,636 +90,509 @@
 
 ---
 
-## 🏗 Architecture Overview
+## 🏛️ **Architecture Overview**
 
-The Customer Support AI Agent implements a **microservices architecture** with clear separation of concerns, ensuring scalability, maintainability, and reliability. The system consists of:
+The Maria Family Clinic platform implements a **comprehensive healthcare microservices architecture** with AI integration, ensuring scalability, security, and HIPAA compliance. The system consists of:
 
-- **React Frontend**: Modern, responsive user interface with real-time communication
-- **FastAPI Backend**: High-performance API server with async capabilities  
-- **Microsoft Agent Framework**: Intelligent agent orchestration and tool management
-- **PostgreSQL**: Primary database for user data and conversation persistence
-- **SQLite**: Development database for lightweight operations
-- **Redis**: High-performance caching and session management
-- **ChromaDB**: Vector database for semantic search and RAG implementation
-- **Prometheus + Grafana**: Comprehensive monitoring and observability stack
+### **System Components**
+- **🖥️ React Frontend**: Modern, responsive healthcare user interfaces
+- **⚡ FastAPI Backend**: High-performance API server with async capabilities
+- **🧠 Microsoft Agent Framework**: AI orchestration for healthcare assistance
+- **📊 PostgreSQL**: Primary database for patient records and appointments
+- **💾 SQLite**: Development database and AI memory system
+- **⚡ Redis**: High-performance caching and session management
+- **🔍 ChromaDB**: Vector database for medical knowledge and RAG
+- **🔗 Supabase**: Backend-as-a-Service for authentication and storage
+- **📈 Prometheus + Grafana**: Comprehensive monitoring and observability
 
----
-
-## 📁 Application Architecture
-
-### Complete File Structure
-
-```
-customer-support-agent/
-├── .github/                          # GitHub Actions CI/CD workflows
-│   └── workflows/                    # Automated testing and deployment pipelines
-├── backend/                          # FastAPI backend application
-│   ├── app/                          # Main application code
-│   │   ├── agents/                   # AI agent implementations
-│   │   │   ├── agent_factory.py      # Factory for creating different agent types
-│   │   │   └── chat_agent.py         # Core chat agent with AI orchestration
-│   │   ├── api/                      # API layer and middleware
-│   │   │   ├── dependencies.py       # FastAPI dependency injection
-│   │   │   ├── middleware.py         # Request/response middleware
-│   │   │   └── routes/               # API endpoint definitions
-│   │   │       ├── chat.py           # Chat session and message endpoints
-│   │   │       ├── health.py         # Health check and status endpoints
-│   │   │       └── metrics.py        # Prometheus metrics endpoints
-│   │   ├── core/                     # Core application infrastructure
-│   │   │   ├── cache.py              # Redis caching implementation
-│   │   │   ├── config.py             # Application configuration management
-│   │   │   ├── logging.py            # Structured logging setup
-│   │   │   └── security.py           # JWT authentication and security
-│   │   ├── db/                       # Database layer
-│   │   │   ├── database.py           # SQLAlchemy database connection
-│   │   │   ├── migrations/           # Alembic database migrations
-│   │   │   └── models.py             # Database schema models
-│   │   ├── tools/                    # Agent tools and utilities
-│   │   │   ├── attachment_tool.py    # Document attachment processing
-│   │   │   ├── escalation_tool.py    # Human agent escalation mechanism
-│   │   │   ├── memory_tool.py        # Conversation memory management
-│   │   │   └── rag_tool.py           # Retrieval-Augmented Generation
-│   │   ├── vector_store/             # Vector database integration
-│   │   │   ├── chroma_client.py      # ChromaDB client for vector search
-│   │   │   └── embeddings.py         # EmbeddingGemma-300m integration
-│   │   └── main.py                   # FastAPI application entry point
-│   ├── scripts/                      # Deployment and utility scripts
-│   │   ├── deploy.sh                 # Production deployment automation
-│   │   ├── init_db.py                # Database initialization
-│   │   ├── populate_kb.py            # Knowledge base population
-│   │   └── rollback.sh               # Deployment rollback procedures
-│   ├── tests/                        # Comprehensive test suite
-│   │   ├── unit/                     # Unit tests for individual components
-│   │   ├── integration/              # Integration tests for API endpoints
-│   │   └── e2e/                      # End-to-end testing scenarios
-│   ├── Dockerfile                    # Backend containerization configuration
-│   ├── docker-compose.yml            # Development Docker Compose setup
-│   └── requirements.txt              # Python dependencies specification
-├── frontend/                         # React TypeScript frontend
-│   ├── public/                       # Static assets
-│   │   └── index.html                # Main HTML template
-│   ├── src/                          # Source code
-│   │   ├── components/               # React UI components
-│   │   │   ├── AttachmentUpload/     # File upload component
-│   │   │   ├── ChatWindow/           # Main chat interface
-│   │   │   ├── EscalationNotice/     # Human agent escalation UI
-│   │   │   ├── Message/              # Individual message component
-│   │   │   ├── MessageInput/         # Message input interface
-│   │   │   ├── SourceCitation/       # AI response citation display
-│   │   │   └── TypingIndicator/      # Real-time typing status
-│   │   ├── hooks/                    # Custom React hooks
-│   │   │   ├── useChat.ts            # Chat state management
-│   │   │   ├── useLocalStorage.ts    # Local storage persistence
-│   │   │   └── useWebSocket.ts       # WebSocket connection management
-│   │   ├── services/                 # API and external service clients
-│   │   │   ├── api.ts                # REST API client
-│   │   │   ├── storage.ts            # Local storage service
-│   │   │   └── websocket.ts          # WebSocket communication
-│   │   ├── types/                    # TypeScript type definitions
-│   │   │   ├── api.ts                # API response types
-│   │   │   ├── chat.ts               # Chat-related types
-│   │   │   └── index.ts              # Main type exports
-│   │   ├── utils/                    # Utility functions
-│   │   │   ├── constants.ts          # Application constants
-│   │   │   ├── helpers.ts            # General helper functions
-│   │   │   └── validation.ts         # Input validation utilities
-│   │   ├── App.tsx                   # Main React application component
-│   │   └── index.tsx                 # Application entry point
-│   ├── Dockerfile                    # Frontend containerization
-│   ├── package.json                  # Node.js dependencies and scripts
-│   └── tsconfig.json                 # TypeScript configuration
-├── monitoring/                       # Observability and monitoring stack
-│   ├── prometheus/                   # Metrics collection configuration
-│   │   ├── prometheus.yml            # Main Prometheus configuration
-│   │   └── rules/                    # Alert and recording rules
-│   ├── grafana/                      # Visualization and dashboards
-│   │   ├── provisioning/             # Grafana provisioning configuration
-│   │   └── dashboards/               # Pre-configured dashboards
-│   └── alertmanager/                 # Alert management
-│       └── alertmanager.yml          # Alert routing configuration
-├── docs/                             # Comprehensive documentation
-│   ├── api.md                        # API endpoint documentation
-│   ├── architecture.md               # Detailed architecture documentation
-│   └── deployment.md                 # Deployment guide
-├── scripts/                          # Root-level utility scripts
-├── .env.example                      # Environment variables template
-├── .env.prod                         # Production environment configuration
-├── .gitignore                        # Git ignore patterns
-├── CLAUDE.md                         # AI development guidelines
-├── DB_initialization_examples.txt    # Database setup examples
-├── Deployment_Checklist.md           # Production deployment checklist
-├── Design_Decisions_Document.md      # Architecture decision records
-├── GEMINI.md                         # Gemini model documentation
-├── KB_loading_examples.txt           # Knowledge base loading examples
-├── Minor_Discrepancies_and_Areas_for_Refinement.md # Known issues
-├── Project_Architecture_Document.md  # Complete architecture documentation
-├── README.md                         # This comprehensive README
-├── Runbook.md                        # Operations runbook
-├── codebase_review.md                # Code quality review
-├── docker-compose.prod.yml           # Production Docker Compose
-├── docker-compose.yml                # Development Docker Compose
-├── file_structure.txt                # This file structure documentation
-└── grafana_dashboard.json            # Pre-configured Grafana dashboards
-```
+### **Integration Points**
+- **🔗 Supabase Integration**: Authentication, storage, and edge functions
+- **🔄 Real-time Communication**: WebSocket infrastructure for live updates
+- **🌐 External APIs**: Healthcare provider integrations and notifications
+- **📱 Notification System**: Multi-channel delivery (SMS/Email/Push)
 
 ---
 
-## 🔄 User-Application Interaction Flow
+## 📁 **Application Architecture**
 
-### Complete User Journey
+### **Complete File Structure**
+
+```
+Maria-Family-Clinic/
+├── 📁 healthcare-app-react/                 # Main React frontend application
+│   ├── 📁 src/
+│   │   ├── 📁 components/                   # React UI components
+│   │   │   ├── 📁 AppointmentBooking/       # Scheduling components
+│   │   │   ├── 📁 PatientDashboard/         # Patient portal components
+│   │   │   ├── 📁 AdminDashboard/           # Healthcare provider interface
+│   │   │   ├── 📁 ChatInterface/            # AI chat components
+│   │   │   ├── 📁 Common/                   # Shared UI components
+│   │   │   └── 📁 Navigation/               # Navigation components
+│   │   ├── 📁 hooks/                        # Custom React hooks
+│   │   ├── 📁 services/                     # API integration services
+│   │   ├── 📁 types/                        # TypeScript definitions
+│   │   ├── 📁 utils/                        # Utility functions
+│   │   ├── 📁 styles/                       # CSS and styling
+│   │   └── 📁 contexts/                     # React context providers
+│   └── 📁 dist/                             # Built application output
+│
+├── 📁 customer-support-agent/               # AI agent backend services
+│   ├── 📁 app/                              # Application source code
+│   │   ├── 📁 agents/                       # AI agent implementations
+│   │   ├── 📁 api/                          # REST API layer
+│   │   ├── 📁 core/                         # Core utilities
+│   │   ├── 📁 db/                           # Database layer
+│   │   ├── 📁 services/                     # Business logic services
+│   │   ├── 📁 tools/                        # AI agent tools
+│   │   └── 📁 vector_store/                 # Vector database integration
+│   ├── 📁 scripts/                          # Utility scripts
+│   └── 📁 tests/                            # Test suite
+│
+├── 📁 healthcare-website/                   # Marketing website
+├── 📁 supabase/                            # Supabase backend configuration
+│   ├── 📁 functions/                        # Edge functions
+│   ├── 📁 migrations/                       # Database schema migrations
+│   ├── 📁 auth/                             # Authentication configuration
+│   ├── 📁 storage/                          # File storage configuration
+│   └── 📁 types/                            # TypeScript type definitions
+│
+├── 📁 monitoring/                           # Observability stack
+│   ├── 📁 prometheus/                       # Metrics collection
+│   ├── 📁 grafana/                          # Visualization dashboards
+│   ├── 📁 alertmanager/                     # Alert management
+│   └── 📁 loki/                             # Log aggregation
+│
+├── 📁 deployment/                          # Deployment configurations
+│   ├── 📁 docker/                          # Docker configurations
+│   ├── 📁 kubernetes/                      # K8s manifests
+│   ├── 📁 terraform/                       # Infrastructure as Code
+│   └── 📁 scripts/                         # Deployment automation
+│
+├── 📁 docs/                                # Comprehensive documentation
+├── 📁 testing/                             # Testing infrastructure
+├── 📁 assets/                              # Project assets
+├── 📁 backup/                              # Backup and recovery
+└── 📁 scripts/                             # Utility scripts
+```
+
+*[View complete file hierarchy diagram](docs/file_hierarchy_diagram.md)*
+
+---
+
+## 👥 **User-Application Interaction Flow**
+
+### **Healthcare-Specific User Journeys**
 
 ```mermaid
 flowchart TD
-    %% User Entry Points
-    User[👤 User] --> WebApp[🌐 Chat Interface]
+    %% User Types
+    P[👤 Patient] --> P1[Register/Login]
+    A[👨‍⚕️ Healthcare Provider] --> A1[Admin Login]
+    H[🤖 AI Agent] --> H1[Initialize]
+    S[👤 Support Staff] --> S1[Support Dashboard]
     
-    %% Session Management
-    WebApp --> SessionCheck{📋 Session Exists?}
-    SessionCheck -->|No| CreateSession[🔄 Create New Session]
-    CreateSession --> StoreSession[💾 Store in PostgreSQL]
-    SessionCheck -->|Yes| SendMessage[💬 Send Message]
-    StoreSession --> SendMessage
+    %% Patient Journey
+    P1 --> P2[👤 Patient Dashboard]
+    P2 --> P3[📅 View Available Appointments]
+    P3 --> P4[⏰ Select Time Slot]
+    P4 --> P5[📋 Fill Booking Form]
+    P5 --> P6[📄 Upload Medical Documents]
+    P6 --> P7[✅ Confirm Booking]
     
-    %% Message Submission
-    SendMessage --> WebSocketCheck{🔌 WebSocket Available?}
-    WebSocketCheck -->|Yes| WebSocket[📡 Real-time WebSocket]
-    WebSocketCheck -->|No| RESTAPI[📡 REST API]
-    WebSocket --> Backend[⚡ FastAPI Backend]
-    RESTAPI --> Backend
+    %% Document Processing Flow
+    P6 --> D1[📤 File Upload]
+    D1 --> D2[🔍 Document Analysis]
+    D2 --> D3[📊 Extract Medical Data]
+    D3 --> D4[🧠 AI Health Assessment]
+    D4 --> D5[💾 Store in Patient Profile]
     
-    %% Attachment Processing
-    Backend --> AttachmentCheck{📎 Attachments?}
-    AttachmentCheck -->|Yes| ProcessAttachment[📄 Process with Markitdown]
-    AttachmentCheck -->|No| ContextRetrieval[🔍 Retrieve Context]
-    ProcessAttachment --> ContextRetrieval
+    %% AI Agent Interaction
+    P2 --> P8[💬 AI Chat Interface]
+    P8 --> P9[❓ Ask Health Questions]
+    P9 --> H2[🧠 Process Query]
+    H2 --> H3[🔍 Search Knowledge Base]
+    H3 --> H4[📚 RAG: Retrieve Relevant Info]
+    H4 --> H5[💡 Generate AI Response]
+    H5 --> P10[📱 Display AI Answer]
     
-    %% Context & Memory
-    ContextRetrieval --> RedisCache{⚡ Redis Cache Hit?}
-    RedisCache -->|Yes| GetCachedContext[📦 Get Cached Context]
-    RedisCache -->|No| GetDBContext[📊 Get from PostgreSQL]
-    GetCachedContext --> AgentContext[🧠 Prepare Agent Context]
-    GetDBContext --> AgentContext
+    %% Escalation Decision
+    H5 --> E1{🤔 Complex Query?}
+    E1 -->|Yes| E2[⚠️ Escalate to Human Agent]
+    E1 -->|No| P10
+    E2 --> S2[📞 Human Agent Assignment]
+    S2 --> S3[💬 Human-User Chat]
+    
+    %% Appointment Management
+    P7 --> AM1[📅 Appointment Created]
+    AM1 --> AM2[⏰ Set Reminders]
+    AM2 --> AM3[📧 Email/SMS Notifications]
+    AM3 --> AM4[📅 Update Provider Calendar]
+    
+    %% Provider Workflow
+    A1 --> A2[📊 Provider Dashboard]
+    A2 --> A3[👥 View Patient List]
+    A3 --> A4[📋 Select Patient]
+    A4 --> A5[📄 View Patient Profile]
+    A5 --> A6[📊 Medical History]
+    A6 --> A7[🗓️ Schedule Overview]
+    A7 --> A8[📈 Analytics & Reports]
+    
+    %% Real-time Communication
+    P2 --> RTC1[🔄 Real-time Updates]
+    A2 --> RTC2[📡 Live Data Sync]
+    S3 --> RTC3[💬 Chat Notifications]
+    
+    %% System Integrations
+    P2 --> SI1[🔗 Supabase Auth]
+    A2 --> SI2[🗄️ Database Access]
+    H1 --> SI3[🧠 Vector Database]
+    S1 --> SI4[📊 Monitoring System]
+    
+    %% Emergency Flow
+    P12[🚨 Emergency Contact]
+    P12 --> E3[⚡ Urgent Notification]
+    E3 --> A2
+    E3 --> S1
+    
+    %% Styling
+    classDef patient fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef provider fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef ai fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef system fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef escalation fill:#ffebee,stroke:#c62828,stroke-width:2px
+    
+    class P,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P12 patient
+    class A,A1,A2,A3,A4,A5,A6,A7,A8 provider
+    class H,H1,H2,H3,H4,H5 ai
+    class D1,D2,D3,D4,D5,AM1,AM2,AM3,AM4,RTC1,RTC2,RTC3,SI1,SI2,SI3,SI4 system
+    class E1,E2,E3,S2,S3 escalation
+```
+
+### **Key Interaction Flows**
+
+#### **Patient Journey (Blue)**
+1. **Registration & Authentication**: Secure patient account creation
+2. **Appointment Booking**: Real-time scheduling with provider availability
+3. **Document Upload**: Secure medical record processing and AI analysis
+4. **AI Chat Support**: Healthcare-specific assistance with medical knowledge
+5. **Health Profile Management**: Comprehensive medical history tracking
+
+#### **Healthcare Provider Workflow (Purple)**
+1. **Admin Dashboard**: Comprehensive clinic management interface
+2. **Patient Management**: Full CRUD operations on patient database
+3. **Schedule Coordination**: Provider availability and appointment management
+4. **Analytics & Reporting**: Performance metrics and care outcome analysis
+
+#### **AI Agent Integration (Green)**
+1. **Intelligent Query Processing**: Healthcare-specific natural language understanding
+2. **Medical Knowledge Base**: RAG implementation with medical literature
+3. **Escalation Logic**: Human handoff for complex medical situations
+4. **Contextual Responses**: Personalized healthcare guidance
+
+*[View detailed interaction flow documentation](docs/user_interaction_diagram.md)*
+
+---
+
+## ⚙️ **Application Logic Flow**
+
+### **Internal Technical Processing Pipeline**
+
+```mermaid
+flowchart TD
+    %% Frontend Layer
+    UI[🖥️ React Frontend] --> UI1[📱 Component Rendering]
+    UI1 --> UI2[📋 State Management]
+    UI2 --> UI3[🔄 API Call Initiation]
+    
+    %% API Gateway Layer
+    AG[🚀 FastAPI Gateway] --> AG1[📥 Request Reception]
+    AG1 --> AG2[🔐 Authentication Check]
+    AG2 --> AG3[⚡ Rate Limiting]
+    AG3 --> AG4[🔍 Input Validation]
+    AG4 --> AG5[📍 Route Matching]
+    
+    %% Authentication Flow
+    AG2 --> AUTH1[🔑 JWT Token Validation]
+    AUTH1 --> AUTH2[🆔 User Role Check]
+    AUTH2 --> AUTH3[📊 Session Lookup]
+    AUTH3 --> AUTH4{✅ Valid Session?}
+    AUTH4 -->|No| AUTH5[❌ Reject Request]
+    AUTH4 -->|Yes| AG3
+    
+    %% Appointment Processing
+    RT1 --> APP1[📋 Appointment Service]
+    APP1 --> APP2[🗄️ PostgreSQL Query]
+    APP2 --> APP3[⏰ Time Slot Validation]
+    APP3 --> APP4[📧 Email Notification]
+    APP4 --> APP5[📱 SMS Alert]
+    
+    %% Chat Request Processing
+    RT2 --> CHAT1[💬 Chat Service]
+    CHAT1 --> CHAT2[💾 Session Management]
+    CHAT2 --> CHAT3[🤖 AI Agent Integration]
     
     %% AI Agent Orchestration
-    AgentContext --> EmbeddingCheck{🔤 Need Embeddings?}
-    EmbeddingCheck -->|Yes| GenerateEmbedding[🧮 Generate EmbeddingGemma-300m]
-    EmbeddingCheck -->|No| VectorSearch[🔍 Chroma Vector Search]
-    GenerateEmbedding --> VectorSearch
-    
-    %% Vector Database Search
-    VectorSearch --> ChromaDB[(🗄️ Chroma Vector DB)]
-    ChromaDB --> SimilaritySearch[🎯 Similarity Search]
-    SimilaritySearch --> TopKCheck{📊 Top-K Results?}
-    TopKCheck -->|Yes| RetrieveDocs[📑 Retrieve Documents]
-    TopKCheck -->|No| NoResults[🚫 No Relevant Docs]
-    
-    %% Agent Framework Processing
-    RetrieveDocs --> AgentFramework[🤖 Microsoft Agent Framework]
-    NoResults --> AgentFramework
-    
-    %% Decision Points
-    AgentFramework --> EscalationCheck{❗ Escalation Needed?}
-    
-    %% Escalation Path
-    EscalationCheck -->|Yes| EscalationTicket[🎫 Create Escalation Ticket]
-    EscalationTicket --> HumanAgent[👨‍💼 Human Agent]
-    HumanAgent --> EscalationResponse[📝 Manual Response]
-    EscalationResponse --> StoreResponse[💾 Store Response]
-    
-    %% AI Response Path
-    EscalationCheck -->|No| AIResponse[🤖 Generate AI Response]
-    AIResponse --> GenerateCitations[📚 Generate Citations]
-    GenerateCitations --> StoreResponse
-    
-    %% Response Storage
-    StoreResponse --> MemoryUpdate[🔄 Update Conversation Memory]
-    MemoryUpdate --> CacheUpdate[⚡ Update Redis Cache]
-    CacheUpdate --> MetricsUpdate[📊 Update Prometheus Metrics]
-    MetricsUpdate --> LogInteraction[📝 Structured Logging]
-    
-    %% Response Delivery
-    LogInteraction --> ResponseCheck{📡 Response Channel?}
-    ResponseCheck -->|WebSocket| WebSocketSend[📡 Send via WebSocket]
-    ResponseCheck -->|REST| HTTPReturn[📡 HTTP Response]
-    WebSocketSend --> WebApp
-    HTTPReturn --> WebApp
-    
-    %% Display Response
-    WebApp --> DisplayCheck{🎨 Response Type?}
-    DisplayCheck -->|Citation| ShowCitation[📚 Display Sources]
-    DisplayCheck -->|Escalation| ShowEscalation[🎫 Show Escalation Notice]
-    DisplayCheck -->|Regular| ShowMessage[💬 Show AI Message]
-    
-    ShowCitation --> User
-    ShowEscalation --> User
-    ShowMessage --> User
-    
-    %% Monitoring & Analytics
-    LogInteraction --> MonitoringStack[📊 Monitoring Stack]
-    MonitoringStack --> Prometheus[(📈 Prometheus Metrics)]
-    MonitoringStack --> Grafana[📉 Grafana Dashboards]
-    
-    %% Styling
-    classDef userClass fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    classDef frontendClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
-    classDef backendClass fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
-    classDef databaseClass fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    classDef aiClass fill:#fce4ec,stroke:#880e4f,stroke-width:2px
-    classDef decisionClass fill:#fff8e1,stroke:#f57f17,stroke-width:2px
-    
-    class User userClass
-    class WebApp,SendMessage,DisplayCheck frontendClass
-    class Backend,AgentFramework,ProcessAttachment backendClass
-    class PostgreSQL,RedisCache,ChromaDB,StoreResponse databaseClass
-    class AIResponse,AgentContext,GenerateEmbedding,VectorSearch aiClass
-    class SessionCheck,WebSocketCheck,AttachmentCheck,EscalationCheck,ResponseCheck decisionClass
-```
-
-### Interaction Flow Description
-
-#### 1. **Session Initialization**
-- User accesses chat interface
-- System checks for existing session
-- Creates new session if none exists
-- Stores session in PostgreSQL database
-
-#### 2. **Message Submission**
-- User sends message with optional attachments
-- Frontend checks for WebSocket availability
-- Falls back to REST API if WebSocket unavailable
-- Sends message to FastAPI backend
-
-#### 3. **Context Retrieval & RAG**
-- System retrieves conversation history from PostgreSQL
-- Generates embeddings using EmbeddingGemma-300m
-- Performs similarity search in Chroma vector database
-- Retrieves top-K most relevant documents
-
-#### 4. **AI Agent Processing**
-- Microsoft Agent Framework processes the query
-- Uses retrieved context and documents
-- Considers conversation history and user intent
-
-#### 5. **Response Generation**
-- **Escalation Path**: If escalation needed, creates ticket for human agent
-- **AI Response Path**: Generates AI-powered response with citations
-- Both paths store responses in database for conversation continuity
-
-#### 6. **Response Delivery**
-- Response sent back via WebSocket or REST API
-- Frontend displays appropriate interface (citations, escalation notice, or message)
-- User receives real-time or immediate response
-
----
-
-## 🧠 Application Logic Flow
-
-### Internal Processing Pipeline
-
-```mermaid
-flowchart TD
-    %% Input Processing
-    ReceiveMessage[📨 Receive User Message] --> ValidateInput[✅ Validate Input]
-    ValidateInput --> RateLimitCheck{⚡ Rate Limited?}
-    RateLimitCheck -->|Yes| RejectRequest[🚫 Reject Request]
-    RateLimitCheck -->|No| Authenticate[🔐 Authenticate User]
-    
-    %% Authentication & Session
-    Authenticate --> JWTVerify[🛡️ Verify JWT Token]
-    JWTVerify --> SessionLookup[📋 Lookup Session]
-    SessionLookup --> SessionCheck{📊 Session Valid?}
-    SessionCheck -->|No| CreateNewSession[🔄 Create New Session]
-    SessionCheck -->|Yes| RetrieveHistory[📚 Retrieve Conversation History]
-    CreateNewSession --> RetrieveHistory
-    
-    %% Message Processing
-    RetrieveHistory --> ProcessAttachments{📎 Attachments?}
-    ProcessAttachments -->|Yes| MarkitdownParse[📄 Parse with Markitdown]
-    ProcessAttachments -->|No| ContextPreparation[🧠 Prepare Context]
-    MarkitdownParse --> ContextPreparation
-    
-    %% Context Building
-    ContextPreparation --> HistoricalContext[📖 Historical Context]
-    HistoricalContext --> UserContext[👤 User Context]
-    UserContext --> AttachmentContext[📎 Attachment Context]
-    AttachmentContext --> SystemContext[⚙️ System Context]
-    SystemContext --> CombineContext[🔗 Combine All Context]
+    CHAT3 --> AI1[🧠 Microsoft Agent Framework]
+    AI1 --> AI2[🔧 Tool Management]
+    AI2 --> AI3[📚 Knowledge Base Search]
+    AI3 --> AI4[🧮 EmbeddingGemma-300m]
+    AI4 --> AI5[🔍 ChromaDB Vector Search]
+    AI5 --> AI6[💡 Response Generation]
     
     %% RAG Implementation
-    CombineContext --> GenerateQueryEmbed[🧮 Generate Query Embedding]
-    GenerateQueryEmbed --> ChromaConnection[🔌 Connect to ChromaDB]
-    ChromaConnection --> VectorSimilarity[🎯 Vector Similarity Search]
-    VectorSimilarity --> RelevanceFilter[📊 Filter by Relevance]
-    RelevanceFilter --> DocumentRetrieval[📑 Retrieve Documents]
-    DocumentRetrieval --> DocumentRanking[🏆 Rank by Relevance]
+    AI3 --> RAG1[📖 Document Retrieval]
+    RAG1 --> RAG2[🔗 Context Building]
+    RAG2 --> RAG3[💬 Response Synthesis]
+    RAG3 --> AI6
     
-    %% Agent Framework Preparation
-    DocumentRanking --> ToolPreparation[🛠️ Prepare Agent Tools]
-    ToolPreparation --> InstructionTemplate[📝 Load Instruction Template]
-    InstructionTemplate --> ContextWindow[🪟 Build Context Window]
-    ContextWindow --> AgentInit[🤖 Initialize Agent Framework]
+    %% Escalation Logic
+    AI6 --> ESC1{🤔 Complex Query?}
+    ESC1 -->|Yes| ESC2[⚠️ Escalation Tool]
+    ESC1 -->|No| CHAT4[📤 Send Response]
+    ESC2 --> ESC3[👨‍💼 Human Agent Assignment]
+    ESC3 --> ESC4[📋 Context Preservation]
     
-    %% Agent Execution
-    AgentInit --> ToolExecution[⚡ Execute Agent Tools]
-    ToolExecution --> RAGToolCall[🔍 Call RAG Tool]
-    ToolExecution --> MemoryToolCall[🧠 Call Memory Tool]
-    ToolExecution --> EscalationToolCall[⚠️ Call Escalation Tool]
-    ToolExecution --> AttachmentToolCall[📎 Call Attachment Tool]
-    
-    %% Decision Logic
-    RAGToolCall --> EscalationCheck{❗ Escalation Required?}
-    MemoryToolCall --> EscalationCheck
-    EscalationToolCall --> EscalationCheck
-    AttachmentToolCall --> EscalationCheck
-    
-    %% Escalation Path
-    EscalationCheck -->|Yes| CreateEscalation[🎫 Create Escalation Ticket]
-    CreateEscalation --> TicketAssignment[👤 Assign to Human Agent]
-    TicketAssignment --> EscalationResponse[📝 Generate Escalation Response]
-    EscalationResponse --> ResponseFormatting[🎨 Format Response]
-    
-    %% AI Response Path
-    EscalationCheck -->|No| ProcessRAGResults[🔍 Process RAG Results]
-    ProcessRAGResults --> ResponseGeneration[🤖 Generate AI Response]
-    ResponseGeneration --> SourceCitation[📚 Add Source Citations]
-    SourceCitation --> ResponseValidation[✅ Validate Response]
-    ResponseValidation --> ResponseFormatting
-    
-    %% Response Processing
-    ResponseFormatting --> ResponseOptimization[⚡ Optimize for Delivery]
-    ResponseOptimization --> CacheResponse[💾 Cache Response]
-    CacheResponse --> DatabaseUpdate[📊 Update Database]
+    %% File Upload Processing
+    RT3 --> FILE1[📤 File Upload Handler]
+    FILE1 --> FILE2[🔍 File Type Validation]
+    FILE2 --> FILE3[📊 Document Analysis]
+    FILE3 --> FILE4[🧠 Markitdown Parser]
+    FILE4 --> FILE5[💾 Supabase Storage]
+    FILE5 --> FILE6[📄 Extract Medical Data]
     
     %% Database Operations
-    DatabaseUpdate --> StoreConversation[💬 Store Conversation]
-    StoreConversation --> UpdateSession[🔄 Update Session]
-    UpdateSession --> RecordMetrics[📊 Record Metrics]
-    RecordMetrics --> UpdateMemory[🧠 Update Memory]
+    APP2 --> DB1[🔗 PostgreSQL Connection]
+    CHAT2 --> DB2[💾 SQLite Memory]
+    DB1 --> DB3[📊 Query Optimization]
+    DB2 --> DB5[🧠 Memory Management]
     
-    %% Monitoring & Logging
-    UpdateMemory --> StructuredLogging[📝 Structured Logging]
-    StructuredLogging --> PerformanceMetrics[⏱️ Performance Metrics]
-    PerformanceMetrics --> ErrorHandling{⚠️ Errors?}
-    ErrorHandling -->|Yes| ErrorLogging[🚨 Log Errors]
-    ErrorHandling -->|No| SuccessMetrics[✅ Success Metrics]
-    ErrorLogging --> HealthCheck[💓 Update Health Status]
-    SuccessMetrics --> HealthCheck
+    %% Real-time Communication
+    CHAT4 --> WS1[🔄 WebSocket Handler]
+    AI6 --> WS1
+    APP5 --> WS2[📡 Real-time Updates]
+    FILE6 --> WS3[📁 File Status Updates]
+    WS1 --> WS4[📱 Client Synchronization]
     
-    %% Response Delivery
-    HealthCheck --> ResponseDelivery[📡 Prepare Response Delivery]
-    ResponseDelivery --> WebSocketCheck{🔌 WebSocket?}
-    WebSocketCheck -->|Yes| SendWebSocket[📡 Send via WebSocket]
-    WebSocketCheck -->|No| SendHTTP[📡 Send via HTTP]
-    SendWebSocket --> End[🏁 End]
-    SendHTTP --> End
+    %% Monitoring and Logging
+    AG5 --> MON1[📊 Prometheus Metrics]
+    AI1 --> MON2[🤖 AI Agent Metrics]
+    DB1 --> MON3[💾 Database Metrics]
     
-    %% Rejection Path
-    RejectRequest --> RateLimitResponse[⏰ Rate Limit Response]
-    RateLimitResponse --> End
+    %% Response Flow
+    CHAT4 --> RESP1[📦 Response Processing]
+    RESP1 --> RESP2[⚡ Response Optimization]
+    RESP2 --> RESP3[💾 Update Database]
+    RESP3 --> RESP4[📱 Frontend Response]
+    
+    %% Security Layer
+    AG4 --> SEC1[🛡️ Input Sanitization]
+    SEC1 --> SEC2[🔒 SQL Injection Prevention]
+    SEC2 --> SEC3[🚫 XSS Protection]
+    SEC3 --> SEC4[📋 Audit Logging]
     
     %% Styling
-    classDef inputClass fill:#e3f2fd,stroke:#0277bd,stroke-width:2px
-    classDef authClass fill:#fce4ec,stroke:#c2185b,stroke-width:2px
-    classDef contextClass fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    classDef ragClass fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
-    classDef agentClass fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    classDef decisionClass fill:#fff8e1,stroke:#ffa000,stroke-width:2px
-    classDef responseClass fill:#f1f8e9,stroke:#689f38,stroke-width:2px
-    classDef databaseClass fill:#fce4ec,stroke:#d32f2f,stroke-width:2px
-    classDef monitoringClass fill:#e0f2f1,stroke:#00796b,stroke-width:2px
-    classDef errorClass fill:#ffebee,stroke:#d32f2f,stroke-width:2px
+    classDef frontend fill:#e3f2fd,stroke:#0277bd,stroke-width:2px
+    classDef backend fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef ai fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    classDef database fill:#fff8e1,stroke:#f57f17,stroke-width:2px
+    classDef monitoring fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef security fill:#ffebee,stroke:#d32f2f,stroke-width:2px
     
-    class ReceiveMessage,ValidateInput,Authenticate inputClass
-    class JWTVerify,SessionLookup,CreateNewSession authClass
-    class ContextPreparation,CombineContext,ContextWindow contextClass
-    class GenerateQueryEmbed,VectorSimilarity,DocumentRetrieval ragClass
-    class AgentInit,ToolExecution,ResponseGeneration agentClass
-    class EscalationCheck,WebSocketCheck,ProcessAttachments decisionClass
-    class ResponseFormatting,ResponseDelivery responseClass
-    class StoreConversation,UpdateSession,DatabaseUpdate databaseClass
-    class StructuredLogging,PerformanceMetrics,HealthCheck monitoringClass
-    class ErrorLogging,RateLimitResponse,RejectRequest errorClass
+    class UI,UI1,UI2,UI3 frontend
+    class AG,AG1,AG2,AG3,AG4,AG5,AUTH1,AUTH2,AUTH3,AUTH4,AUTH5,APP1,APP2,APP3,APP4,APP5,CHAT1,CHAT2,CHAT4,RESP1,RESP2,RESP3,RESP4 backend
+    class AI1,AI2,AI3,AI4,AI5,AI6,RAG1,RAG2,RAG3,ESC1,ESC2,ESC3,ESC4 ai
+    class DB1,DB2,DB3,DB5,FILE1,FILE2,FILE3,FILE4,FILE5,FILE6 database
+    class MON1,MON2,MON3,WS1,WS2,WS3,WS4 monitoring
+    class SEC1,SEC2,SEC3,SEC4 security
 ```
 
-### Key Technical Components
+### **Key Technical Components**
 
-1. **Embedding Generation**: EmbeddingGemma-300m model integration
-2. **Vector Database**: ChromaDB for similarity search and retrieval
-3. **Agent Orchestration**: Microsoft Agent Framework for tool management
-4. **Memory System**: SQLite-based conversation memory with PostgreSQL persistence
-5. **Caching Layer**: Redis for performance optimization
-6. **Document Processing**: Markitdown for attachment parsing
-7. **Authentication**: JWT-based security with session management
-8. **Monitoring**: Prometheus metrics collection and Grafana visualization
+1. **🧠 AI Processing Pipeline**: Microsoft Agent Framework orchestration
+2. **🔍 RAG Implementation**: ChromaDB vector search with medical knowledge
+3. **📊 Multi-Database Architecture**: PostgreSQL + SQLite + Redis + ChromaDB
+4. **⚡ Real-time Communication**: WebSocket infrastructure for live updates
+5. **🛡️ Security & Compliance**: HIPAA-compliant data handling
+6. **📈 Monitoring & Observability**: Comprehensive metrics and alerting
+
+*[View detailed technical flow documentation](docs/application_logic_diagram.md)*
 
 ---
 
-## ⚡ Quick Start
+## ⚡ **Quick Start**
 
-### Prerequisites
-- Docker 20.10+
-- Docker Compose 2.0+
-- Git
-- 4GB+ RAM available
-- 10GB+ disk space
+### **Prerequisites**
 
-### Development Setup
+- **Docker 20.10+** and **Docker Compose 2.0+**
+- **Git** and **4GB+ RAM** available
+- **10GB+ disk space** for full deployment
+
+### **Development Setup (5 Minutes)**
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/nordeim/customer-support-agent.git
-cd customer-support-agent
+git clone https://github.com/nordeim/Maria-Family-Clinic.git
+cd Maria-Family-Clinic
 
 # 2. Environment setup
 cp .env.example .env
 # Edit .env with your configuration
 
 # 3. Start all services
-docker-compose up -d
+docker-compose up -d --build
 
 # 4. Initialize database
 docker-compose exec backend python scripts/init_db.py
 
-# 5. Populate knowledge base (optional)
-docker-compose exec backend python scripts/populate_kb.py --documents-dir ./docs/knowledge-base
+# 5. Populate healthcare knowledge base (optional)
+docker-compose exec backend python scripts/populate_kb.py --documents-dir ./data/knowledge-base
 
 # 6. Verify deployment
 curl http://localhost:8000/health
 ```
 
-### Production Deployment
+### **Access Points**
 
-```bash
-# 1. Set production environment
-export VERSION=1.0.0
-export POSTGRES_PASSWORD=your_secure_password
-export SECRET_KEY=your_secure_secret_key
-
-# 2. Deploy using automation script
-./scripts/deploy.sh
-
-# 3. Check deployment status
-./scripts/deploy.sh health
-```
+- **🏥 Frontend Application**: http://localhost:3000
+- **⚡ API Documentation**: http://localhost:8000/docs
+- **📊 Monitoring Dashboard**: http://localhost:3000 (Grafana)
+- **📈 Metrics Collection**: http://localhost:9090 (Prometheus)
 
 ---
 
-## 🏭 Production Deployment
+## 🚀 **Deployment Guide**
 
-### System Requirements
+### **Production Deployment**
 
-| Component | Minimum | Recommended |
-|-----------|---------|-------------|
+#### **System Requirements**
+
+| **Component** | **Minimum** | **Recommended** |
+|---------------|-------------|-----------------|
 | **CPU** | 2 cores | 4+ cores |
 | **RAM** | 4GB | 8GB+ |
 | **Storage** | 20GB SSD | 50GB+ SSD |
 | **Network** | 100 Mbps | 1 Gbps |
 
-### Environment Configuration
-
-#### Production Environment Variables
+#### **Production Environment Setup**
 
 ```bash
-# Core Application
-VERSION=1.0.0
+# 1. Set production environment variables
+export VERSION=1.0.0
+export POSTGRES_PASSWORD=your_secure_password
+export SECRET_KEY=your_secure_secret_key
+
+# 2. Use production Docker Compose
+docker-compose -f docker-compose.prod.yml up -d
+
+# 3. Initialize production database
+docker-compose -f docker-compose.prod.yml exec backend python scripts/init_db.py --prod
+
+# 4. Check deployment status
+curl -f http://your-domain.com/health
+```
+
+#### **SSL/HTTPS Configuration**
+
+```bash
+# Install Let's Encrypt certificates
+certbot --nginx -d mariafamilyclinic.com -d www.mariafamilyclinic.com
+
+# Auto-renewal setup
+sudo crontab -e
+# Add: 0 12 * * * /usr/bin/certbot renew --quiet
+```
+
+### **Environment Configuration**
+
+#### **Complete Production Environment Variables**
+
+```env
+# === APPLICATION CONFIGURATION ===
+APP_NAME=Maria Family Clinic
+APP_VERSION=1.0.0
+APP_ENV=production
 DEBUG=false
-SECRET_KEY=your-production-secret-key-here
-JWT_SECRET_KEY=your-jwt-secret-key-here
+SECRET_KEY=your-super-secure-secret-key-256-bits
 
-# Database Configuration
-POSTGRES_HOST=postgres
+# === DATABASE CONFIGURATION ===
+POSTGRES_HOST=postgres.internal
 POSTGRES_PORT=5432
-POSTGRES_DB=customer_support
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=your-secure-postgres-password
+POSTGRES_DB=healthcare_prod
+POSTGRES_USER=healthcare_prod_user
+POSTGRES_PASSWORD=very-secure-db-password-256-bits
 
-# Redis Configuration
+# === REDIS CONFIGURATION ===
 REDIS_HOST=redis
 REDIS_PORT=6379
-REDIS_PASSWORD=your-secure-redis-password
+REDIS_PASSWORD=secure-redis-password
 
-# AI Configuration
-EMBEDDING_MODEL_PATH=/app/models/embeddinggemma-300m
-CHROMA_PERSIST_DIRECTORY=/app/data/chroma
+# === CHROMADB CONFIGURATION ===
+CHROMA_HOST=chromadb
+CHROMA_PORT=8000
+CHROMA_PERSIST_DIRECTORY=./data/chromadb
 
-# Monitoring
-PROMETHEUS_ENABLED=true
-GRAFANA_ADMIN_PASSWORD=your-grafana-password
+# === SUPABASE CONFIGURATION ===
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your_anon_key_here
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 
-# External APIs
-OPENAI_API_KEY=your-openai-api-key
-MICROSOFT_AGENT_FRAMEWORK_KEY=your-agent-framework-key
+# === AI AGENT CONFIGURATION ===
+MICROSOFT_AGENT_FRAMEWORK_KEY=your_framework_key
+EMBEDDING_MODEL_PATH=./models/embeddinggemma-300m
+AI_MODEL_TIMEOUT=30
 
-# Rate Limiting
-RATE_LIMIT_PER_MINUTE=60
-RATE_LIMIT_PER_HOUR=1000
-```
-
-### Deployment Checklist
-
-- [ ] System requirements met
-- [ ] Environment variables configured
-- [ ] SSL certificates installed
-- [ ] Database initialized and migrated
-- [ ] Knowledge base populated
-- [ ] Monitoring stack configured
-- [ ] Backup procedures tested
-- [ ] Security hardening applied
-- [ ] Load testing completed
-- [ ] Rollback procedures verified
-
----
-
-## 📊 Monitoring & Observability
-
-### Prometheus Metrics
-
-```bash
-# Access Prometheus dashboard
-open http://localhost:9090
-
-# Check key metrics
-curl 'http://localhost:9090/api/v1/query?query=rate(http_requests_total[5m])'
-```
-
-### Grafana Dashboards
-
-```bash
-# Access Grafana (admin/admin)
-open http://localhost:3000
-
-# Key performance indicators:
-# - Response time percentiles
-# - Conversation success rate
-# - Escalation frequency
-# - System resource usage
-# - Error rates and types
-```
-
-### Key Monitoring Metrics
-
-```yaml
-# Application Metrics
-- response_time_seconds
-- http_requests_total
-- active_sessions
-- conversation_count
-- escalation_rate
-
-# System Metrics
-- cpu_usage_percent
-- memory_usage_percent
-- disk_usage_percent
-- network_io_bytes
-
-# AI/ML Metrics
-- embedding_generation_time
-- vector_search_latency
-- agent_framework_latency
-- knowledge_base_hits
-```
-
----
-
-## 🔧 Configuration
-
-### Database Configuration
-
-```python
-# Database settings in .env
-DATABASE_URL=postgresql://user:password@localhost:5432/customer_support
-DB_POOL_SIZE=20
-DB_MAX_OVERFLOW=30
-```
-
-### AI Model Configuration
-
-```python
-# AI/ML settings
-EMBEDDING_MODEL_PATH=/app/models/embeddinggemma-300m
-CHUNK_SIZE=1000
-CHUNK_OVERLAP=200
-TOP_K_RESULTS=5
-```
-
-### Security Configuration
-
-```python
-# JWT settings
-JWT_SECRET_KEY=your-secret-key
+# === AUTHENTICATION ===
+JWT_SECRET_KEY=jwt-secret-key-change-in-production
 JWT_ALGORITHM=HS256
-JWT_EXPIRE_MINUTES=30
+JWT_EXPIRE_MINUTES=1440
 
-# Rate limiting
+# === RATE LIMITING ===
 RATE_LIMIT_PER_MINUTE=60
 RATE_LIMIT_PER_HOUR=1000
+
+# === MONITORING ===
+PROMETHEUS_ENABLED=true
+GRAFANA_ADMIN_PASSWORD=secure-grafana-password
+LOG_LEVEL=WARNING
+
+# === SSL/HTTPS CONFIGURATION ===
+SSL_CERT_PATH=/etc/ssl/certs/mariafamilyclinic.crt
+SSL_KEY_PATH=/etc/ssl/private/mariafamilyclinic.key
+FORCE_HTTPS=true
+
+# === NOTIFICATION ===
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@domain.com
+SMTP_PASSWORD=your-app-password
+FROM_EMAIL=noreply@mariafamilyclinic.com
+
+TWILIO_ACCOUNT_SID=your_twilio_sid
+TWILIO_AUTH_TOKEN=your_twilio_token
+TWILIO_PHONE_NUMBER=+1234567890
 ```
+
+### **Deployment Checklist**
+
+- [ ] **System requirements met**
+- [ ] **Environment variables configured**
+- [ ] **SSL certificates installed**
+- [ ] **Database initialized and migrated**
+- [ ] **Healthcare knowledge base populated**
+- [ ] **Monitoring stack configured**
+- [ ] **Backup procedures tested**
+- [ ] **Security hardening applied**
+- [ ] **Load testing completed**
+- [ ] **Rollback procedures verified**
+- [ ] **HIPAA compliance validated**
+
+*[View complete deployment documentation](docs/deployment_section.md)*
 
 ---
 
-## 📚 API Documentation
+## 📖 **API Documentation**
 
-### Authentication
+### **Authentication**
 
 All API requests require JWT authentication:
 
@@ -718,42 +603,65 @@ curl -X POST http://localhost:8000/auth/login \
   -d '{"username": "user", "password": "pass"}'
 ```
 
-### Core Endpoints
+### **Core Endpoints**
 
-#### Chat Sessions
+#### **Patient Management**
 
 ```bash
-# Create session
-curl -X POST http://localhost:8000/chat/sessions \
+# Get patient profile
+curl -X GET http://localhost:8000/api/patients/{patient_id} \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+
+# Update patient information
+curl -X PUT http://localhost:8000/api/patients/{patient_id} \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"user_id": "user123"}'
+  -d '{"first_name": "John", "last_name": "Doe"}'
+```
 
-# Send message
-curl -X POST http://localhost:8000/chat/sessions/{session_id}/messages \
+#### **Appointment Booking**
+
+```bash
+# Get available time slots
+curl -X GET "http://localhost:8000/api/appointments/slots?provider_id={provider_id}&date=2024-01-15" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+
+# Book appointment
+curl -X POST http://localhost:8000/api/appointments \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"message": "How do I reset my password?"}'
+  -d '{
+    "provider_id": "provider_123",
+    "appointment_date": "2024-01-15T10:00:00Z",
+    "notes": "Regular checkup"
+  }'
 ```
 
-#### Health Check
+#### **AI Chat Support**
 
 ```bash
-# System health
-curl http://localhost:8000/health
+# Send chat message
+curl -X POST http://localhost:8000/api/chat/sessions/{session_id}/messages \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What are the symptoms of flu?"}'
 
-# Detailed status
-curl http://localhost:8000/status
+# Get chat history
+curl -X GET http://localhost:8000/api/chat/sessions/{session_id}/messages \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
-#### Metrics
+#### **File Upload**
 
 ```bash
-# Prometheus metrics
-curl http://localhost:8000/metrics
+# Upload medical document
+curl -X POST http://localhost:8000/api/files/upload \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -F "file=@medical_record.pdf" \
+  -F "patient_id=patient_123"
 ```
 
-### WebSocket Connection
+### **WebSocket Communication**
 
 ```javascript
 // Frontend WebSocket example
@@ -766,31 +674,58 @@ ws.onmessage = (event) => {
 
 ws.send(JSON.stringify({
   session_id: 'session123',
-  message: 'Hello, I need help'
+  message: 'Hello, I need help with my appointment'
 }));
+```
+
+### **Health Checks**
+
+```bash
+# System health
+curl http://localhost:8000/health
+
+# Detailed status
+curl http://localhost:8000/status
+
+# Prometheus metrics
+curl http://localhost:8000/metrics
 ```
 
 ---
 
-## 🧪 Development
+## 👨‍💻 **Development Guidelines**
 
-### Local Development Setup
+### **Local Development Setup**
 
 ```bash
 # Backend development
-cd backend
+cd customer-support-agent
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+uvicorn main:app --reload --port 8000
 
 # Frontend development
-cd frontend
+cd healthcare-app-react
 npm install
 npm run dev
 ```
 
-### Testing
+### **Code Standards**
+
+#### **Python Backend**
+- **PEP 8 Compliance**: Follow Python style guidelines
+- **Type Hints**: Use comprehensive type annotations
+- **Async/Await**: Leverage FastAPI's async capabilities
+- **Documentation**: Include docstrings for all functions
+
+#### **TypeScript Frontend**
+- **Strict Mode**: Enable TypeScript strict checking
+- **ESLint Configuration**: Follow established linting rules
+- **Component Patterns**: Use functional components with hooks
+- **Type Safety**: Maintain comprehensive type definitions
+
+### **Testing Strategy**
 
 ```bash
 # Run all tests
@@ -799,160 +734,416 @@ docker-compose exec backend pytest
 # Run with coverage
 docker-compose exec backend pytest --cov=app --cov-report=html
 
+# End-to-end testing
+docker-compose exec backend playwright test
+
 # Load testing
 artillery run load-test.yml
 ```
 
-### Code Quality
+### **Database Management**
 
 ```bash
-# Python linting
-docker-compose exec backend flake8 app/
-docker-compose exec backend black app/
-docker-compose exec backend isort app/
+# Create migration
+docker-compose exec backend alembic revision --autogenerate -m "Add patient table"
 
-# TypeScript linting
-cd frontend
-npm run lint
-npm run type-check
+# Run migrations
+docker-compose exec backend alembic upgrade head
+
+# Generate types
+docker-compose exec backend python scripts/generate_types.py
 ```
 
 ---
 
-## 🔒 Security
+## 🧪 **Testing & Quality Assurance**
 
-### Security Features
+### **Testing Framework**
 
-- **JWT Authentication**: Secure token-based authentication
-- **Rate Limiting**: Protection against abuse and DDoS
-- **Input Validation**: Comprehensive input sanitization
-- **SQL Injection Prevention**: ORM-based database queries
-- **CORS Configuration**: Proper cross-origin resource sharing
-- **HTTPS/TLS**: Encrypted communication
-- **Environment Variables**: Secure configuration management
+#### **Unit Tests**
+- **Backend**: pytest with async support
+- **Frontend**: Jest with React Testing Library
+- **Coverage Target**: >90% code coverage
 
-### Security Checklist
+#### **Integration Tests**
+- **API Endpoints**: FastAPI test client
+- **Database**: Test database with migrations
+- **AI Components**: Mock external services
 
-- [ ] Change all default passwords
-- [ ] Use strong JWT secrets
-- [ ] Enable SSL/TLS in production
-- [ ] Configure firewall rules
-- [ ] Enable rate limiting
-- [ ] Set up security monitoring
-- [ ] Regular security updates
-- [ ] Access logging enabled
-- [ ] Vulnerability scanning
-- [ ] Security audit completed
+#### **End-to-End Tests**
+- **Patient Workflows**: Complete user journeys
+- **Admin Dashboard**: Provider management flows
+- **AI Chat**: Healthcare conversation testing
+
+### **Quality Metrics**
+
+```yaml
+# Code Quality Targets
+- Code Coverage: >90%
+- Performance: <200ms API response time
+- Accessibility: WCAG 2.1 AA compliance
+- Security: Zero critical vulnerabilities
+- Documentation: 100% API endpoint coverage
+```
+
+### **Load Testing**
+
+```yaml
+# artillery.yml
+config:
+  target: 'http://localhost:8000'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+    - duration: 120
+      arrivalRate: 50
+  scenarios:
+    - name: "Patient booking flow"
+      weight: 100
+      flow:
+        - post:
+            url: "/api/patients"
+            json:
+              first_name: "Test"
+              last_name: "Patient"
+        - get:
+            url: "/api/appointments/slots"
+        - post:
+            url: "/api/appointments"
+```
 
 ---
 
-## 🚨 Troubleshooting
+## 🔒 **Security Features**
 
-### Common Issues
+### **Authentication & Authorization**
 
-#### Backend Won't Start
+- **🔐 JWT Authentication**: Secure token-based authentication
+- **👥 Role-based Access**: Patient, provider, admin permissions
+- **🔒 Session Management**: Secure token handling and refresh
+- **🚫 Multi-factor Authentication**: Enhanced security for healthcare data
+
+### **Data Protection**
+
+- **🔒 Encryption**: Data at rest and in transit
+- **🛡️ Input Validation**: Comprehensive sanitization
+- **🚫 SQL Injection Prevention**: ORM-based queries
+- **⚡ Rate Limiting**: Abuse and DDoS protection
+
+### **HIPAA Compliance Ready**
+
+- **📋 Audit Logging**: Complete action tracking
+- **🔒 Data Encryption**: End-to-end encryption
+- **🛡️ Access Controls**: Principle of least privilege
+- **📊 Privacy Controls**: User data management
+- **💾 Secure Backup**: Encrypted backup procedures
+
+### **Security Checklist**
+
+- [ ] **Change all default passwords**
+- [ ] **Use strong JWT secrets**
+- [ ] **Enable SSL/TLS in production**
+- [ ] **Configure firewall rules**
+- [ ] **Enable rate limiting**
+- [ ] **Set up security monitoring**
+- [ ] **Regular security updates**
+- [ ] **Access logging enabled**
+- [ ] **Vulnerability scanning**
+- [ ] **Security audit completed**
+
+---
+
+## 📊 **Monitoring & Observability**
+
+### **Prometheus Metrics Collection**
 
 ```bash
-# Check logs
-docker-compose logs backend
+# Access Prometheus dashboard
+open http://localhost:9090
 
-# Common solutions:
-# 1. Database connection
-docker-compose exec backend python -c "from app.db.database import engine; print('DB OK')"
-
-# 2. Environment variables
-docker-compose exec backend env | grep DATABASE_URL
+# Check key metrics
+curl 'http://localhost:9090/api/v1/query?query=rate(http_requests_total[5m])'
 ```
 
-#### High Memory Usage
+### **Grafana Dashboards**
 
 ```bash
-# Monitor container usage
-docker stats
+# Access Grafana (admin/admin)
+open http://localhost:3000
 
-# Clear ChromaDB cache
-docker-compose exec backend python -c "from app.vector_store.chroma_client import clear_cache; clear_cache()"
+# Key Healthcare KPIs:
+# - Patient booking success rate
+# - Provider schedule utilization
+# - AI response accuracy
+# - System health metrics
+# - Response time percentiles
+```
 
-# Restart backend
+### **Key Monitoring Metrics**
+
+```yaml
+# Healthcare-Specific Metrics
+- patient_booking_success_rate
+- provider_schedule_utilization
+- ai_response_accuracy
+- appointment_completion_rate
+- emergency_escalation_frequency
+
+# System Performance
+- api_response_time_seconds
+- database_query_duration
+- websocket_connection_count
+- memory_usage_percent
+- cpu_utilization_percent
+
+# AI/ML Metrics
+- embedding_generation_time
+- vector_search_latency
+- agent_framework_latency
+- knowledge_base_hit_rate
+- escalation_rate
+```
+
+### **Alerting Rules**
+
+```yaml
+# Critical Healthcare Alerts
+- High appointment booking failure rate
+- Provider system unavailable
+- AI agent response time degraded
+- Database connection pool exhaustion
+- Security breach detection
+```
+
+---
+
+## 🆘 **Troubleshooting Guide**
+
+### **Common Issues and Solutions**
+
+#### **Database Connection Issues**
+
+```bash
+# Check database connectivity
+docker-compose exec postgres psql -U healthcare_user -d healthcare_db -c "SELECT version();"
+
+# Reset database connections
+docker-compose exec postgres psql -U postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle';"
+
+# Check connection pool
+docker-compose exec postgres psql -U postgres -c "SELECT * FROM pg_stat_activity;"
+```
+
+#### **AI Agent Issues**
+
+```bash
+# Check AI agent logs
+docker-compose logs backend | grep -i "ai\|agent"
+
+# Restart AI service
 docker-compose restart backend
-```
 
-#### Knowledge Base Issues
-
-```bash
-# Verify ChromaDB setup
+# Verify model loading
 docker-compose exec backend python -c "
-from app.vector_store.chroma_client import chroma_client
-collections = chroma_client.list_collections()
-print(f'Collections: {collections}')
+from ai_agent import AIAgent
+agent = AIAgent()
+print('AI Agent Status:', agent.health_check())
 "
-
-# Re-index documents
-docker-compose exec backend python scripts/populate_kb.py --force-reindex
 ```
 
----
-
-## 🔄 Backup and Recovery
-
-### Database Backup
+#### **Performance Issues**
 
 ```bash
-# PostgreSQL backup
-docker-compose exec postgres pg_dump -U postgres customer_support > backup_$(date +%Y%m%d_%H%M%S).sql
+# Monitor system resources
+docker stats --no-stream
 
-# Automated backup script
+# Check API response times
+curl -w "@curl-format.txt" -o /dev/null -s "http://localhost:8000/health"
+
+# Optimize database queries
+docker-compose exec postgres psql -U postgres -c "
+SELECT query, calls, total_time, mean_time 
+FROM pg_stat_statements 
+ORDER BY total_time DESC 
+LIMIT 10;
+"
+```
+
+### **Emergency Recovery Procedures**
+
+```bash
 #!/bin/bash
-BACKUP_DIR="/backups/postgres"
-DATE=$(date +%Y%m%d_%H%M%S)
-docker-compose exec postgres pg_dump -U postgres customer_support | gzip > $BACKUP_DIR/backup_$DATE.sql.gz
+# emergency-recovery.sh
 
-# Keep only last 30 backups
-find $BACKUP_DIR -name "backup_*.sql.gz" -mtime +30 -delete
-```
+echo "Starting emergency system recovery..."
 
-### Knowledge Base Backup
+# Stop all services
+docker-compose down
 
-```bash
-# ChromaDB backup
-docker run --rm -v customer-support-agent_chroma_data:/data -v $(pwd):/backup alpine tar czf /backup/chroma-backup-$(date +%Y%m%d_%H%M%S).tar.gz -C /data .
+# Restore latest backup
+LATEST_BACKUP=$(ls -t backups/weekly | head -1)
+tar xzf "backups/weekly/$LATEST_BACKUP/postgres_backup.tar.gz" -C /tmp/postgres-restore
 
-# Restore ChromaDB
-docker run --rm -v customer-support-agent_chroma_data:/data -v $(pwd):/backup alpine tar xzf /backup/chroma-backup-YYYYMMDD_HHMMSS.tar.gz -C /data
+# Restore databases
+docker run --rm -v healthcare_postgres_data:/data \
+  -v /tmp/postgres-restore:/backup \
+  alpine cp -r /backup/* /data/
+
+# Start services
+docker-compose up -d
+
+echo "Emergency recovery completed"
 ```
 
 ---
 
-## 🤝 Contributing
+## 💾 **Backup and Recovery**
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+### **Automated Backup Strategy**
 
-### Development Workflow
+#### **Daily Backup Script**
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+```bash
+#!/bin/bash
+# scripts/daily-backup.sh
 
-### Code Standards
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR="./backups/daily/$DATE"
+mkdir -p "$BACKUP_DIR"
 
-- **Python**: Follow PEP 8, use type hints, docstrings
-- **TypeScript**: Follow ESLint configuration, use strict mode
+echo "Starting daily backup at $(date)"
+
+# PostgreSQL backup
+docker-compose exec postgres pg_dump -U healthcare_prod_user healthcare_prod | gzip > "$BACKUP_DIR/postgres_backup.sql.gz"
+
+# Redis backup
+docker-compose exec redis redis-cli --rdb - > "$BACKUP_DIR/redis_backup.rdb"
+
+# ChromaDB backup
+docker run --rm -v mariafamilyclinic_chromadb_data:/data \
+  -v "$(pwd)/$BACKUP_DIR":/backup \
+  alpine tar czf /backup/chromadb_backup.tar.gz -C /data .
+
+# Upload to cloud storage
+aws s3 sync "$BACKUP_DIR" s3://maria-family-clinic-backups/daily/$DATE/
+
+# Clean up old backups
+find ./backups/daily -type d -mtime +7 -exec rm -rf {} +
+
+echo "Backup completed successfully"
+```
+
+#### **Weekly Full Backup**
+
+```bash
+#!/bin/bash
+# scripts/weekly-backup.sh
+
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR="./backups/weekly/$DATE"
+mkdir -p "$BACKUP_DIR"
+
+# Full system backup including containers
+docker-compose config > "$BACKUP_DIR/docker-compose.yml"
+cp .env "$BACKUP_DIR/"
+
+# Complete database backup
+tar czf "$BACKUP_DIR/app_data_backup.tar.gz" ./data ./logs ./uploads
+
+# Upload to cloud storage
+aws s3 sync "$BACKUP_DIR" s3://maria-family-clinic-backups/weekly/$DATE/
+
+echo "Weekly backup completed"
+```
+
+### **Recovery Procedures**
+
+#### **PostgreSQL Recovery**
+
+```bash
+# Stop PostgreSQL service
+docker-compose stop postgres
+
+# Restore from backup
+gunzip -c backups/daily/20241206_120000/postgres_backup.sql.gz | \
+  docker-compose exec -T postgres psql -U postgres
+
+# Start PostgreSQL
+docker-compose start postgres
+```
+
+#### **Knowledge Base Recovery**
+
+```bash
+# Stop ChromaDB
+docker-compose stop chromadb
+
+# Restore vector database
+tar xzf backups/daily/20241206_120000/chromadb_backup.tar.gz -C /tmp/chromadb-restore
+docker run --rm -v mariafamilyclinic_chromadb_data:/data \
+  -v /tmp/chromadb-restore:/backup \
+  alpine cp -r /backup/* /data/
+
+# Start ChromaDB
+docker-compose start chromadb
+```
+
+---
+
+## 🤝 **Contributing Guidelines**
+
+### **Getting Started**
+
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/amazing-healthcare-feature`)
+3. **Make your changes**
+4. **Run tests** (`docker-compose exec backend pytest`)
+5. **Submit a pull request**
+
+### **Contribution Requirements**
+
+- **Code Standards**: Follow PEP 8 (Python) and ESLint (TypeScript)
 - **Testing**: Maintain >90% test coverage
 - **Documentation**: Update docs for new features
-- **Security**: Follow security best practices
+- **Security**: Follow healthcare security best practices
+- **Healthcare Compliance**: Consider HIPAA implications
+
+### **Development Workflow**
+
+```bash
+# Setup development environment
+git clone https://github.com/your-username/Maria-Family-Clinic.git
+cd Maria-Family-Clinic
+git checkout -b feature/your-feature
+
+# Make changes and test
+docker-compose up -d --build
+docker-compose exec backend pytest
+
+# Commit and push
+git add .
+git commit -m "Add healthcare feature: your feature description"
+git push origin feature/your-feature
+```
+
+### **Code Review Process**
+
+1. **Automated Testing**: All tests must pass
+2. **Security Review**: Healthcare data handling validation
+3. **Performance Review**: API response time and database queries
+4. **Healthcare Compliance**: HIPAA and medical data standards
+5. **Documentation**: Updated API docs and user guides
 
 ---
 
-## 📄 License
+## 📄 **License**
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ```
 MIT License
 
-Copyright (c) 2024 Customer Support AI Agent
+Copyright (c) 2024 Maria Family Clinic Healthcare Platform
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -975,42 +1166,92 @@ SOFTWARE.
 
 ---
 
-## 🙏 Acknowledgments
+## 📞 **Contact & Support**
 
-- **Microsoft Agent Framework**: For intelligent agent orchestration
-- **Google EmbeddingGemma-300m**: For high-quality embeddings
-- **ChromaDB**: For vector database capabilities
-- **FastAPI**: For the excellent web framework
-- **React**: For the modern frontend framework
-- **Docker**: For containerization and deployment
-- **Prometheus & Grafana**: For monitoring and observability
+### **Project Maintainers**
+
+- **Healthcare Platform Lead**: [Healthcare Team](mailto:healthcare@mariafamilyclinic.com)
+- **AI Integration**: [AI Team](mailto:ai@mariafamilyclinic.com)
+- **DevOps & Infrastructure**: [DevOps Team](mailto:devops@mariafamilyclinic.com)
+
+### **Community Channels**
+
+- **📋 GitHub Issues**: [Bug reports and feature requests](https://github.com/nordeim/Maria-Family-Clinic/issues)
+- **💬 GitHub Discussions**: [Community support and questions](https://github.com/nordeim/Maria-Family-Clinic/discussions)
+- **📖 Documentation**: [Complete documentation suite](docs/)
+- **🏥 Healthcare API**: [API reference and examples](docs/api.md)
+
+### **Professional Support**
+
+- **Enterprise Support**: [Commercial support options](mailto:enterprise@mariafamilyclinic.com)
+- **Training & Onboarding**: [Healthcare platform training](mailto:training@mariafamilyclinic.com)
+- **Compliance Consulting**: [HIPAA compliance guidance](mailto:compliance@mariafamilyclinic.com)
 
 ---
 
-## 📚 References
+## 🙏 **Acknowledgments**
 
+### **Healthcare Technology Partners**
+
+- **🏥 Microsoft Agent Framework**: For intelligent healthcare agent orchestration
+- **🧠 Google EmbeddingGemma-300m**: For high-quality medical embeddings
+- **🔍 ChromaDB**: For healthcare knowledge base vector search
+- **⚡ FastAPI**: For high-performance healthcare API framework
+- **⚛️ React**: For modern healthcare user interfaces
+- **🐋 Docker**: For secure, scalable healthcare deployments
+- **📊 Prometheus & Grafana**: For healthcare monitoring and observability
+
+### **Healthcare Standards & Compliance**
+
+- **🏥 HIPAA Compliance Framework**: Healthcare data protection standards
+- **🛡️ Security Best Practices**: Healthcare industry security guidelines
+- **📋 Medical Data Standards**: HL7 FHIR and medical data interoperability
+- **🔒 Healthcare Encryption**: End-to-end medical data protection
+
+---
+
+## 📚 **References & Documentation**
+
+### **Healthcare Technology**
 - [Microsoft Agent Framework Documentation](https://learn.microsoft.com/en-us/agent-framework/overview/agent-framework-overview)
 - [EmbeddingGemma Model](https://huggingface.co/google/embeddinggemma-300m)
 - [Chroma Vector Database](https://www.trychroma.com/)
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [React Documentation](https://reactjs.org/)
+
+### **Healthcare Compliance**
+- [HIPAA Security Rule](https://www.hhs.gov/hipaa/for-professionals/security/index.html)
+- [HL7 FHIR Standard](https://www.hl7.org/fhir/)
+- [Healthcare Data Encryption Guidelines](https://www.nist.gov/healthcare)
+
+### **Deployment & Infrastructure**
 - [Docker Best Practices](https://docs.docker.com/develop/best-practices/)
+- [Kubernetes Healthcare Deployment](https://kubernetes.io/docs/concepts/workloads/)
+- [AWS Healthcare Compliance](https://aws.amazon.com/compliance/healthcare-compliance/)
 
 ---
 
 <div align="center">
 
-[![GitHub stars](https://img.shields.io/github/stars/nordeim/customer-support-agent?style=social)](https://github.com/nordeim/customer-support-agent)
-[![GitHub forks](https://img.shields.io/github/forks/nordeim/customer-support-agent?style=social)](https://github.com/nordeim/customer-support-agent/fork)
-[![GitHub issues](https://img.shields.io/github/issues/nordeim/customer-support-agent)](https://github.com/nordeim/customer-support-agent/issues)
-[![GitHub license](https://img.shields.io/github/license/nordeim/customer-support-agent)](https://github.com/nordeim/customer-support-agent/blob/main/LICENSE)
+![GitHub stars](https://img.shields.io/github/stars/nordeim/Maria-Family-Clinic?style=social)
+![GitHub forks](https://img.shields.io/github/forks/nordeim/Maria-Family-Clinic?style=social)
+![GitHub issues](https://img.shields.io/github/issues/nordeim/Maria-Family-Clinic)
+![GitHub license](https://img.shields.io/github/license/nordeim/Maria-Family-Clinic)
 
-**Built with ❤️ by the Customer Support AI Team**
+**🏥 Built with ❤️ by the Maria Family Clinic Healthcare Team**
 
-[Website](https://github.com/nordeim/customer-support-agent) • 
-[Documentation](docs/) • 
-[API Reference](docs/api.md) • 
-[Deployment Guide](docs/deployment.md) • 
-[Architecture](docs/architecture.md)
+[🌐 Website](https://github.com/nordeim/Maria-Family-Clinic) • 
+[📖 Documentation](docs/) • 
+[⚡ API Reference](docs/api.md) • 
+[🚀 Deployment Guide](docs/deployment_section.md) • 
+[🏗️ Architecture](docs/file_hierarchy_diagram.md) • 
+[👥 User Flows](docs/user_interaction_diagram.md) • 
+[⚙️ Technical Flow](docs/application_logic_diagram.md)
+
+---
+
+**🎯 Healthcare Innovation Through Technology**
+
+*"Empowering healthcare providers with AI-driven patient care solutions"*
 
 </div>
