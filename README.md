@@ -1,474 +1,1016 @@
-# Maria Family Clinic Healthcare Platform — Production-Ready README Blueprint
+# Customer Support AI Agent
 
-Maria Family Clinic is a Singapore-focused, production-ready healthcare platform that helps patients discover clinics and doctors, confirm availability, and book appointments with confidence. It is designed for clinical quality, speed, and compliance from the outset, combining a modern web stack with healthcare-specific data models, geospatial search, and real-time responsiveness. The platform’s core proposition is to make safe, verified, and timely care accesssible to everyone in Singapore through an experience that is accessible, multilingual, and trusted by both patients and providers.
+<div align="center">
 
-![Platform overview badge: production-ready, metrics, and compliance highlights](assets/badges/production-ready.md)
+![Customer Support AI Agent](https://img.shields.io/badge/Customer%20Support-AI%20Agent-blue?style=for-the-badge)
+![FastAPI](https://img.shields.io/badge/FastAPI-Latest-109989?style=for-the-badge&logo=fastapi)
+![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=for-the-badge&logo=react)
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-336791?style=for-the-badge&logo=postgresql)
+![MIT License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-This README provides a concise yet comprehensive view of the platform’s purpose, features, architecture, deployment, compliance, and contribution practices. It is intended for engineering leaders, product managers, compliance officers, security reviewers, DevOps/SRE teams, and technical writers who require both strategic context and practical detail to evaluate, deploy, or contribute to the platform.
+**Intelligent customer support automation powered by Microsoft Agent Framework and RAG**
 
-## Executive Overview and Value Proposition
+[![Deploy to Production](https://img.shields.io/badge/Deploy-Production Ready-success?style=for-the-badge)](https://github.com/nordeim/customer-support-agent/deploy)
+[![API Documentation](https://img.shields.io/badge/API-Documented-blue?style=for-the-badge)](docs/api.md)
+[![Architecture Guide](https://img.shields.io/badge/Architecture-Documented-purple?style=for-the-badge)](docs/architecture.md)
 
-The platform’s value lies in merging trustworthy healthcare discovery and booking with compliance-aware engineering. Patients can search by specialty and location, validate provider credentials, confirm availability, and complete bookings without ambiguity. Clinics gain a consistent digital front door for patient acquisition and operations, backed by real-time updates and healthcare-specific audit trails. Regulators and compliance teams can review the platform’s security and privacy posture, which aligns to the Health Insurance Portability and Accountability Act (HIPAA) Security Rule’s technical safeguards framework and good documentation practices, signaling clinical responsibility even though this platform is not a medical device and does not perform diagnostic or treatment functions.[^1][^3][^4]
-
-In short: Maria Family Clinic is a compliant, high-performance patient journey platform optimized for Singapore’s healthcare ecosystem.
-
-## Key Features and Capabilities
-
-The platform implements a full set of patient-facing and operational features:
-
-- Patient registration and PDPA-aware consent management with versioning.
-- Clinic and doctor search with geospatial proximity (radius queries) and specialty filtering.
-- Appointment booking with real-time availability and status updates via subscriptions.
-- Healthier SG integration for eligibility assessment, enrollment, and program tracking.
-- Multi-language content across English, Chinese, Malay, and Tamil for core entities and UI.
-- Accessibility that meets Web Content Accessibility Guidelines (WCAG) 2.2 AA, with automated and manual checks baked into CI.
-- Compliance logging and audit trails for healthcare-specific workflows.
-
-![Feature highlights across discovery, booking, and compliance](assets/diagrams/feature-highlights.md)
-
-To demonstrate coverage and compliance alignment, the following matrix summarizes the core features and controls.
-
-Table 1: Feature-to-Compliance Mapping
-
-| Feature | User Benefit | Risk Controls | Auditability | Related Policy |
-|---|---|---|---|---|
-| PDPA consent with versioning | Clear, revocable consent with version history | Consent checks before sensitive data processing | Consent change logs and retention metadata | Consent & Retention SOP |
-| Clinic/doctor search | Fast, relevant discovery by location and specialty | Rate limiting; input validation; integrity checks | Search event logs | Access & Rate Limit Policy |
-| Appointment booking | Reliable scheduling with real-time updates | RBAC; transaction checks; conflict detection | Booking event logs; status change history | Booking Policy |
-| Real-time availability | Up-to-date clinic/doctor schedules | WebSocket subscriptions; monitoring | Subscription events | Real-time Monitoring SOP |
-| Healthier SG | Program eligibility and tracking | Protected procedures; data minimization | Enrollment logs | Program Policy |
-| Accessibility (WCAG 2.2 AA) | Inclusive design for all users | Accessibility linting and testing | Automated and manual test reports | Accessibility Policy |
-| Compliance logging | End-to-end traceability for audits | Centralized logging; review cadence | Audit trail per sensitive operation | Audit Control Plan |
-
-## Technology Stack and Versions
-
-The platform uses a modern architecture for performance, maintainability, and safety:
-
-- Frontend: Next.js (v16.0.1), React (v19.2.0), TypeScript (v5)
-- Backend/API: tRPC (v11.0.0-rc.553), NextAuth (v5.0.0-beta.25), Prisma (v5.22.0)
-- Database: PostgreSQL (v15.4) with PostGIS (v3.4)
-- Infrastructure: Vercel (deployment), Supabase (managed database and auth)
-- Testing and Quality: Vitest (testing framework), ESLint (v9), Husky (v9.1.6)
-- Key Libraries: @prisma/client, @supabase/supabase-js, @tanstack/react-query, @trpc/client, @vis.gl/react-google-maps, zod, tailwindcss, react-hook-form
-
-Table 2: Technology Stack Summary
-
-| Layer | Technology | Version | Purpose |
-|---|---|---|---|
-| Frontend | Next.js | 16.0.1 | App Router, server components |
-| Frontend | React | 19.2.0 | UI rendering and interactivity |
-| Frontend | TypeScript | 5 | Type safety and developer ergonomics |
-| API | tRPC | 11.0.0-rc.553 | Type-safe API layer (29 routers) |
-| Auth | NextAuth | 5.0.0-beta.25 | Authentication and session management |
-| ORM | Prisma | 5.22.0 | Database access and migrations |
-| Database | PostgreSQL | 15.4 | Relational data store |
-| Geospatial | PostGIS | 3.4 | Geospatial queries and indexes |
-| Infra (deploy) | Vercel | — | Preview and production hosting |
-| Infra (DB/auth) | Supabase | — | Managed DB and auth services |
-| Testing | Vitest | — | Unit, integration, and e2e tests |
-| Linting | ESLint | 9 | Code quality checks |
-| Git hooks | Husky | 9.1.6 | Pre-commit quality gates |
-
-## Performance, Accessibility, and Quality Metrics
-
-The platform meets stringent performance and accessibility targets, with quality gates enforced in CI to safeguard release readiness.
-
-Table 3: Core Web Vitals
-
-| Metric | Current | Target | Status |
-|---|---|---|---|
-| Largest Contentful Paint (LCP) | 1.8s | ≤ 2.5s | GOOD |
-| First Input Delay (FID) | 45ms | ≤ 100ms | GOOD |
-| Cumulative Layout Shift (CLS) | 0.08 | ≤ 0.1 | GOOD |
-
-Table 4: Healthcare Workflow Latencies
-
-| Workflow | Current | Target | Status |
-|---|---|---|---|
-| Clinic search (geospatial) | 1.2s | ≤ 2.0s | GOOD |
-| Doctor profile load | 0.8s | ≤ 1.5s | GOOD |
-| Appointment booking (end-to-end) | 2.1s | ≤ 3.0s | GOOD |
-| Healthier SG module load | 1.5s | ≤ 2.5s | GOOD |
-
-Table 5: Accessibility Results
-
-| Category | Result |
-|---|---|
-| WCAG compliance | AA |
-| Accessibility score | 96.7 |
-| Automated tests | 247/250 passed |
-| Manual tests | 45/45 passed |
-
-Table 6: Quality Gates Summary
-
-| Gate | Threshold | Actual | Status |
-|---|---|---|---|
-| Code coverage | 85% | 87.3% | PASS |
-| Accessibility score | 95 | 96.7 | PASS |
-| Performance score | 90 | 92.1 | PASS |
-| Security vulnerabilities | 0 | 0 | PASS |
-| Healthcare compliance coverage | 100% | 100% | PASS |
-
-![Performance and accessibility snapshot for README](assets/charts/performance-summary.md)
-
-These results are continually monitored and validated through automated and manual checks aligned with good documentation practices, reinforcing a controlled release process and audit-ready posture.[^3]
-
-## Architecture Overview
-
-The platform’s architecture is layered to separate concerns, enforce trust boundaries, and embed compliance controls at the right points:
-
-- Client: Next.js App Router with server components for fast, secure rendering and client components for interactivity.
-- API layer: tRPC provides a type-safe interface across 29 routers spanning patient, clinic, doctor, appointment, search, compliance, and contact domains.
-- Authentication: NextAuth manages sessions and role-based access control (RBAC).
-- Database: Prisma mediates access to PostgreSQL with PostGIS for geospatial queries.
-- Real-time: WebSocket subscriptions deliver live availability and booking updates.
-- Infrastructure: Vercel hosts previews and production; Supabase provides managed PostgreSQL and auth.
-
-![High-level systems and data flows (no PHI)](assets/diagrams/system-architecture-overview.md)
-
-Table 7: Architecture Components and Trust Boundaries
-
-| Component | Interface | Trust Boundary | Notes |
-|---|---|---|---|
-| Client (Next.js) | HTTP, WebSocket | Untrusted network | Public UI; no PHI in logs |
-| API (tRPC) | RPC/HTTP | Trusted zone | AuthN/AuthZ; rate limiting; validation |
-| Business logic | Service layer | Trusted zone | Healthcare rules; integrity checks |
-| Database (Postgres + PostGIS) | SQL | Restricted | RLS; encryption; geospatial indexes |
-| Identity provider (Supabase Auth) | OIDC/SAML | External | MFA/SSO; session checks |
-| Real-time subscriptions | WebSocket | Trusted zone | Availability and booking updates |
-
-Geospatial capabilities leverage PostGIS for point-based storage, radius searches, and distance calculations, with indexes tuned for high-throughput lookup in clinic and doctor search flows.
-
-### Repository File Hierarchy
-
-A clear repository structure enables maintainability, modularity, and auditability.
-
-Table 8: Key Directories and Purposes
-
-| Directory | Purpose | Notable Contents |
-|---|---|---|
-| src/app | Next.js App Router | Layout, routes, server/client components |
-| src/components | React component library | UI, healthcare-specific components, forms |
-| src/server | Server-side code | tRPC routers, auth config, business logic |
-| src/hooks | Custom hooks | 35 hooks for data, UI, and accessibility |
-| src/types | TypeScript types | Shared domain types |
-| src/utils | Utilities | Helpers for formatting, validation |
-| src/accessibility | Accessibility framework | AA-focused components and utilities |
-| src/performance | Performance monitoring | Web Vitals tracking and reporting |
-| src/ux | UX utilities | A11y and interaction helpers |
-| src/content/translations | Multi-language content | EN (100%), ZH (95%), MS (90%), TA (85%) |
-| prisma | Schema and migrations | Healthcare schema, seed data, PostGIS |
-| docs | Documentation | Technical, guides, diagrams |
-| testing | Test suites | Unit, integration, e2e, compliance, performance, security |
-| analytics | Analytics system | Privacy-aware metrics collection |
-| seo | SEO optimization | Structured metadata and routes |
-| public | Static assets | Icons, images, service worker |
-
-![Repository structure overview](assets/diagrams/file-hierarchy.md)
-
-### User Interaction Flows
-
-Core patient journeys are designed to be simple, transparent, and compliant by default.
-
-- Patient registration with consent capture (PDPA-aware).
-- Clinic and doctor search with filters and proximity.
-- Appointment booking with confirmation and real-time updates.
-- Healthier SG eligibility assessment and enrollment.
-
-![Patient and provider interaction flows (Mermaid diagram)](assets/diagrams/user-flows.md)
-
-These flows deliberately minimize friction while enforcing rate limits and capturing compliance checkpoints. The flows align to technical safeguard categories—access control, audit, integrity, authentication, and transmission security—so that the platform’s user experience never compromises privacy or security.[^1][^4]
-
-### Application Logic Flow
-
-From request to response, the platform follows a consistent, compliance-aware pattern.
-
-![Application logic orchestration (Mermaid diagram)](assets/diagrams/app-logic-flow.md)
-
-Table 9: Logic-to-Compliance Mapping
-
-| Step | Operation | Safeguard Category | Evidence Pointer |
-|---|---|---|---|
-| Client → tRPC router | API call | Access control; transmission security | IAM policy; TLS policy |
-| Input validation | Zod schema | Integrity | Validation SOP; integrity checks |
-| tRPC → Prisma | DB read/write | Access control; audit controls | DB access policy; audit plan |
-| PostGIS query | Spatial operation | Integrity | Spatial index docs |
-| NextAuth session | Session check | Person/entity authentication | Authentication policy |
-| Real-time subscription | WebSocket update | Audit controls | Real-time monitoring SOP |
-| Consent/version check | Compliance workflow | Access control; retention | Consent SOP; retention policy |
-| Encryption signals | Data at rest/in transit | Encryption/decryption | Crypto policy |
-
-This flow ensures that every interaction is governed by the minimum necessary controls and that logs and checks occur at the right points to support auditability without sacrificing performance.
-
-## API Overview and Real-Time Features
-
-The API layer uses tRPC to provide a type-safe interface across 29 healthcare routers. Public endpoints support discovery (clinics, doctors, services), while protected endpoints manage appointments, profiles, eligibility, analytics, and contact submissions. NextAuth enforces authentication and RBAC. WebSocket subscriptions provide real-time updates for appointment status and availability.
-
-Table 10: Rate Limiting Policy
-
-| Endpoint Class | Limit | Window | Notes |
-|---|---|---|---|
-| Public read | 1000 requests | 1 hour | Cache-friendly content |
-| Authenticated | 500 requests | 1 hour | Profile-bound operations |
-| Write operations | 100 requests | 1 hour | Booking and updates |
-| File upload | 10 requests | 1 hour | Media attachments |
-| Search | 50 requests | 1 hour | Geospatial and text search |
-
-API responses include standard rate limit headers, and clients are expected to implement exponential backoff on 429 responses. Full canonical API endpoints, router names, and detailed schemas are maintained in the technical API reference.
-
-## Installation and Local Setup
-
-Prerequisites:
-- Node.js (latest LTS recommended)
-- PostgreSQL (v15.4) with PostGIS (v3.4)
-- Supabase account for managed database and auth
-
-Environment variables (development):
-- DATABASE_URL
-- DIRECT_URL
-- NEXTAUTH_SECRET
-- NEXTAUTH_URL
-- VERCEL_TOKEN (optional)
-- ORG_ID (optional)
-- PROJECT_ID (optional)
-- SLACK_WEBHOOK (optional)
-
-Setup steps:
-1. Install dependencies:
-   - npm install
-2. Initialize the database:
-   - npm run db:generate
-   - npm run db:migrate
-   - npm run db:seed
-3. Start development servers:
-   - npm run dev
-   - npm run lint
-   - npm run type-check
-4. Run tests:
-   - npm run test
-   - npm run test:coverage
-   - npm run test:compliance:pdpa
-   - npm run test:compliance:moh
-   - npm run test:performance
-
-Table 11: Environment Variables
-
-| Variable | Purpose | Required |
-|---|---|---|
-| DATABASE_URL | Primary DB connection | Yes |
-| DIRECT_URL | Direct DB connection (Supabase) | Yes |
-| NEXTAUTH_SECRET | Secret for NextAuth | Yes |
-| NEXTAUTH_URL | Base URL for NextAuth | Yes |
-| VERCEL_TOKEN | Deployment automation (Vercel) | Optional |
-| ORG_ID | Organization identifier | Optional |
-| PROJECT_ID | Project identifier | Optional |
-| SLACK_WEBHOOK | CI/CD notifications | Optional |
-
-Database schema and migrations are managed via Prisma, with PostGIS integration for geospatial entities and indexes. Full schema details and relationships are provided in the database documentation.
-
-## Deployment Guide (Development, Staging, Production)
-
-The platform follows a three-environment strategy with Vercel for frontend deployment and Supabase for managed PostgreSQL and auth. CI/CD gates enforce compliance checks, security scanning, performance and accessibility thresholds, and rollback readiness.
-
-Table 12: Environments Overview
-
-| Environment | Platform | Database | Status |
-|---|---|---|---|
-| Development | Vercel Preview | Supabase Dev | Active |
-| Staging | Vercel Staging | Supabase Staging | Active |
-| Production | Vercel Production | Supabase Production | Active |
-
-![CI/CD pipeline overview with healthcare gates](assets/diagrams/cicd-pipeline.md)
-
-The pipeline automates:
-- Healthcare compliance tests (PDPA/MOH).
-- Security and vulnerability testing.
-- Performance checks (Core Web Vitals and workflow latencies).
-- Accessibility checks (WCAG 2.2 AA).
-- Real-time monitoring and alerting.
-- Emergency rollback capabilities.
-
-Table 13: CI/CD Gates Checklist
-
-| Gate | Threshold | Enforcement |
-|---|---|---|
-| Code coverage | ≥ 85% | Block on fail |
-| Accessibility score | ≥ 95 | Block on fail |
-| Performance score | ≥ 90 | Block on fail |
-| Vulnerabilities | 0 open high/critical | Block on fail |
-| Compliance coverage | 100% | Block on fail |
-
-Operational monitoring includes real-time health checks, healthcare-specific metrics, performance degradation alerts, security breach detection, and backup completion monitoring.
-
-## Healthcare Compliance and Security (PDPA, MOH, WCAG)
-
-The platform implements controls aligned with HIPAA’s technical safeguards, adapted to a non-device healthcare discovery and booking context. These controls signal compliance competence without exposing PHI or sensitive operations.[^1][^4][^7]
-
-Table 14: HIPAA Safeguard Matrix
-
-| Safeguard | README Statement | Evidence Pointer |
-|---|---|---|
-| Access control | Unique user IDs and role-based policies; emergency access governed by SOP | IAM policy; emergency SOP |
-| Automatic logoff | Sessions terminate after inactivity per configuration standards | Session management policy |
-| Encryption | Data at rest and in transit encrypted per policy | Crypto policy |
-| Audit controls | System activity logged and reviewed according to policy | Audit plan; review cadence |
-| Integrity | Integrity mechanisms (e.g., checksums/signatures) implemented | Integrity SOP |
-| Authentication | Identity verified before access; MFA/SSO available | Authentication policy |
-| Transmission security | ePHI in transit protected end-to-end | Secure transport SOP |
-
-Table 15: Compliance Coverage Summary
-
-| Framework | Score | Status | Key Controls |
-|---|---|---|---|
-| PDPA | 95 | Production ready | Consent versioning; deletion/portability |
-| MOH alignment | — | Production ready | License verification; service categorization |
-| WCAG 2.2 AA | 96.7 | Production ready | A11y linting; automated/manual testing |
-
-![Compliance framework visual](assets/diagrams/compliance-framework.md)
-
-Evidence mapping and controlled documentation practices underpin these statements, ensuring that public-facing claims remain precise and audit-ready.[^3]
-
-## Multilingual and Accessibility Support
-
-The platform supports English, Chinese, Malay, and Tamil with completeness levels tailored to Singapore’s linguistic diversity. Accessibility follows WCAG 2.2 AA and includes screen reader compatibility, keyboard navigation, high contrast, adjustable fonts, and voice navigation.
-
-Table 16: Language Completeness
-
-| Language | Completeness |
-|---|---|
-| English | 100% |
-| Chinese | 95% |
-| Malay | 90% |
-| Tamil | 85% |
-
-Table 17: Accessibility Features Summary
-
-| Capability | Coverage |
-|---|---|
-| Screen reader support | Full |
-| Keyboard navigation | Full |
-| High contrast mode | Enabled |
-| Font size adjustment | Enabled |
-| Voice navigation | Enabled |
-| Automated tests | 247/250 passed |
-| Manual tests | 45/45 passed |
-
-These features are continuously validated via automated checks and manual testing to sustain AA conformance.
-
-## Contributing Guidelines
-
-Contributions are welcomed and governed to preserve compliance and quality. The platform uses branching prefixes (feat/, fix/, docs/, test/, perf/), requires pull requests for all changes, and enforces pre-commit quality checks via Husky. CI gates must pass before merge, and change control follows good documentation practices.[^3]
-
-Table 18: Contribution Workflow Checklist
-
-| Step | Requirement | Gate |
-|---|---|---|
-| Branch | feat/fix/docs/test/perf prefix | Required |
-| PR | Description, risk, test impact | Required |
-| Pre-commit checks | Lint, type-check, unit tests | Must pass |
-| CI gates | Coverage, A11y, performance, security, compliance | Must pass |
-| Review | Code, security, compliance review | Required |
-| Merge | Squash and retain traceability | Required |
-
-Table 19: Code Quality Gates
-
-| Gate | Threshold | Enforcement |
-|---|---|---|
-| Linting | No errors | Block on fail |
-| Type checking | Strict mode | Block on fail |
-| Unit/integration tests | Pass with coverage | Block on fail |
-| Accessibility | AA score ≥ 95 | Block on fail |
-| Performance | Score ≥ 90 | Block on fail |
-| Security | No high/critical vulnerabilities | Block on fail |
-| Compliance | Coverage 100% | Block on fail |
-
-## Professional Licensing and Legal
-
-The project will adopt a structured licensing model. This README acknowledges that final license text, copyright holder name, year, and third-party component attributions are pending and will be added upon confirmation.
-
-Table 20: License Summary Template
-
-| Type | Summary | Notice Template |
-|---|---|---|
-| Project license | Production use allowed; contributions require DCO/CLA | “Copyright © [Year] [Holder]. Licensed under [License].” |
-| Third-party components | List of licenses and attributions | “Includes software from [Name] under [License].” |
-| Patent disclosures | Placeholder for patent notices | “See LICENSE file for patent disclosures.” |
-
-## Versioning, Release, and Unresolved Anomalies
-
-Versioning follows semantic conventions with healthcare release gates. Anomalies are tracked with risk assessments and remediation timelines.
-
-Table 21: Unresolved Anomalies Template
-
-| ID | Description | Risk | Impact | Remediation Plan | ETA |
-|---|---|---|---|---|---|
-| ANO-001 | [Description] | [Low/Med/High] | [User/Compliance/Perf] | [Steps] | [Date] |
-
-Table 22: Release History Template
-
-| Version | Date | Highlights | Gates Passed |
-|---|---|---|---|
-| x.y.z | YYYY-MM-DD | Features/Fixes | Coverage/A11y/Perf/Sec/Compliance |
-
-Release documentation practices align to regulated environments, ensuring traceability and controlled change.[^11]
-
-## Support, Incident Response, and Vulnerability Disclosure
-
-Support, incident response (IR), and vulnerability handling follow privacy-first and security-first principles. Safety communications and coordinated disclosure processes are in place to protect users and maintain trust.
-
-Table 23: Support Channels
-
-| Channel | Purpose | SLA |
-|---|---|---|
-| API support email | Technical API issues | Response within 1 business day |
-| Documentation portal | Guides and changelogs | Live updates |
-| Status page | Service health and incidents | Real-time notifications |
-| Community forum | FAQs and peer support | Best effort |
-
-Table 24: Incident Response Workflow
-
-| Phase | Action | Output |
-|---|---|---|
-| Detection | Monitor alerts and reports | Incident ticket |
-| Triage | Classify severity and scope | Severity assignment |
-| Containment | Isolate affected systems | Containment plan |
-| Eradication | Remove cause and verify | Fix validation |
-| Recovery | Restore services with monitoring | Return to normal |
-| Postmortem | Document root cause and actions | Report and improvements |
-
-Breach notification coordination follows healthcare norms and leverages contingency planning for timely communication with users and regulators where applicable.[^1]
-
-## Information Gaps
-
-To maintain accuracy and avoid assumptions, this README recognizes the following gaps pending confirmation:
-- Canonical repository URL and logo/image assets.
-- Final license text, copyright holder name, and year.
-- External Business Associate Agreement (BAA) status and PDPA Data Protection Officer contact details.
-- Canonical API base URL and endpoint taxonomy beyond example hostnames.
-- Operational Service Level Objective (SLO) definitions and error budgets.
-- Formal vulnerability disclosure policy and security contact.
-- Data retention durations and deletion SLAs specific to Singapore contexts.
-- Canonical diagram assets and figure placement if alternative paths are preferred.
-- Community support channel URLs and governance model specifics.
-- Detailed trust boundary topology and network architecture diagrams.
-
-These will be documented in the public repo or internal QMS as they are finalized.
-
-## References
-
-[^1]: Summary of the HIPAA Security Rule | HHS.gov. https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html  
-[^2]: Content of Premarket Submissions for Device Software Functions | FDA. https://www.fda.gov/regulatory-information/search-fda-guidance-documents/content-premarket-submissions-device-software-functions  
-[^3]: Good Documentation Practices for Medical Devices | MadCap Software. https://www.madcapsoftware.com/blog/good-documentation-practices-for-medical-devices/  
-[^4]: Technical Safeguards—HIPAA Security Series #4 | HHS (PDF). https://www.hhs.gov/sites/default/files/ocr/privacy/hipaa/administrative/securityrule/techsafeguards.pdf  
-[^5]: Medical Device Software Architecture Documentation (IEC 62304) | OpenRegulatory. https://openregulatory.com/articles/medical-device-software-architecture-documentation-iec-62304  
-[^6]: R: Regulatory Compliance and Validation Issues—Guidance for the Use of R in Regulated Clinical Trial Environments | R Foundation (PDF). https://www.r-project.org/doc/R-FDA.pdf  
-[^7]: HIPAA Compliance for Medical Software Applications | HIPAA Journal. https://www.hipaajournal.com/hipaa-compliance-for-medical-software-applications/  
-[^8]: New FDA Guidance on Software Documentation for Medical Devices | Exponent. https://www.exponent.com/article/new-fda-guidance-software-documentation-medical-devices  
-[^9]: Medical Device Software Guidance Navigator | FDA. https://www.fda.gov/medical-devices/regulatory-accelerator/medical-device-software-guidance-navigator  
-[^10]: Federal Register Notice: Content of Premarket Submissions for Device Software Functions. https://www.federalregister.gov/d/2023-12723  
-[^11]: Documentation for Medical Device Software | Sunstone Pilot. https://sunstonepilot.com/2021/08/documentation-for-medical-device-software/  
-[^12]: OpenRegulatory Templates (ISO 13485, IEC 62304, ISO 14971, IEC 62366). https://github.com/openregulatory/templates
+</div>
 
 ---
 
-This README reflects the platform’s production readiness and clinical responsibility. It balances clarity for technical audiences with the discipline expected in healthcare contexts, and it anchors security and compliance in verifiable, audit-ready practices.
+## 🚀 Features
+
+### Core Capabilities
+- **🤖 Intelligent Conversations**: Context-aware dialogue management using Microsoft Agent Framework
+- **📚 Knowledge Base Integration**: RAG implementation with Chroma vector database and EmbeddingGemma-300m
+- **📎 Attachment Processing**: Support for document uploads with Markitdown parsing
+- **🧠 Memory System**: SQLite-based persistent memory for conversation context
+- **⚡ Escalation Mechanism**: Automatic escalation to human agents when needed
+- **🌐 Multi-Channel Support**: RESTful API with WebSocket support for real-time communication
+- **📊 Comprehensive Monitoring**: Prometheus metrics and Grafana dashboards
+- **🚀 Production-Ready**: Docker containerization with CI/CD pipeline
+
+### Business Value
+- **⏱️ Reduced Response Time**: Instant responses to common queries
+- **🌙 24/7 Availability**: Round-the-clock support without human intervention
+- **📈 Consistent Quality**: Standardized responses regardless of agent availability
+- **💰 Cost Efficiency**: Reduced operational costs through automation
+- **📈 Scalability**: Handle increasing customer volumes without additional resources
+- **📊 Data Insights**: Analytics on customer queries and satisfaction
+
+---
+
+## 🛠 Technology Stack
+
+<div align="center">
+
+### Frontend
+![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=flat-square&logo=react) 
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript) 
+![CSS Modules](https://img.shields.io/badge/CSS%20Modules-Latest-000000?style=flat-square)
+
+### Backend  
+![FastAPI](https://img.shields.io/badge/FastAPI-Latest-109989?style=flat-square&logo=fastapi)
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python)
+![Microsoft Agent Framework](https://img.shields.io/badge/Microsoft%20Agent%20Framework-Latest-0078D4?style=flat-square)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-Latest-FF6B6B?style=flat-square)
+
+### Database & Storage
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-336791?style=flat-square&logo=postgresql)
+![SQLite](https://img.shields.io/badge/SQLite-Latest-003B57?style=flat-square)
+![Redis](https://img.shields.io/badge/Redis-Latest-DC382D?style=flat-square&logo=redis)
+![Chroma](https://img.shields.io/badge/Chroma-Latest-8B5CF6?style=flat-square)
+
+### AI/ML Components
+![EmbeddingGemma-300m](https://img.shields.io/badge/EmbeddingGemma--300m-Google-4285F4?style=flat-square)
+![Markitdown](https://img.shields.io/badge/Markitdown-Latest-FF6B6B?style=flat-square)
+
+### Infrastructure & Monitoring
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker)
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-Latest-2088FF?style=flat-square&logo=github)
+![Prometheus](https://img.shields.io/badge/Prometheus-Latest-E6522C?style=flat-square&logo=prometheus)
+![Grafana](https://img.shields.io/badge/Grafana-Latest-F46800?style=flat-square&logo=grafana)
+
+</div>
+
+---
+
+## 🏗 Architecture Overview
+
+The Customer Support AI Agent implements a **microservices architecture** with clear separation of concerns, ensuring scalability, maintainability, and reliability. The system consists of:
+
+- **React Frontend**: Modern, responsive user interface with real-time communication
+- **FastAPI Backend**: High-performance API server with async capabilities  
+- **Microsoft Agent Framework**: Intelligent agent orchestration and tool management
+- **PostgreSQL**: Primary database for user data and conversation persistence
+- **SQLite**: Development database for lightweight operations
+- **Redis**: High-performance caching and session management
+- **ChromaDB**: Vector database for semantic search and RAG implementation
+- **Prometheus + Grafana**: Comprehensive monitoring and observability stack
+
+---
+
+## 📁 Application Architecture
+
+### Complete File Structure
+
+```
+customer-support-agent/
+├── .github/                          # GitHub Actions CI/CD workflows
+│   └── workflows/                    # Automated testing and deployment pipelines
+├── backend/                          # FastAPI backend application
+│   ├── app/                          # Main application code
+│   │   ├── agents/                   # AI agent implementations
+│   │   │   ├── agent_factory.py      # Factory for creating different agent types
+│   │   │   └── chat_agent.py         # Core chat agent with AI orchestration
+│   │   ├── api/                      # API layer and middleware
+│   │   │   ├── dependencies.py       # FastAPI dependency injection
+│   │   │   ├── middleware.py         # Request/response middleware
+│   │   │   └── routes/               # API endpoint definitions
+│   │   │       ├── chat.py           # Chat session and message endpoints
+│   │   │       ├── health.py         # Health check and status endpoints
+│   │   │       └── metrics.py        # Prometheus metrics endpoints
+│   │   ├── core/                     # Core application infrastructure
+│   │   │   ├── cache.py              # Redis caching implementation
+│   │   │   ├── config.py             # Application configuration management
+│   │   │   ├── logging.py            # Structured logging setup
+│   │   │   └── security.py           # JWT authentication and security
+│   │   ├── db/                       # Database layer
+│   │   │   ├── database.py           # SQLAlchemy database connection
+│   │   │   ├── migrations/           # Alembic database migrations
+│   │   │   └── models.py             # Database schema models
+│   │   ├── tools/                    # Agent tools and utilities
+│   │   │   ├── attachment_tool.py    # Document attachment processing
+│   │   │   ├── escalation_tool.py    # Human agent escalation mechanism
+│   │   │   ├── memory_tool.py        # Conversation memory management
+│   │   │   └── rag_tool.py           # Retrieval-Augmented Generation
+│   │   ├── vector_store/             # Vector database integration
+│   │   │   ├── chroma_client.py      # ChromaDB client for vector search
+│   │   │   └── embeddings.py         # EmbeddingGemma-300m integration
+│   │   └── main.py                   # FastAPI application entry point
+│   ├── scripts/                      # Deployment and utility scripts
+│   │   ├── deploy.sh                 # Production deployment automation
+│   │   ├── init_db.py                # Database initialization
+│   │   ├── populate_kb.py            # Knowledge base population
+│   │   └── rollback.sh               # Deployment rollback procedures
+│   ├── tests/                        # Comprehensive test suite
+│   │   ├── unit/                     # Unit tests for individual components
+│   │   ├── integration/              # Integration tests for API endpoints
+│   │   └── e2e/                      # End-to-end testing scenarios
+│   ├── Dockerfile                    # Backend containerization configuration
+│   ├── docker-compose.yml            # Development Docker Compose setup
+│   └── requirements.txt              # Python dependencies specification
+├── frontend/                         # React TypeScript frontend
+│   ├── public/                       # Static assets
+│   │   └── index.html                # Main HTML template
+│   ├── src/                          # Source code
+│   │   ├── components/               # React UI components
+│   │   │   ├── AttachmentUpload/     # File upload component
+│   │   │   ├── ChatWindow/           # Main chat interface
+│   │   │   ├── EscalationNotice/     # Human agent escalation UI
+│   │   │   ├── Message/              # Individual message component
+│   │   │   ├── MessageInput/         # Message input interface
+│   │   │   ├── SourceCitation/       # AI response citation display
+│   │   │   └── TypingIndicator/      # Real-time typing status
+│   │   ├── hooks/                    # Custom React hooks
+│   │   │   ├── useChat.ts            # Chat state management
+│   │   │   ├── useLocalStorage.ts    # Local storage persistence
+│   │   │   └── useWebSocket.ts       # WebSocket connection management
+│   │   ├── services/                 # API and external service clients
+│   │   │   ├── api.ts                # REST API client
+│   │   │   ├── storage.ts            # Local storage service
+│   │   │   └── websocket.ts          # WebSocket communication
+│   │   ├── types/                    # TypeScript type definitions
+│   │   │   ├── api.ts                # API response types
+│   │   │   ├── chat.ts               # Chat-related types
+│   │   │   └── index.ts              # Main type exports
+│   │   ├── utils/                    # Utility functions
+│   │   │   ├── constants.ts          # Application constants
+│   │   │   ├── helpers.ts            # General helper functions
+│   │   │   └── validation.ts         # Input validation utilities
+│   │   ├── App.tsx                   # Main React application component
+│   │   └── index.tsx                 # Application entry point
+│   ├── Dockerfile                    # Frontend containerization
+│   ├── package.json                  # Node.js dependencies and scripts
+│   └── tsconfig.json                 # TypeScript configuration
+├── monitoring/                       # Observability and monitoring stack
+│   ├── prometheus/                   # Metrics collection configuration
+│   │   ├── prometheus.yml            # Main Prometheus configuration
+│   │   └── rules/                    # Alert and recording rules
+│   ├── grafana/                      # Visualization and dashboards
+│   │   ├── provisioning/             # Grafana provisioning configuration
+│   │   └── dashboards/               # Pre-configured dashboards
+│   └── alertmanager/                 # Alert management
+│       └── alertmanager.yml          # Alert routing configuration
+├── docs/                             # Comprehensive documentation
+│   ├── api.md                        # API endpoint documentation
+│   ├── architecture.md               # Detailed architecture documentation
+│   └── deployment.md                 # Deployment guide
+├── scripts/                          # Root-level utility scripts
+├── .env.example                      # Environment variables template
+├── .env.prod                         # Production environment configuration
+├── .gitignore                        # Git ignore patterns
+├── CLAUDE.md                         # AI development guidelines
+├── DB_initialization_examples.txt    # Database setup examples
+├── Deployment_Checklist.md           # Production deployment checklist
+├── Design_Decisions_Document.md      # Architecture decision records
+├── GEMINI.md                         # Gemini model documentation
+├── KB_loading_examples.txt           # Knowledge base loading examples
+├── Minor_Discrepancies_and_Areas_for_Refinement.md # Known issues
+├── Project_Architecture_Document.md  # Complete architecture documentation
+├── README.md                         # This comprehensive README
+├── Runbook.md                        # Operations runbook
+├── codebase_review.md                # Code quality review
+├── docker-compose.prod.yml           # Production Docker Compose
+├── docker-compose.yml                # Development Docker Compose
+├── file_structure.txt                # This file structure documentation
+└── grafana_dashboard.json            # Pre-configured Grafana dashboards
+```
+
+---
+
+## 🔄 User-Application Interaction Flow
+
+### Complete User Journey
+
+```mermaid
+flowchart TD
+    %% User Entry Points
+    User[👤 User] --> WebApp[🌐 Chat Interface]
+    
+    %% Session Management
+    WebApp --> SessionCheck{📋 Session Exists?}
+    SessionCheck -->|No| CreateSession[🔄 Create New Session]
+    CreateSession --> StoreSession[💾 Store in PostgreSQL]
+    SessionCheck -->|Yes| SendMessage[💬 Send Message]
+    StoreSession --> SendMessage
+    
+    %% Message Submission
+    SendMessage --> WebSocketCheck{🔌 WebSocket Available?}
+    WebSocketCheck -->|Yes| WebSocket[📡 Real-time WebSocket]
+    WebSocketCheck -->|No| RESTAPI[📡 REST API]
+    WebSocket --> Backend[⚡ FastAPI Backend]
+    RESTAPI --> Backend
+    
+    %% Attachment Processing
+    Backend --> AttachmentCheck{📎 Attachments?}
+    AttachmentCheck -->|Yes| ProcessAttachment[📄 Process with Markitdown]
+    AttachmentCheck -->|No| ContextRetrieval[🔍 Retrieve Context]
+    ProcessAttachment --> ContextRetrieval
+    
+    %% Context & Memory
+    ContextRetrieval --> RedisCache{⚡ Redis Cache Hit?}
+    RedisCache -->|Yes| GetCachedContext[📦 Get Cached Context]
+    RedisCache -->|No| GetDBContext[📊 Get from PostgreSQL]
+    GetCachedContext --> AgentContext[🧠 Prepare Agent Context]
+    GetDBContext --> AgentContext
+    
+    %% AI Agent Orchestration
+    AgentContext --> EmbeddingCheck{🔤 Need Embeddings?}
+    EmbeddingCheck -->|Yes| GenerateEmbedding[🧮 Generate EmbeddingGemma-300m]
+    EmbeddingCheck -->|No| VectorSearch[🔍 Chroma Vector Search]
+    GenerateEmbedding --> VectorSearch
+    
+    %% Vector Database Search
+    VectorSearch --> ChromaDB[(🗄️ Chroma Vector DB)]
+    ChromaDB --> SimilaritySearch[🎯 Similarity Search]
+    SimilaritySearch --> TopKCheck{📊 Top-K Results?}
+    TopKCheck -->|Yes| RetrieveDocs[📑 Retrieve Documents]
+    TopKCheck -->|No| NoResults[🚫 No Relevant Docs]
+    
+    %% Agent Framework Processing
+    RetrieveDocs --> AgentFramework[🤖 Microsoft Agent Framework]
+    NoResults --> AgentFramework
+    
+    %% Decision Points
+    AgentFramework --> EscalationCheck{❗ Escalation Needed?}
+    
+    %% Escalation Path
+    EscalationCheck -->|Yes| EscalationTicket[🎫 Create Escalation Ticket]
+    EscalationTicket --> HumanAgent[👨‍💼 Human Agent]
+    HumanAgent --> EscalationResponse[📝 Manual Response]
+    EscalationResponse --> StoreResponse[💾 Store Response]
+    
+    %% AI Response Path
+    EscalationCheck -->|No| AIResponse[🤖 Generate AI Response]
+    AIResponse --> GenerateCitations[📚 Generate Citations]
+    GenerateCitations --> StoreResponse
+    
+    %% Response Storage
+    StoreResponse --> MemoryUpdate[🔄 Update Conversation Memory]
+    MemoryUpdate --> CacheUpdate[⚡ Update Redis Cache]
+    CacheUpdate --> MetricsUpdate[📊 Update Prometheus Metrics]
+    MetricsUpdate --> LogInteraction[📝 Structured Logging]
+    
+    %% Response Delivery
+    LogInteraction --> ResponseCheck{📡 Response Channel?}
+    ResponseCheck -->|WebSocket| WebSocketSend[📡 Send via WebSocket]
+    ResponseCheck -->|REST| HTTPReturn[📡 HTTP Response]
+    WebSocketSend --> WebApp
+    HTTPReturn --> WebApp
+    
+    %% Display Response
+    WebApp --> DisplayCheck{🎨 Response Type?}
+    DisplayCheck -->|Citation| ShowCitation[📚 Display Sources]
+    DisplayCheck -->|Escalation| ShowEscalation[🎫 Show Escalation Notice]
+    DisplayCheck -->|Regular| ShowMessage[💬 Show AI Message]
+    
+    ShowCitation --> User
+    ShowEscalation --> User
+    ShowMessage --> User
+    
+    %% Monitoring & Analytics
+    LogInteraction --> MonitoringStack[📊 Monitoring Stack]
+    MonitoringStack --> Prometheus[(📈 Prometheus Metrics)]
+    MonitoringStack --> Grafana[📉 Grafana Dashboards]
+    
+    %% Styling
+    classDef userClass fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef frontendClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef backendClass fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef databaseClass fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef aiClass fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    classDef decisionClass fill:#fff8e1,stroke:#f57f17,stroke-width:2px
+    
+    class User userClass
+    class WebApp,SendMessage,DisplayCheck frontendClass
+    class Backend,AgentFramework,ProcessAttachment backendClass
+    class PostgreSQL,RedisCache,ChromaDB,StoreResponse databaseClass
+    class AIResponse,AgentContext,GenerateEmbedding,VectorSearch aiClass
+    class SessionCheck,WebSocketCheck,AttachmentCheck,EscalationCheck,ResponseCheck decisionClass
+```
+
+### Interaction Flow Description
+
+#### 1. **Session Initialization**
+- User accesses chat interface
+- System checks for existing session
+- Creates new session if none exists
+- Stores session in PostgreSQL database
+
+#### 2. **Message Submission**
+- User sends message with optional attachments
+- Frontend checks for WebSocket availability
+- Falls back to REST API if WebSocket unavailable
+- Sends message to FastAPI backend
+
+#### 3. **Context Retrieval & RAG**
+- System retrieves conversation history from PostgreSQL
+- Generates embeddings using EmbeddingGemma-300m
+- Performs similarity search in Chroma vector database
+- Retrieves top-K most relevant documents
+
+#### 4. **AI Agent Processing**
+- Microsoft Agent Framework processes the query
+- Uses retrieved context and documents
+- Considers conversation history and user intent
+
+#### 5. **Response Generation**
+- **Escalation Path**: If escalation needed, creates ticket for human agent
+- **AI Response Path**: Generates AI-powered response with citations
+- Both paths store responses in database for conversation continuity
+
+#### 6. **Response Delivery**
+- Response sent back via WebSocket or REST API
+- Frontend displays appropriate interface (citations, escalation notice, or message)
+- User receives real-time or immediate response
+
+---
+
+## 🧠 Application Logic Flow
+
+### Internal Processing Pipeline
+
+```mermaid
+flowchart TD
+    %% Input Processing
+    ReceiveMessage[📨 Receive User Message] --> ValidateInput[✅ Validate Input]
+    ValidateInput --> RateLimitCheck{⚡ Rate Limited?}
+    RateLimitCheck -->|Yes| RejectRequest[🚫 Reject Request]
+    RateLimitCheck -->|No| Authenticate[🔐 Authenticate User]
+    
+    %% Authentication & Session
+    Authenticate --> JWTVerify[🛡️ Verify JWT Token]
+    JWTVerify --> SessionLookup[📋 Lookup Session]
+    SessionLookup --> SessionCheck{📊 Session Valid?}
+    SessionCheck -->|No| CreateNewSession[🔄 Create New Session]
+    SessionCheck -->|Yes| RetrieveHistory[📚 Retrieve Conversation History]
+    CreateNewSession --> RetrieveHistory
+    
+    %% Message Processing
+    RetrieveHistory --> ProcessAttachments{📎 Attachments?}
+    ProcessAttachments -->|Yes| MarkitdownParse[📄 Parse with Markitdown]
+    ProcessAttachments -->|No| ContextPreparation[🧠 Prepare Context]
+    MarkitdownParse --> ContextPreparation
+    
+    %% Context Building
+    ContextPreparation --> HistoricalContext[📖 Historical Context]
+    HistoricalContext --> UserContext[👤 User Context]
+    UserContext --> AttachmentContext[📎 Attachment Context]
+    AttachmentContext --> SystemContext[⚙️ System Context]
+    SystemContext --> CombineContext[🔗 Combine All Context]
+    
+    %% RAG Implementation
+    CombineContext --> GenerateQueryEmbed[🧮 Generate Query Embedding]
+    GenerateQueryEmbed --> ChromaConnection[🔌 Connect to ChromaDB]
+    ChromaConnection --> VectorSimilarity[🎯 Vector Similarity Search]
+    VectorSimilarity --> RelevanceFilter[📊 Filter by Relevance]
+    RelevanceFilter --> DocumentRetrieval[📑 Retrieve Documents]
+    DocumentRetrieval --> DocumentRanking[🏆 Rank by Relevance]
+    
+    %% Agent Framework Preparation
+    DocumentRanking --> ToolPreparation[🛠️ Prepare Agent Tools]
+    ToolPreparation --> InstructionTemplate[📝 Load Instruction Template]
+    InstructionTemplate --> ContextWindow[🪟 Build Context Window]
+    ContextWindow --> AgentInit[🤖 Initialize Agent Framework]
+    
+    %% Agent Execution
+    AgentInit --> ToolExecution[⚡ Execute Agent Tools]
+    ToolExecution --> RAGToolCall[🔍 Call RAG Tool]
+    ToolExecution --> MemoryToolCall[🧠 Call Memory Tool]
+    ToolExecution --> EscalationToolCall[⚠️ Call Escalation Tool]
+    ToolExecution --> AttachmentToolCall[📎 Call Attachment Tool]
+    
+    %% Decision Logic
+    RAGToolCall --> EscalationCheck{❗ Escalation Required?}
+    MemoryToolCall --> EscalationCheck
+    EscalationToolCall --> EscalationCheck
+    AttachmentToolCall --> EscalationCheck
+    
+    %% Escalation Path
+    EscalationCheck -->|Yes| CreateEscalation[🎫 Create Escalation Ticket]
+    CreateEscalation --> TicketAssignment[👤 Assign to Human Agent]
+    TicketAssignment --> EscalationResponse[📝 Generate Escalation Response]
+    EscalationResponse --> ResponseFormatting[🎨 Format Response]
+    
+    %% AI Response Path
+    EscalationCheck -->|No| ProcessRAGResults[🔍 Process RAG Results]
+    ProcessRAGResults --> ResponseGeneration[🤖 Generate AI Response]
+    ResponseGeneration --> SourceCitation[📚 Add Source Citations]
+    SourceCitation --> ResponseValidation[✅ Validate Response]
+    ResponseValidation --> ResponseFormatting
+    
+    %% Response Processing
+    ResponseFormatting --> ResponseOptimization[⚡ Optimize for Delivery]
+    ResponseOptimization --> CacheResponse[💾 Cache Response]
+    CacheResponse --> DatabaseUpdate[📊 Update Database]
+    
+    %% Database Operations
+    DatabaseUpdate --> StoreConversation[💬 Store Conversation]
+    StoreConversation --> UpdateSession[🔄 Update Session]
+    UpdateSession --> RecordMetrics[📊 Record Metrics]
+    RecordMetrics --> UpdateMemory[🧠 Update Memory]
+    
+    %% Monitoring & Logging
+    UpdateMemory --> StructuredLogging[📝 Structured Logging]
+    StructuredLogging --> PerformanceMetrics[⏱️ Performance Metrics]
+    PerformanceMetrics --> ErrorHandling{⚠️ Errors?}
+    ErrorHandling -->|Yes| ErrorLogging[🚨 Log Errors]
+    ErrorHandling -->|No| SuccessMetrics[✅ Success Metrics]
+    ErrorLogging --> HealthCheck[💓 Update Health Status]
+    SuccessMetrics --> HealthCheck
+    
+    %% Response Delivery
+    HealthCheck --> ResponseDelivery[📡 Prepare Response Delivery]
+    ResponseDelivery --> WebSocketCheck{🔌 WebSocket?}
+    WebSocketCheck -->|Yes| SendWebSocket[📡 Send via WebSocket]
+    WebSocketCheck -->|No| SendHTTP[📡 Send via HTTP]
+    SendWebSocket --> End[🏁 End]
+    SendHTTP --> End
+    
+    %% Rejection Path
+    RejectRequest --> RateLimitResponse[⏰ Rate Limit Response]
+    RateLimitResponse --> End
+    
+    %% Styling
+    classDef inputClass fill:#e3f2fd,stroke:#0277bd,stroke-width:2px
+    classDef authClass fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef contextClass fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef ragClass fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    classDef agentClass fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef decisionClass fill:#fff8e1,stroke:#ffa000,stroke-width:2px
+    classDef responseClass fill:#f1f8e9,stroke:#689f38,stroke-width:2px
+    classDef databaseClass fill:#fce4ec,stroke:#d32f2f,stroke-width:2px
+    classDef monitoringClass fill:#e0f2f1,stroke:#00796b,stroke-width:2px
+    classDef errorClass fill:#ffebee,stroke:#d32f2f,stroke-width:2px
+    
+    class ReceiveMessage,ValidateInput,Authenticate inputClass
+    class JWTVerify,SessionLookup,CreateNewSession authClass
+    class ContextPreparation,CombineContext,ContextWindow contextClass
+    class GenerateQueryEmbed,VectorSimilarity,DocumentRetrieval ragClass
+    class AgentInit,ToolExecution,ResponseGeneration agentClass
+    class EscalationCheck,WebSocketCheck,ProcessAttachments decisionClass
+    class ResponseFormatting,ResponseDelivery responseClass
+    class StoreConversation,UpdateSession,DatabaseUpdate databaseClass
+    class StructuredLogging,PerformanceMetrics,HealthCheck monitoringClass
+    class ErrorLogging,RateLimitResponse,RejectRequest errorClass
+```
+
+### Key Technical Components
+
+1. **Embedding Generation**: EmbeddingGemma-300m model integration
+2. **Vector Database**: ChromaDB for similarity search and retrieval
+3. **Agent Orchestration**: Microsoft Agent Framework for tool management
+4. **Memory System**: SQLite-based conversation memory with PostgreSQL persistence
+5. **Caching Layer**: Redis for performance optimization
+6. **Document Processing**: Markitdown for attachment parsing
+7. **Authentication**: JWT-based security with session management
+8. **Monitoring**: Prometheus metrics collection and Grafana visualization
+
+---
+
+## ⚡ Quick Start
+
+### Prerequisites
+- Docker 20.10+
+- Docker Compose 2.0+
+- Git
+- 4GB+ RAM available
+- 10GB+ disk space
+
+### Development Setup
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/nordeim/customer-support-agent.git
+cd customer-support-agent
+
+# 2. Environment setup
+cp .env.example .env
+# Edit .env with your configuration
+
+# 3. Start all services
+docker-compose up -d
+
+# 4. Initialize database
+docker-compose exec backend python scripts/init_db.py
+
+# 5. Populate knowledge base (optional)
+docker-compose exec backend python scripts/populate_kb.py --documents-dir ./docs/knowledge-base
+
+# 6. Verify deployment
+curl http://localhost:8000/health
+```
+
+### Production Deployment
+
+```bash
+# 1. Set production environment
+export VERSION=1.0.0
+export POSTGRES_PASSWORD=your_secure_password
+export SECRET_KEY=your_secure_secret_key
+
+# 2. Deploy using automation script
+./scripts/deploy.sh
+
+# 3. Check deployment status
+./scripts/deploy.sh health
+```
+
+---
+
+## 🏭 Production Deployment
+
+### System Requirements
+
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| **CPU** | 2 cores | 4+ cores |
+| **RAM** | 4GB | 8GB+ |
+| **Storage** | 20GB SSD | 50GB+ SSD |
+| **Network** | 100 Mbps | 1 Gbps |
+
+### Environment Configuration
+
+#### Production Environment Variables
+
+```bash
+# Core Application
+VERSION=1.0.0
+DEBUG=false
+SECRET_KEY=your-production-secret-key-here
+JWT_SECRET_KEY=your-jwt-secret-key-here
+
+# Database Configuration
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=customer_support
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your-secure-postgres-password
+
+# Redis Configuration
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=your-secure-redis-password
+
+# AI Configuration
+EMBEDDING_MODEL_PATH=/app/models/embeddinggemma-300m
+CHROMA_PERSIST_DIRECTORY=/app/data/chroma
+
+# Monitoring
+PROMETHEUS_ENABLED=true
+GRAFANA_ADMIN_PASSWORD=your-grafana-password
+
+# External APIs
+OPENAI_API_KEY=your-openai-api-key
+MICROSOFT_AGENT_FRAMEWORK_KEY=your-agent-framework-key
+
+# Rate Limiting
+RATE_LIMIT_PER_MINUTE=60
+RATE_LIMIT_PER_HOUR=1000
+```
+
+### Deployment Checklist
+
+- [ ] System requirements met
+- [ ] Environment variables configured
+- [ ] SSL certificates installed
+- [ ] Database initialized and migrated
+- [ ] Knowledge base populated
+- [ ] Monitoring stack configured
+- [ ] Backup procedures tested
+- [ ] Security hardening applied
+- [ ] Load testing completed
+- [ ] Rollback procedures verified
+
+---
+
+## 📊 Monitoring & Observability
+
+### Prometheus Metrics
+
+```bash
+# Access Prometheus dashboard
+open http://localhost:9090
+
+# Check key metrics
+curl 'http://localhost:9090/api/v1/query?query=rate(http_requests_total[5m])'
+```
+
+### Grafana Dashboards
+
+```bash
+# Access Grafana (admin/admin)
+open http://localhost:3000
+
+# Key performance indicators:
+# - Response time percentiles
+# - Conversation success rate
+# - Escalation frequency
+# - System resource usage
+# - Error rates and types
+```
+
+### Key Monitoring Metrics
+
+```yaml
+# Application Metrics
+- response_time_seconds
+- http_requests_total
+- active_sessions
+- conversation_count
+- escalation_rate
+
+# System Metrics
+- cpu_usage_percent
+- memory_usage_percent
+- disk_usage_percent
+- network_io_bytes
+
+# AI/ML Metrics
+- embedding_generation_time
+- vector_search_latency
+- agent_framework_latency
+- knowledge_base_hits
+```
+
+---
+
+## 🔧 Configuration
+
+### Database Configuration
+
+```python
+# Database settings in .env
+DATABASE_URL=postgresql://user:password@localhost:5432/customer_support
+DB_POOL_SIZE=20
+DB_MAX_OVERFLOW=30
+```
+
+### AI Model Configuration
+
+```python
+# AI/ML settings
+EMBEDDING_MODEL_PATH=/app/models/embeddinggemma-300m
+CHUNK_SIZE=1000
+CHUNK_OVERLAP=200
+TOP_K_RESULTS=5
+```
+
+### Security Configuration
+
+```python
+# JWT settings
+JWT_SECRET_KEY=your-secret-key
+JWT_ALGORITHM=HS256
+JWT_EXPIRE_MINUTES=30
+
+# Rate limiting
+RATE_LIMIT_PER_MINUTE=60
+RATE_LIMIT_PER_HOUR=1000
+```
+
+---
+
+## 📚 API Documentation
+
+### Authentication
+
+All API requests require JWT authentication:
+
+```bash
+# Get JWT token
+curl -X POST http://localhost:8000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "user", "password": "pass"}'
+```
+
+### Core Endpoints
+
+#### Chat Sessions
+
+```bash
+# Create session
+curl -X POST http://localhost:8000/chat/sessions \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"user_id": "user123"}'
+
+# Send message
+curl -X POST http://localhost:8000/chat/sessions/{session_id}/messages \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "How do I reset my password?"}'
+```
+
+#### Health Check
+
+```bash
+# System health
+curl http://localhost:8000/health
+
+# Detailed status
+curl http://localhost:8000/status
+```
+
+#### Metrics
+
+```bash
+# Prometheus metrics
+curl http://localhost:8000/metrics
+```
+
+### WebSocket Connection
+
+```javascript
+// Frontend WebSocket example
+const ws = new WebSocket('ws://localhost:8000/ws/chat');
+
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log('Response:', data);
+};
+
+ws.send(JSON.stringify({
+  session_id: 'session123',
+  message: 'Hello, I need help'
+}));
+```
+
+---
+
+## 🧪 Development
+
+### Local Development Setup
+
+```bash
+# Backend development
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+
+# Frontend development
+cd frontend
+npm install
+npm run dev
+```
+
+### Testing
+
+```bash
+# Run all tests
+docker-compose exec backend pytest
+
+# Run with coverage
+docker-compose exec backend pytest --cov=app --cov-report=html
+
+# Load testing
+artillery run load-test.yml
+```
+
+### Code Quality
+
+```bash
+# Python linting
+docker-compose exec backend flake8 app/
+docker-compose exec backend black app/
+docker-compose exec backend isort app/
+
+# TypeScript linting
+cd frontend
+npm run lint
+npm run type-check
+```
+
+---
+
+## 🔒 Security
+
+### Security Features
+
+- **JWT Authentication**: Secure token-based authentication
+- **Rate Limiting**: Protection against abuse and DDoS
+- **Input Validation**: Comprehensive input sanitization
+- **SQL Injection Prevention**: ORM-based database queries
+- **CORS Configuration**: Proper cross-origin resource sharing
+- **HTTPS/TLS**: Encrypted communication
+- **Environment Variables**: Secure configuration management
+
+### Security Checklist
+
+- [ ] Change all default passwords
+- [ ] Use strong JWT secrets
+- [ ] Enable SSL/TLS in production
+- [ ] Configure firewall rules
+- [ ] Enable rate limiting
+- [ ] Set up security monitoring
+- [ ] Regular security updates
+- [ ] Access logging enabled
+- [ ] Vulnerability scanning
+- [ ] Security audit completed
+
+---
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+#### Backend Won't Start
+
+```bash
+# Check logs
+docker-compose logs backend
+
+# Common solutions:
+# 1. Database connection
+docker-compose exec backend python -c "from app.db.database import engine; print('DB OK')"
+
+# 2. Environment variables
+docker-compose exec backend env | grep DATABASE_URL
+```
+
+#### High Memory Usage
+
+```bash
+# Monitor container usage
+docker stats
+
+# Clear ChromaDB cache
+docker-compose exec backend python -c "from app.vector_store.chroma_client import clear_cache; clear_cache()"
+
+# Restart backend
+docker-compose restart backend
+```
+
+#### Knowledge Base Issues
+
+```bash
+# Verify ChromaDB setup
+docker-compose exec backend python -c "
+from app.vector_store.chroma_client import chroma_client
+collections = chroma_client.list_collections()
+print(f'Collections: {collections}')
+"
+
+# Re-index documents
+docker-compose exec backend python scripts/populate_kb.py --force-reindex
+```
+
+---
+
+## 🔄 Backup and Recovery
+
+### Database Backup
+
+```bash
+# PostgreSQL backup
+docker-compose exec postgres pg_dump -U postgres customer_support > backup_$(date +%Y%m%d_%H%M%S).sql
+
+# Automated backup script
+#!/bin/bash
+BACKUP_DIR="/backups/postgres"
+DATE=$(date +%Y%m%d_%H%M%S)
+docker-compose exec postgres pg_dump -U postgres customer_support | gzip > $BACKUP_DIR/backup_$DATE.sql.gz
+
+# Keep only last 30 backups
+find $BACKUP_DIR -name "backup_*.sql.gz" -mtime +30 -delete
+```
+
+### Knowledge Base Backup
+
+```bash
+# ChromaDB backup
+docker run --rm -v customer-support-agent_chroma_data:/data -v $(pwd):/backup alpine tar czf /backup/chroma-backup-$(date +%Y%m%d_%H%M%S).tar.gz -C /data .
+
+# Restore ChromaDB
+docker run --rm -v customer-support-agent_chroma_data:/data -v $(pwd):/backup alpine tar xzf /backup/chroma-backup-YYYYMMDD_HHMMSS.tar.gz -C /data
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+### Development Workflow
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Code Standards
+
+- **Python**: Follow PEP 8, use type hints, docstrings
+- **TypeScript**: Follow ESLint configuration, use strict mode
+- **Testing**: Maintain >90% test coverage
+- **Documentation**: Update docs for new features
+- **Security**: Follow security best practices
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License
+
+Copyright (c) 2024 Customer Support AI Agent
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
+## 🙏 Acknowledgments
+
+- **Microsoft Agent Framework**: For intelligent agent orchestration
+- **Google EmbeddingGemma-300m**: For high-quality embeddings
+- **ChromaDB**: For vector database capabilities
+- **FastAPI**: For the excellent web framework
+- **React**: For the modern frontend framework
+- **Docker**: For containerization and deployment
+- **Prometheus & Grafana**: For monitoring and observability
+
+---
+
+## 📚 References
+
+- [Microsoft Agent Framework Documentation](https://learn.microsoft.com/en-us/agent-framework/overview/agent-framework-overview)
+- [EmbeddingGemma Model](https://huggingface.co/google/embeddinggemma-300m)
+- [Chroma Vector Database](https://www.trychroma.com/)
+- [FastAPI Documentation](https://fastapi.tiangolo.com/)
+- [React Documentation](https://reactjs.org/)
+- [Docker Best Practices](https://docs.docker.com/develop/best-practices/)
+
+---
+
+<div align="center">
+
+[![GitHub stars](https://img.shields.io/github/stars/nordeim/customer-support-agent?style=social)](https://github.com/nordeim/customer-support-agent)
+[![GitHub forks](https://img.shields.io/github/forks/nordeim/customer-support-agent?style=social)](https://github.com/nordeim/customer-support-agent/fork)
+[![GitHub issues](https://img.shields.io/github/issues/nordeim/customer-support-agent)](https://github.com/nordeim/customer-support-agent/issues)
+[![GitHub license](https://img.shields.io/github/license/nordeim/customer-support-agent)](https://github.com/nordeim/customer-support-agent/blob/main/LICENSE)
+
+**Built with ❤️ by the Customer Support AI Team**
+
+[Website](https://github.com/nordeim/customer-support-agent) • 
+[Documentation](docs/) • 
+[API Reference](docs/api.md) • 
+[Deployment Guide](docs/deployment.md) • 
+[Architecture](docs/architecture.md)
+
+</div>
