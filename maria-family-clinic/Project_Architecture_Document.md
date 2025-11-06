@@ -1,4 +1,4 @@
-# Maria Family Clinic - Project Architecture Document
+# My Family Clinic - Project Architecture Document
 
 **Version:** 2.1  
 **Document Status:** Production Ready  
@@ -26,7 +26,7 @@
 
 ### Project Mission
 
-Maria Family Clinic is Singapore's comprehensive healthcare discovery and service platform, designed to empower citizens in their healthcare journey by providing seamless access to primary care services, doctor consultations, and the national Healthier SG program.
+My Family Clinic is Singapore's comprehensive healthcare discovery and service platform, designed to empower citizens in their healthcare journey by providing seamless access to primary care services, doctor consultations, and the national Healthier SG program.
 
 ### Key Achievements Across 12 Development Phases
 
@@ -2853,7 +2853,7 @@ export class HealthcareSEOOptimizer {
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "MedicalBusiness",
-      "name": "Maria Family Clinic",
+      "name": "My Family Clinic",
       "description": "Find doctors, book appointments, and manage your healthcare in Singapore",
       "url": "https://myfamilyclinic.sg",
       "telephone": "+65-1234-5678",
@@ -3162,7 +3162,7 @@ optimization_targets:
 
 ## Conclusion
 
-Maria Family Clinic represents a production-ready, comprehensive healthcare platform that successfully delivers on Singapore's digital healthcare transformation goals. Through 12 development phases, the platform has achieved:
+My Family Clinic represents a production-ready, comprehensive healthcare platform that successfully delivers on Singapore's digital healthcare transformation goals. Through 12 development phases, the platform has achieved:
 
 ### Key Achievements Summary
 
@@ -3203,5 +3203,5 @@ The platform is now ready for production deployment and will serve as Singapore'
 **Document Version:** 2.1  
 **Last Updated:** November 5, 2025  
 **Next Review:** December 5, 2025  
-**Document Owner:** Maria Family Clinic Development Team  
+**Document Owner:** My Family Clinic Development Team  
 **Approval Status:** Production Ready ✅

@@ -1,10 +1,10 @@
-# Maria Family Clinic - Healthcare Platform
+# My Family Clinic - Healthcare Platform
 
 A comprehensive healthcare platform for Singapore, built with Next.js 15, Supabase, and modern web technologies. This platform enables citizens to locate clinics, explore healthcare services, find doctors, and access the Healthier SG program.
 
 ## 🏥 Project Overview
 
-Maria Family Clinic is a healthcare discovery and service platform designed to help Singaporeans:
+My Family Clinic is a healthcare discovery and service platform designed to help Singaporeans:
 - **Locate Clinics**: Find nearby clinics with geolocation-based search
 - **Explore Services**: Browse healthcare services and their availability
 - **Find Doctors**: Search for doctors by specialty and language
@@ -251,7 +251,7 @@ For technical support or questions:
 
 ## 📄 License
 
-This project is proprietary software for Maria Family Clinic. All rights reserved.
+This project is proprietary software for My Family Clinic. All rights reserved.
 
 ## 🙏 Acknowledgments
 

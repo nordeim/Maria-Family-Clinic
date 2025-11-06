@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides comprehensive instructions for integrating and testing the Service Availability Tracking System in the Maria Family Clinic application.
+This guide provides comprehensive instructions for integrating and testing the Service Availability Tracking System in the My Family Clinic application.
 
 ## System Architecture
 

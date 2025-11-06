@@ -1,43 +1,37 @@
-import NextAuth, { type NextAuthConfig } from 'next-auth'
+import NextAuth from 'next-auth'
+import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import type { Provider } from 'next-auth/providers'
+import GoogleProvider from 'next-auth/providers/google'
+import EmailProvider from 'next-auth/providers/email'
 import { PrismaClient } from '@prisma/client'
 import { supabase } from '@/lib/supabase'
 
 // Providers
-const providers: Provider[] = [
-  {
-    id: 'google',
-    name: 'Google',
-    type: 'oauth',
-    wellKnown: 'https://accounts.google.com/.well-known/openid-configuration',
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    checks: ['pkce', 'state'],
-    profile(profile) {
-      return {
-        id: profile.sub,
-        name: profile.name,
-        email: profile.email,
-        image: profile.picture,
+const providers = [
+  GoogleProvider({
+    clientId: process.env.GOOGLE_CLIENT_ID!,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    authorization: {
+      params: {
+        prompt: "consent",
+        access_type: "offline",
+        response_type: "code"
       }
-    },
-  },
+    }
+  }),
   // Email provider for authentication without external services
-  {
-    id: 'email',
-    name: 'Email',
-    type: 'email',
+  EmailProvider({
+    server: {
+      host: process.env.EMAIL_SERVER_HOST,
+      port: process.env.EMAIL_SERVER_PORT,
+      auth: {
+        user: process.env.EMAIL_SERVER_USER,
+        pass: process.env.EMAIL_SERVER_PASSWORD,
+      },
+    },
+    from: process.env.EMAIL_FROM,
     maxAge: 24 * 60 * 60, // 24 hours
-    async sendVerificationRequest({
-      identifier,
-      url,
-      token,
-    }: {
-      identifier: string
-      url: string
-      token: string
-    }) {
+    sendVerificationRequest: async ({ identifier, url }) => {
       // For development - just log the verification URL
       if (process.env.NODE_ENV === 'development') {
         console.log('🔐 Email verification URL:', url)
@@ -53,10 +47,10 @@ const providers: Provider[] = [
       //   html: `Click <a href="${url}">here</a> to verify your email address.`,
       // })
     },
-  },
+  }),
 ]
 
-export const authConfig: NextAuthConfig = {
+export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV === 'development',
   adapter: PrismaAdapter(new PrismaClient()),
   providers,
@@ -185,7 +179,8 @@ export const authConfig: NextAuthConfig = {
   },
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
+export default NextAuth(authOptions)
+export const { auth, signIn, signOut } = NextAuth(authOptions)
 
 /**
  * Helper function to get the current session on the server
