@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Doctors - MyFamily Clinic</title>
+    <meta name="description" content="Search from our network of qualified healthcare professionals across Singapore. Find specialists for all medical needs.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .card-hover {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <i class="fas fa-heart text-blue-600 text-2xl"></i>
+                        <span class="text-xl font-bold text-gray-900">MyFamily Clinic</span>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-blue-600 transition-colors">Home</a>
+                    <a href="doctors.html" class="text-blue-600 font-medium border-b-2 border-blue-600">Find Doctors</a>
+                    <a href="clinics.html" class="text-gray-600 hover:text-blue-600 transition-colors">Clinics</a>
+                    <a href="services.html" class="text-gray-600 hover:text-blue-600 transition-colors">Services</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-blue-600 transition-colors">Contact</a>
+                </div>
+
+                <div class="hidden lg:flex items-center space-x-4 text-sm text-gray-600">
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-phone text-sm"></i>
+                        <span>+65 6123 4567</span>
+                    </div>
+                </div>
+
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Home</a>
+                <a href="doctors.html" class="block px-3 py-2 text-blue-600 font-medium">Find Doctors</a>
+                <a href="clinics.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Clinics</a>
+                <a href="services.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Services</a>
+                <a href="contact.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">Find Doctors</h1>
+            <p class="text-lg text-gray-600">
+                Search from our network of qualified healthcare professionals
+            </p>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Filters Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm p-6 sticky top-24">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-filter mr-2"></i>
+                        Filters
+                    </h2>
+                    
+                    <!-- Search -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                            <input
+                                type="text"
+                                placeholder="Doctor name or specialty"
+                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Specialty -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Specialty</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option>All Specialties</option>
+                            <option>Cardiology</option>
+                            <option>Pediatrics</option>
+                            <option>Dermatology</option>
+                            <option>Orthopedics</option>
+                            <option>Neurology</option>
+                            <option>Psychiatry</option>
+                            <option>Ophthalmology</option>
+                            <option>ENT</option>
+                        </select>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                        <div class="relative">
+                            <i class="fas fa-map-marker-alt absolute left-3 top-3 text-gray-400"></i>
+                            <input
+                                type="text"
+                                placeholder="Singapore area"
+                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Rating -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Rating</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option>Any rating</option>
+                            <option>4.5+ stars</option>
+                            <option>4.0+ stars</option>
+                            <option>3.5+ stars</option>
+                        </select>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option>Any price</option>
+                            <option>Under $100</option>
+                            <option>$100 - $150</option>
+                            <option>$150 - $200</option>
+                            <option>Over $200</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="lg:col-span-3">
+                <div class="mb-6">
+                    <p class="text-gray-600">Found 4 doctors</p>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Doctor 1 -->
+                    <div class="bg-white rounded-lg shadow-sm card-hover">
+                        <div class="p-6">
+                            <div class="flex flex-col md:flex-row md:items-start md:space-x-6">
+                                <div class="flex-shrink-0 mb-4 md:mb-0">
+                                    <div class="w-24 h-24 bg-gray-200 rounded-full"></div>
+                                </div>
+
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-start justify-between">
+                                        <div>
+                                            <div class="flex items-center space-x-2 mb-1">
+                                                <h3 class="text-xl font-semibold text-gray-900">Dr. Sarah Chen</h3>
+                                                <i class="fas fa-check-circle text-green-500"></i>
+                                            </div>
+                                            <p class="text-blue-600 font-medium mb-1">Cardiology</p>
+                                            <p class="text-gray-600 text-sm mb-2">MBBS, MRCP, FAMS</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-green-600">From $120</div>
+                                            <div class="text-sm text-gray-500">Consultation fee</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-4 mb-3">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                            <span class="text-sm text-gray-600">4.9 (156 reviews)</span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">15 years experience</div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-4 mb-3 text-sm text-gray-600">
+                                        <span>Singapore General Hospital</span>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>
+                                            Central Singapore
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <span class="text-sm text-gray-600">Languages: </span>
+                                        <span class="text-sm text-gray-800">English, Mandarin</span>
+                                    </div>
+
+                                    <div class="flex items-center text-sm text-green-600 mb-4">
+                                        <i class="fas fa-calendar mr-1"></i>
+                                        Next available: Today 2:30 PM
+                                    </div>
+
+                                    <div class="flex space-x-3">
+                                        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            Book Appointment
+                                        </button>
+                                        <button class="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                            View Profile
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 2 -->
+                    <div class="bg-white rounded-lg shadow-sm card-hover">
+                        <div class="p-6">
+                            <div class="flex flex-col md:flex-row md:items-start md:space-x-6">
+                                <div class="flex-shrink-0 mb-4 md:mb-0">
+                                    <div class="w-24 h-24 bg-gray-200 rounded-full"></div>
+                                </div>
+
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-start justify-between">
+                                        <div>
+                                            <div class="flex items-center space-x-2 mb-1">
+                                                <h3 class="text-xl font-semibold text-gray-900">Dr. Michael Tan</h3>
+                                                <i class="fas fa-check-circle text-green-500"></i>
+                                            </div>
+                                            <p class="text-blue-600 font-medium mb-1">Pediatrics</p>
+                                            <p class="text-gray-600 text-sm mb-2">MBBS, MMed (Paediatrics)</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-green-600">From $100</div>
+                                            <div class="text-sm text-gray-500">Consultation fee</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-4 mb-3">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                            <span class="text-sm text-gray-600">4.8 (203 reviews)</span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">12 years experience</div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-4 mb-3 text-sm text-gray-600">
+                                        <span>KK Women's and Children's Hospital</span>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>
+                                            North-East Singapore
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <span class="text-sm text-gray-600">Languages: </span>
+                                        <span class="text-sm text-gray-800">English, Mandarin, Malay</span>
+                                    </div>
+
+                                    <div class="flex items-center text-sm text-green-600 mb-4">
+                                        <i class="fas fa-calendar mr-1"></i>
+                                        Next available: Tomorrow 9:00 AM
+                                    </div>
+
+                                    <div class="flex space-x-3">
+                                        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            Book Appointment
+                                        </button>
+                                        <button class="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                            View Profile
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 3 -->
+                    <div class="bg-white rounded-lg shadow-sm card-hover">
+                        <div class="p-6">
+                            <div class="flex flex-col md:flex-row md:items-start md:space-x-6">
+                                <div class="flex-shrink-0 mb-4 md:mb-0">
+                                    <div class="w-24 h-24 bg-gray-200 rounded-full"></div>
+                                </div>
+
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-start justify-between">
+                                        <div>
+                                            <div class="flex items-center space-x-2 mb-1">
+                                                <h3 class="text-xl font-semibold text-gray-900">Dr. Emily Wong</h3>
+                                                <i class="fas fa-check-circle text-green-500"></i>
+                                            </div>
+                                            <p class="text-blue-600 font-medium mb-1">Dermatology</p>
+                                            <p class="text-gray-600 text-sm mb-2">MBBS, MRCP, FAMS</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-green-600">From $150</div>
+                                            <div class="text-sm text-gray-500">Consultation fee</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-4 mb-3">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                            <span class="text-sm text-gray-600">4.9 (189 reviews)</span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">18 years experience</div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-4 mb-3 text-sm text-gray-600">
+                                        <span>National Skin Centre</span>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>
+                                            Central Singapore
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <span class="text-sm text-gray-600">Languages: </span>
+                                        <span class="text-sm text-gray-800">English, Mandarin</span>
+                                    </div>
+
+                                    <div class="flex items-center text-sm text-green-600 mb-4">
+                                        <i class="fas fa-calendar mr-1"></i>
+                                        Next available: Today 4:15 PM
+                                    </div>
+
+                                    <div class="flex space-x-3">
+                                        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            Book Appointment
+                                        </button>
+                                        <button class="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                            View Profile
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor 4 -->
+                    <div class="bg-white rounded-lg shadow-sm card-hover">
+                        <div class="p-6">
+                            <div class="flex flex-col md:flex-row md:items-start md:space-x-6">
+                                <div class="flex-shrink-0 mb-4 md:mb-0">
+                                    <div class="w-24 h-24 bg-gray-200 rounded-full"></div>
+                                </div>
+
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-start justify-between">
+                                        <div>
+                                            <div class="flex items-center space-x-2 mb-1">
+                                                <h3 class="text-xl font-semibold text-gray-900">Dr. David Lim</h3>
+                                                <i class="fas fa-check-circle text-green-500"></i>
+                                            </div>
+                                            <p class="text-blue-600 font-medium mb-1">Orthopedics</p>
+                                            <p class="text-gray-600 text-sm mb-2">MBBS, MMed (Orthopaedic Surgery)</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-green-600">From $180</div>
+                                            <div class="text-sm text-gray-500">Consultation fee</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-4 mb-3">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                            <span class="text-sm text-gray-600">4.7 (167 reviews)</span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">20 years experience</div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-4 mb-3 text-sm text-gray-600">
+                                        <span>Raffles Hospital</span>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>
+                                            Central Singapore
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <span class="text-sm text-gray-600">Languages: </span>
+                                        <span class="text-sm text-gray-800">English, Mandarin</span>
+                                    </div>
+
+                                    <div class="flex items-center text-sm text-green-600 mb-4">
+                                        <i class="fas fa-calendar mr-1"></i>
+                                        Next available: Tomorrow 10:30 AM
+                                    </div>
+
+                                    <div class="flex space-x-3">
+                                        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            Book Appointment
+                                        </button>
+                                        <button class="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                                            View Profile
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-heart text-blue-400 text-2xl"></i>
+                        <span class="text-xl font-bold">MyFamily Clinic</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        Your trusted healthcare partner in Singapore. We provide comprehensive medical services 
+                        with compassionate care and professional excellence.
+                    </p>
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-2 text-gray-300">
+                            <i class="fas fa-phone text-sm"></i>
+                            <span>+65 6123 4567</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-gray-300">
+                            <i class="fas fa-envelope text-sm"></i>
+                            <span>contact@myfamilyclinic.sg</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-blue-400 transition-colors">Home</a></li>
+                        <li><a href="doctors.html" class="text-gray-300 hover:text-blue-400 transition-colors">Find Doctors</a></li>
+                        <li><a href="clinics.html" class="text-gray-300 hover:text-blue-400 transition-colors">Clinics</a></li>
+                        <li><a href="services.html" class="text-gray-300 hover:text-blue-400 transition-colors">Services</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>General Consultation</li>
+                        <li>Specialist Care</li>
+                        <li>Health Screening</li>
+                        <li>Emergency Care</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400 text-sm">
+                    © 2025 MyFamily Clinic. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

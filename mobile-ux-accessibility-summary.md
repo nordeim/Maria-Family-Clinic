@@ -2,7 +2,7 @@
 
 ## 📱 Overview
 
-The Maria Family Clinic platform has been enhanced with comprehensive mobile-first UX and accessibility features, ensuring WCAG 2.2 AA compliance and optimal user experience across all devices and abilities.
+The My Family Clinic platform has been enhanced with comprehensive mobile-first UX and accessibility features, ensuring WCAG 2.2 AA compliance and optimal user experience across all devices and abilities.
 
 ## 🎯 Implemented Enhancements
 

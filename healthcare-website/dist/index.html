@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyFamily Clinic - Your Trusted Healthcare Partner in Singapore</title>
+    <meta name="description" content="Find the best healthcare providers in Singapore. Book appointments, access medical records, and manage your family's health with MyFamily Clinic.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        .card-hover {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-heart text-blue-600 text-2xl"></i>
+                        <span class="text-xl font-bold text-gray-900">MyFamily Clinic</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-blue-600 font-medium border-b-2 border-blue-600">Home</a>
+                    <a href="doctors.html" class="text-gray-600 hover:text-blue-600 transition-colors">Find Doctors</a>
+                    <a href="clinics.html" class="text-gray-600 hover:text-blue-600 transition-colors">Clinics</a>
+                    <a href="services.html" class="text-gray-600 hover:text-blue-600 transition-colors">Services</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-blue-600 transition-colors">Contact</a>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="hidden lg:flex items-center space-x-4 text-sm text-gray-600">
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-phone text-sm"></i>
+                        <span>+65 6123 4567</span>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-map-marker-alt text-sm"></i>
+                        <span>Singapore</span>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-blue-600 font-medium">Home</a>
+                <a href="doctors.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Find Doctors</a>
+                <a href="clinics.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Clinics</a>
+                <a href="services.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Services</a>
+                <a href="contact.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                    Your Health, <br>
+                    <span class="text-blue-200">Our Priority</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                    Find the best healthcare providers in Singapore. Book appointments, 
+                    access medical records, and manage your family's health with ease.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="doctors.html" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors flex items-center justify-center">
+                        <i class="fas fa-search mr-2"></i>
+                        Find Doctors
+                    </a>
+                    <a href="tel:+6561234567" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors flex items-center justify-center">
+                        <i class="fas fa-phone mr-2"></i>
+                        Call Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="bg-white shadow-lg -mt-12 relative z-10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4 text-center">
+                    Find Healthcare Providers
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        <input
+                            type="text"
+                            placeholder="Doctor name or specialty"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                    </div>
+                    <div class="relative">
+                        <i class="fas fa-map-marker-alt absolute left-3 top-3 text-gray-400"></i>
+                        <input
+                            type="text"
+                            placeholder="Location in Singapore"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                    </div>
+                    <a href="doctors.html" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center">
+                        Search
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    Why Choose MyFamily Clinic?
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    We provide comprehensive healthcare services with cutting-edge technology 
+                    and compassionate care.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Expert Doctors</h3>
+                    <p class="text-gray-600">
+                        Over 150 qualified healthcare professionals across all specialties
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-clock text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">24/7 Availability</h3>
+                    <p class="text-gray-600">
+                        Round-the-clock emergency care and consultation services
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Secure & Private</h3>
+                    <p class="text-gray-600">
+                        HIPAA-compliant platform ensuring your medical data is safe
+                    </p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-heart text-orange-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Compassionate Care</h3>
+                    <p class="text-gray-600">
+                        Patient-centered approach with personalized treatment plans
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Doctors Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                        Featured Doctors
+                    </h2>
+                    <p class="text-xl text-gray-600">
+                        Meet our top-rated healthcare professionals
+                    </p>
+                </div>
+                <a href="doctors.html" class="text-blue-600 hover:text-blue-700 font-semibold flex items-center">
+                    View All <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Doctor Card 1 -->
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm card-hover">
+                    <div class="p-6">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="w-16 h-16 bg-gray-200 rounded-full"></div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900">Dr. Sarah Chen</h3>
+                                <p class="text-gray-600">Cardiology</p>
+                                <p class="text-sm text-gray-500">15 years experience</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                            <span class="text-sm text-gray-600">4.9 (156 reviews)</span>
+                        </div>
+                        <div class="flex items-center text-sm text-green-600 mb-4">
+                            <i class="fas fa-check-circle mr-1"></i>
+                            <span>Next available: Today 2:30 PM</span>
+                        </div>
+                        <button class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                            Book Appointment
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Doctor Card 2 -->
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm card-hover">
+                    <div class="p-6">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="w-16 h-16 bg-gray-200 rounded-full"></div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900">Dr. Michael Tan</h3>
+                                <p class="text-gray-600">Pediatrics</p>
+                                <p class="text-sm text-gray-500">12 years experience</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                            <span class="text-sm text-gray-600">4.8 (203 reviews)</span>
+                        </div>
+                        <div class="flex items-center text-sm text-green-600 mb-4">
+                            <i class="fas fa-check-circle mr-1"></i>
+                            <span>Next available: Tomorrow 9:00 AM</span>
+                        </div>
+                        <button class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                            Book Appointment
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Doctor Card 3 -->
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm card-hover">
+                    <div class="p-6">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="w-16 h-16 bg-gray-200 rounded-full"></div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900">Dr. Emily Wong</h3>
+                                <p class="text-gray-600">Dermatology</p>
+                                <p class="text-sm text-gray-500">18 years experience</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                            <span class="text-sm text-gray-600">4.9 (189 reviews)</span>
+                        </div>
+                        <div class="flex items-center text-sm text-green-600 mb-4">
+                            <i class="fas fa-check-circle mr-1"></i>
+                            <span>Next available: Today 4:15 PM</span>
+                        </div>
+                        <button class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                            Book Appointment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold mb-2">150+</div>
+                    <div class="text-blue-200">Qualified Doctors</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold mb-2">25,000+</div>
+                    <div class="text-blue-200">Patients Served</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold mb-2">25</div>
+                    <div class="text-blue-200">Clinic Locations</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold mb-2">98%</div>
+                    <div class="text-blue-200">Patient Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Section -->
+    <section class="py-16 bg-red-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <div class="flex justify-center mb-4">
+                    <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center pulse-animation">
+                        <i class="fas fa-phone text-red-600 text-2xl"></i>
+                    </div>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    Medical Emergency?
+                </h2>
+                <p class="text-xl text-gray-600 mb-6">
+                    Don't wait. Our emergency care team is available 24/7.
+                </p>
+                <a href="tel:+6561234567" class="bg-red-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-red-700 transition-colors inline-flex items-center">
+                    <i class="fas fa-phone mr-2"></i>
+                    Call Emergency: +65 6123 4567
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-heart text-blue-400 text-2xl"></i>
+                        <span class="text-xl font-bold">MyFamily Clinic</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        Your trusted healthcare partner in Singapore. We provide comprehensive medical services 
+                        with compassionate care and professional excellence.
+                    </p>
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-2 text-gray-300">
+                            <i class="fas fa-phone text-sm"></i>
+                            <span>+65 6123 4567</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-gray-300">
+                            <i class="fas fa-envelope text-sm"></i>
+                            <span>contact@myfamilyclinic.sg</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-gray-300">
+                            <i class="fas fa-map-marker-alt text-sm"></i>
+                            <span>123 Healthcare Drive, Singapore 123456</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-blue-400 transition-colors">Home</a></li>
+                        <li><a href="doctors.html" class="text-gray-300 hover:text-blue-400 transition-colors">Find Doctors</a></li>
+                        <li><a href="clinics.html" class="text-gray-300 hover:text-blue-400 transition-colors">Clinics</a></li>
+                        <li><a href="services.html" class="text-gray-300 hover:text-blue-400 transition-colors">Services</a></li>
+                        <li><a href="contact.html" class="text-gray-300 hover:text-blue-400 transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>General Consultation</li>
+                        <li>Specialist Care</li>
+                        <li>Health Screening</li>
+                        <li>Vaccination</li>
+                        <li>Emergency Care</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 mt-8 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm">
+                        © 2025 MyFamily Clinic. All rights reserved.
+                    </p>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        <a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-colors">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-colors">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-colors">HIPAA Compliance</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>

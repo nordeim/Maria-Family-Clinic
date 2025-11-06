@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - MyFamily Clinic</title>
+    <meta name="description" content="Get in touch with MyFamily Clinic. Contact us for appointments, questions, or emergency care. We're here to help with all your healthcare needs.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .card-hover {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <i class="fas fa-heart text-blue-600 text-2xl"></i>
+                        <span class="text-xl font-bold text-gray-900">MyFamily Clinic</span>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-blue-600 transition-colors">Home</a>
+                    <a href="doctors.html" class="text-gray-600 hover:text-blue-600 transition-colors">Find Doctors</a>
+                    <a href="clinics.html" class="text-gray-600 hover:text-blue-600 transition-colors">Clinics</a>
+                    <a href="services.html" class="text-gray-600 hover:text-blue-600 transition-colors">Services</a>
+                    <a href="contact.html" class="text-blue-600 font-medium border-b-2 border-blue-600">Contact</a>
+                </div>
+
+                <div class="hidden lg:flex items-center space-x-4 text-sm text-gray-600">
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-phone text-sm"></i>
+                        <span>+65 6123 4567</span>
+                    </div>
+                </div>
+
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Home</a>
+                <a href="doctors.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Find Doctors</a>
+                <a href="clinics.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Clinics</a>
+                <a href="services.html" class="block px-3 py-2 text-gray-600 hover:text-blue-600">Services</a>
+                <a href="contact.html" class="block px-3 py-2 text-blue-600 font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">Contact Us</h1>
+            <p class="text-lg text-gray-600">
+                We're here to help. Get in touch with us for any questions or to book an appointment.
+            </p>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center card-hover">
+                <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-calendar text-blue-600 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Book Appointment</h3>
+                <p class="text-gray-600 mb-4">Schedule your next visit</p>
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                    Book Now
+                </button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center card-hover">
+                <div class="bg-red-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Emergency Care</h3>
+                <p class="text-gray-600 mb-4">24/7 medical emergency</p>
+                <a href="tel:+6561234567" class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors inline-block">
+                    Call Now
+                </a>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm p-6 text-center card-hover">
+                <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-prescription-bottle-alt text-green-600 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Prescription Refill</h3>
+                <p class="text-gray-600 mb-4">Request prescription refill</p>
+                <button class="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors">
+                    Request
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Contact Information -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Get in Touch</h2>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-green-100 p-2 rounded-lg">
+                                <i class="fas fa-phone text-green-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Phone</h3>
+                                <p class="text-gray-700">+65 6123 4567</p>
+                                <p class="text-sm text-gray-500">Available 24/7</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-blue-100 p-2 rounded-lg">
+                                <i class="fas fa-envelope text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Email</h3>
+                                <p class="text-gray-700">contact@myfamilyclinic.sg</p>
+                                <p class="text-sm text-gray-500">Response within 2 hours</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-purple-100 p-2 rounded-lg">
+                                <i class="fas fa-map-marker-alt text-purple-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Main Clinic</h3>
+                                <p class="text-gray-700">123 Orchard Road, #03-15</p>
+                                <p class="text-sm text-gray-500">Singapore 238858</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="bg-orange-100 p-2 rounded-lg">
+                                <i class="fas fa-clock text-orange-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Operating Hours</h3>
+                                <p class="text-gray-700">Mon-Fri: 8AM-8PM</p>
+                                <p class="text-sm text-gray-500">Weekends: 9AM-6PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Notice -->
+                <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                    <div class="flex items-center mb-3">
+                        <i class="fas fa-exclamation-circle text-red-600 mr-2"></i>
+                        <h3 class="font-semibold text-red-900">Medical Emergency</h3>
+                    </div>
+                    <p class="text-red-800 text-sm mb-4">
+                        For life-threatening emergencies, call 995 immediately or visit the nearest emergency department.
+                    </p>
+                    <a href="tel:995" class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors inline-flex items-center">
+                        <i class="fas fa-phone mr-2"></i>
+                        Call 995
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+                    
+                    <form class="space-y-6">
+                        <!-- Name and Email -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Full Name *
+                                </label>
+                                <input
+                                    type="text"
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="Your full name"
+                                />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Email Address *
+                                </label>
+                                <input
+                                    type="email"
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="your.email@example.com"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Phone and Subject -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Phone Number
+                                </label>
+                                <input
+                                    type="tel"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="+65 9123 4567"
+                                />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Subject *
+                                </label>
+                                <select required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Select a subject</option>
+                                    <option value="appointment">Book Appointment</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="prescription">Prescription Refill</option>
+                                    <option value="billing">Billing Question</option>
+                                    <option value="feedback">Feedback</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Preferred Contact Method -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Preferred Contact Method
+                            </label>
+                            <div class="flex space-x-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="contactMethod" value="email" class="mr-2" checked />
+                                    Email
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="contactMethod" value="phone" class="mr-2" />
+                                    Phone Call
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="contactMethod" value="whatsapp" class="mr-2" />
+                                    WhatsApp
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Message -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Message *
+                            </label>
+                            <textarea
+                                required
+                                rows="6"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Please describe your inquiry in detail..."
+                            ></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex justify-end">
+                            <button
+                                type="submit"
+                                class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center"
+                            >
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="mt-16">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Find Us</h2>
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="h-96 bg-gray-200 rounded-lg flex items-center justify-center">
+                    <div class="text-center">
+                        <i class="fas fa-map-marked-alt text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600">Interactive map would be displayed here</p>
+                        <p class="text-sm text-gray-500">123 Orchard Road, #03-15, Singapore 238858</p>
+                    </div>
+                </div>
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div class="flex items-center justify-center space-x-2">
+                        <i class="fas fa-walking text-blue-600"></i>
+                        <span>5 min walk from Orchard MRT</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2">
+                        <i class="fas fa-car text-blue-600"></i>
+                        <span>Parking available</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-2">
+                        <i class="fas fa-bus text-blue-600"></i>
+                        <span>Multiple bus routes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-heart text-blue-400 text-2xl"></i>
+                        <span class="text-xl font-bold">MyFamily Clinic</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        Your trusted healthcare partner in Singapore. We provide comprehensive medical services 
+                        with compassionate care and professional excellence.
+                    </p>
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-2 text-gray-300">
+                            <i class="fas fa-phone text-sm"></i>
+                            <span>+65 6123 4567</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-gray-300">
+                            <i class="fas fa-envelope text-sm"></i>
+                            <span>contact@myfamilyclinic.sg</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-gray-300">
+                            <i class="fas fa-map-marker-alt text-sm"></i>
+                            <span>123 Healthcare Drive, Singapore 123456</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-blue-400 transition-colors">Home</a></li>
+                        <li><a href="doctors.html" class="text-gray-300 hover:text-blue-400 transition-colors">Find Doctors</a></li>
+                        <li><a href="clinics.html" class="text-gray-300 hover:text-blue-400 transition-colors">Clinics</a></li>
+                        <li><a href="services.html" class="text-gray-300 hover:text-blue-400 transition-colors">Services</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li>General Consultation</li>
+                        <li>Specialist Care</li>
+                        <li>Health Screening</li>
+                        <li>Emergency Care</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm">
+                        © 2025 MyFamily Clinic. All rights reserved.
+                    </p>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        <a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-colors">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-colors">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition-colors">HIPAA Compliance</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
